@@ -28,7 +28,7 @@ print "started at $start\n";
 # get starting place to return to later
 my$currdir=`pwd`;
 chomp $currdir;
-print "started at $currdir\n";
+print "started step two at dir $currdir\n";
 # input should be all .bed files cat into one
 my$linfile= $ARGV[0];
 chomp $linfile;
@@ -41,12 +41,12 @@ my$chdirort="/media/daniel/NGS1/RNASeq/find_circ";
 
 chdir($chdirort);
 
-print "creating circ_candidates_auto_$linfile with score filtering...\n";
-my$err = system ("grep circ $linfile | grep -v chrM | python2.7 $scriptplace/sum.py -2,3 | python2.7 $scriptplace/scorethresh.py -16 1 | python2.7 $scriptplace/scorethresh.py -15 2 | python2.7 $scriptplace/scorethresh.py -14 2 | python2.7 $scriptplace/scorethresh.py 7 2 | python2.7 $scriptplace/scorethresh.py 8,9 35 | python2.7 $scriptplace/scorethresh.py -17 100000 >circ_candidates_auto_$linfile");
+print "creating $linfile.circ_candidates_auto_.bed with score filtering...\n";
+my$err = system ("grep circ $linfile | grep -v chrM | python2.7 $scriptplace/sum.py -2,3 | python2.7 $scriptplace/scorethresh.py -16 1 | python2.7 $scriptplace/scorethresh.py -15 2 | python2.7 $scriptplace/scorethresh.py -14 2 | python2.7 $scriptplace/scorethresh.py 7 2 | python2.7 $scriptplace/scorethresh.py 8,9 35 | python2.7 $scriptplace/scorethresh.py -17 100000 >$linfile.circ_candidates_auto_.bed");
 
 print "errors:\n$err\n\n";
 # output of command1
-my$infiletwo="circ_candidates_auto_$linfile";
+my$infiletwo="$linfile.circ_candidates_auto_.bed";
 
 
 
@@ -61,7 +61,7 @@ print "errors:\n$err2\n\n";
 # output of command2
 my$newnametwo="$infiletwo.out";
 
-
+# ist jetzt also $linfile.circ_candidates_auto_.bed.out
 
 ######################################### 
 # here comes the fix file in excel part
@@ -78,8 +78,13 @@ open(IN,$newnametwo)|| die "$!";
 my@infile = <IN> ;
 
 
-my$linetwofile= $ARGV[1];
-chomp $linetwofile;
+# new filename for steptwo output ;
+# ist jetzt also $linfile.circ_candidates_auto_.bed.out_.processsed
+
+
+my$linetwofile= "$linfile.circ_candidates_auto_.bed.out.processed";
+#chomp $linetwofile;
+
 
 print "adding unique coordinates\ncreating $currdir/$linetwofile ...\n"; 
 # output file second argument adding coordinates 
@@ -102,13 +107,15 @@ foreach my $line (@infile){
 
 # now the fitting outfile is $currdir/$linetwofile and this is the input for next steps
 # command3, the sort
-print "sorting by coordinates...\ncreating $currdir/circ_candidates.grouped_$linfile.sort.bed ...\n";
-my$errso=system("sort -k 1,1 $currdir/$linetwofile  > $currdir/circ_candidates.grouped_$linfile.sort.bed");
+print "sorting by coordinates...\ncreating $currdir/$linfile.sort.bed ...\n";
+my$errso=system("sort -k 1,1 $currdir/$linetwofile  > $currdir/$linetwofile.sorted");
 print "errors:\n$errso\n\n";
 ### now reorder the output file, delete unwanted information
 # file to dump information into
-print "reordering circ_candidates.grouped_$linfile.sort.bed entries...\n";
-my$outfilethre="$currdir/candidatelist_auto_$linfile.csv";
+print "reordering $currdir/$linetwofile.sorted entries...\n";
+
+
+my$outfilethre="$currdir/$linfile.csv";
 
 
 # outfile for finding relevant columns...
@@ -120,7 +127,7 @@ print ND "coordinates\tstrand\tsampleid\tunique_counts\tqualA\tqualB\tRefSeqID\n
 ## see excel file for that
 # this is the input file for finding the relevant columns,
 # and the outfile from sorting line 87 
-open(SO,"$currdir/circ_candidates.grouped_$linfile.sort.bed")||die "$!";
+open(SO,"$currdir/$linetwofile.sorted")||die "$!";
 # edit this file 
 my@newin = <SO>;
 
