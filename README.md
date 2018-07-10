@@ -11,6 +11,19 @@ detecting circular RNA candidates
 - circbase.org known circular RNAs mapping file
 
 
+
+
+
+
+# three levels of automation:
+  1. manually; perl test2.pl | perl steptwo.pl
+  2. find_circ_auto.pl above scripts executed for one sample
+  3. auto_automaker.pl above scripts for multiple samples
+    -> perl matrixmaker.pl needs to be done manually in each of the above cases with chosen sapmle(s)!
+
+
+
+
 ## you can either start each step manually:
 go to find_circ/
 
