@@ -7,7 +7,7 @@ use strict;
 # perl matrixmaker.pl candidatelist_importantsamples_processed.csv important_sample_circpresencematrix.csv
 #########################################
 
-
+# using output $linfile.csv from steptwo.pl
 ########################################################################### input start
 #system("clear");
 
