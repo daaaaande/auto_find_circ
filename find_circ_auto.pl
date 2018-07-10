@@ -27,28 +27,26 @@ my$steponedir="/media/daniel/NGS1/RNASeq/find_circ";
 my$steptwodir="/media/daniel/NGS1/RNASeq/find_circ/steptwo";
 my$stepthreedir="/media/daniel/NGS1/RNASeq/find_circ";
 chdir($steponedir);
-############################################################################# first step 
+############################################################################# first step
 # test2.pl takes unmapped/trimmed/fastq.gz/line1 and line2 reads...
 my$errstepone = system (`perl $steponedir/test2.pl $infile1 $infile2 $samplename`);
 
 
 print "step 1:\n$errstepone\n";
 #$outfn=$ARGV[2]
-#$dirn="run_$outfn"					
+#$dirn="run_$outfn"
 # output will be $dirn/auto_$dirn.sites.bed
 # also get files in find_circ/run_$samplename/auto_$samplename.sites.bed
 
 
 ############################################################################# second step
 my$steptwoinput="$steponedir/run_$samplename/auto_$samplename.sites.bed";# right?maybe...
-my$steptwooutput="$steponedir/run_$samplename";
-
 # auto_run_hal01_r.sites.bed error
 
 # perl steptwo/steptwo.pl important_samples.bed important_samples_processed.csv
-print "trying now perl $steptwodir/steptwo.pl $steptwoinput auto_$samplename.sites_processed.csv\n\n";
-my$errsteptwo = system (`perl $steptwodir/steptwo.pl $steptwoinput auto_$samplename.sites_processed.csv`);
-
+print "trying now perl $steptwodir/steptwo.pl $steptwoinput\n";
+my$errsteptwo = system (`perl $steptwodir/steptwo.pl $steptwoinput`);
+# out comes $steptwoinput.csv
 
 print "step 2:\n$errsteptwo\n";
 print "done making $steptwoinput.csv, moving it to run_$samplename/... \n";
@@ -74,4 +72,3 @@ my $end = time;
 my$timeused=(($end-$start)/60);# into minutes
 
 print "done.\n used $timeused minutes for $samplename\n in $steptwooutput/auto_$samplename.sites_processed.csv";
-
