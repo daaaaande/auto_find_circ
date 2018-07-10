@@ -6,7 +6,7 @@ use strict;
 #system("clear");
 
 
-######################################## example run 
+######################################## example run
 # perl test2.pl line_1_file.fastq.gz line_2_file.fastq.gz _important_sample_dir
 #########################################
 
@@ -19,7 +19,7 @@ print "started at $start\n";
 
 # call needs to be :
 
-#input files could be anywhere, script NEEDS to run in find_circ, output folder will be created in find_circ/** 
+#input files could be anywhere, script NEEDS to run in find_circ, output folder will be created in find_circ/**
 
 #			perl test2.pl daric/HAL01_R1_trimmed.fastq.gz daric/HAL01_R2_trimmed.fastq.gz outdir
 
@@ -77,7 +77,7 @@ print "errors:\n$err5\n\n";
 
 print "creating $dirn/auto_$dirn.sites.reads \tand  $dirn/auto_$dirn.sites.bed\n";
 my$err7 = system (`bowtie2 --reorder --mm --score-min=C,-15,0 -q -x hg19 -U auto_anchors.qfa 2> auto_bt2_secondpass.log | python2.7 $bowtiepace/find_circ.py -G $bowtiepace/genome/chroms/ -p $dirn -s $bowtiepace/$dirn/$dirn.sites.log > $dirn/auto_$dirn.sites.bed 2> $dirn/auto_$dirn.sites.reads`);
-
+                                                                                                                                                                                                # since $dirn is run_samplename this will be find_circ/run_samplename/auto_run_samplename.sites.bed and so on
 print "errors:\n$err7\n\n";
 
 my $duration = time - $start;
@@ -89,4 +89,3 @@ print "done.\n";
 
 
 ##bowtie2 -p 12 --very-sensitive --mm --score-min=C,-15,0 -x hg19 -1 daric/HAL01_R1_trimmed.fastq.gz -2 daric/HAL01_R2_trimmed.fastq.gz >tmp.sam 2> log.log
-
