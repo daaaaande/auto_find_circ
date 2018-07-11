@@ -43,7 +43,8 @@ go to find_circ/
 
 
 
-
+## or start find_circ_auto.pl with first_readline second_inline samplename as input vars
+  - here you will have to start matrixmaker.pl with the final outfile separately fore every sample group you want to look at
 
 
 

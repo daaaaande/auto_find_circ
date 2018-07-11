@@ -82,7 +82,7 @@ my@infile = <IN> ;
 # ist jetzt also $linfile.circ_candidates_auto_.bed.out_.processsed
 
 
-my$linetwofile= "$linfile.circ_candidates_auto_.bed.out.processed";
+my$linetwofile= "$linfile.circ_candidates_auto_.bed.out";
 #chomp $linetwofile;
 
 
@@ -109,7 +109,7 @@ foreach my $line (@infile){
 # command3, the sort
 print "sorting by coordinates...\ncreating $currdir/$linfile.sort.bed ...\n";
 my$errso=system("sort -k 1,1 $currdir/$linetwofile  > $currdir/$linetwofile.sorted");
-print "errors:\n$errso\n\n";
+print "errors:\n$errso\n\n";			#$linfile.circ_candidates_auto_.bed.out.sorted
 ### now reorder the output file, delete unwanted information
 # file to dump information into
 print "reordering $currdir/$linetwofile.sorted entries...\n";
