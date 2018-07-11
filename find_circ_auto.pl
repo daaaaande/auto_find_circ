@@ -40,7 +40,7 @@ print "step 1:\n$errstepone\n";
 
 
 ############################################################################# second step
-my$steptwoinput="$steponedir/run_$samplename/auto_$samplename.sites.bed";# right?maybe...
+my$steptwoinput="$steponedir/run_$samplename/auto_run_$samplename.sites.bed";# right?maybe...
 #my$steptwooutput="$steponedir/run_$samplename";
 
 # auto_run_hal01_r.sites.bed error
@@ -67,8 +67,9 @@ system(`mv $steptwoinput.csv run_$samplename/`);
 
 ## to not process the same file twice...
 
-system(`mv $steponedir/tmp.bam tmp_$samplename.bam`);
-system(`mv $steponedir/tmp.sam tmp_$samplename.sam`);
+system(`mv $steponedir/temp.bam tmp_$samplename.bam`);
+system(`mv $steponedir/temp.sam tmp_$samplename.sam`);
+#system()
 
 my $end = time;
 my$timeused=(($end-$start)/60);# into minutes

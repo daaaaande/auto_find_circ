@@ -76,7 +76,7 @@ print "errors:\n$err5\n\n";
 
 
 print "creating $dirn/auto_$dirn.sites.reads \tand  $dirn/auto_$dirn.sites.bed\n";
-my$err7 = system (`bowtie2 --reorder --mm --score-min=C,-15,0 -q -x hg19 -U auto_anchors.qfa 2> auto_bt2_secondpass.log | python2.7 $bowtiepace/find_circ.py -G $bowtiepace/genome/chroms/ -p $dirn -s $bowtiepace/$dirn/$dirn.sites.log > $dirn/auto_$dirn.sites.bed 2> $dirn/auto_$dirn.sites.reads`);
+my$err7 = system (`bowtie2 --reorder -p 12 --mm --score-min=C,-15,0 -q -x hg19 -U $dirn/auto_anchors.qfa 2> $dirn/auto_bt2_secondpass.log | python2.7 $bowtiepace/find_circ.py -G $bowtiepace/genome/chroms/ -p $dirn -s $bowtiepace/$dirn/$dirn.sites.log > $dirn/auto_$dirn.sites.bed 2> $dirn/auto_$dirn.sites.reads`);
 
 print "errors:\n$err7\n\n";
 

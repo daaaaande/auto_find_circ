@@ -41,12 +41,12 @@ my$chdirort="/media/daniel/NGS1/RNASeq/find_circ";
 
 chdir($chdirort);
 
-print "creating $linfile.circ_candidates_auto_.bed with score filtering...\n";
-my$err = system ("grep circ $linfile | grep -v chrM | python2.7 $scriptplace/sum.py -2,3 | python2.7 $scriptplace/scorethresh.py -16 1 | python2.7 $scriptplace/scorethresh.py -15 2 | python2.7 $scriptplace/scorethresh.py -14 2 | python2.7 $scriptplace/scorethresh.py 7 2 | python2.7 $scriptplace/scorethresh.py 8,9 35 | python2.7 $scriptplace/scorethresh.py -17 100000 >$linfile.circ_candidates_auto_.bed");
+print "creating $linfile.circ_candidates_auto.bed with score filtering...\n";
+my$err = system ("grep circ $linfile | grep -v chrM | python2.7 $scriptplace/sum.py -2,3 | python2.7 $scriptplace/scorethresh.py -16 1 | python2.7 $scriptplace/scorethresh.py -15 2 | python2.7 $scriptplace/scorethresh.py -14 2 | python2.7 $scriptplace/scorethresh.py 7 2 | python2.7 $scriptplace/scorethresh.py 8,9 35 | python2.7 $scriptplace/scorethresh.py -17 100000 >$linfile.circ_candidates_auto.bed");
 
 print "errors:\n$err\n\n";
 # output of command1
-my$infiletwo="$scriptplace/$linfile.circ_candidates_auto_.bed";
+my$infiletwo="$scriptplace/$linfile.circ_candidates_auto.bed";
 
 
 

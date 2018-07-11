@@ -63,5 +63,6 @@ lineonefile2  linetwofile2  samplename2
 
 ## ideas to improve auto_find_circ
 
-1. make in auto_automaker and its input a fourth line indicating the samplegroup . auto_auautomaker.pl should then in the end move only the relevant outputfile into the groupdir that it will create
+1. make in auto_automaker and its input a fourth column indicating the samplegroup.
+  auto_auautomaker.pl should then in the end move only the relevant outputfile into the groupdir that it will create
 2. make global logfile that all scripts attach to so that all output is to be found in one single place.  
