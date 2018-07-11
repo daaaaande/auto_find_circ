@@ -107,7 +107,7 @@ foreach my $line (@infile){
 
 # now the fitting outfile is $currdir/$linetwofile and this is the input for next steps
 # command3, the sort
-print "sorting by coordinates...\ncreating $currdir/$linfile.sort.bed ...\n";
+print "sorting by coordinates...\ncreating $currdir/$linetwofile.sorted ...\n";
 my$errso=system("sort -k 1,1 $currdir/$linetwofile  > $currdir/$linetwofile.sorted");
 print "errors:\n$errso\n\n";			#$linfile.circ_candidates_auto_.bed.out.sorted
 ### now reorder the output file, delete unwanted information

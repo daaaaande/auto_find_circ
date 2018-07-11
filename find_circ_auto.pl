@@ -41,12 +41,13 @@ print "step 1:\n$errstepone\n";
 
 ############################################################################# second step
 my$steptwoinput="$steponedir/run_$samplename/auto_run_$samplename.sites.bed";# right?maybe...
-my$steptwooutput="$steponedir/run_$samplename";
+#my$steptwooutput="$steponedir/run_$samplename";
 
 # auto_run_hal01_r.sites.bed error
 
 # perl steptwo/steptwo.pl important_samples.bed important_samples_processed.csv
 print "trying now perl $steptwodir/steptwo.pl $steptwoinput , will make $steptwoinput.csv\n\n";
+chdir($steponedir);
 my$errsteptwo = system (`perl $steptwodir/steptwo.pl $steptwoinput`);
 
 
