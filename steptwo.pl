@@ -6,7 +6,7 @@ use strict;
 #system("clear");
 
 
-######################################## example run
+######################################## example run 
 # mkdir samplename
 # when more than one sample ;(cat important_sample_*.sites.bed >important_samples.bed)
 # perl steptwo.pl important_samples.bed important_samples_processed.csv
@@ -63,7 +63,7 @@ my$newnametwo="$infiletwo.out";
 
 # ist jetzt also $linfile.circ_candidates_auto_.bed.out
 
-#########################################
+######################################### 
 # here comes the fix file in excel part
 # command 2 output is taken in,
 # each line getts coordinates added
@@ -82,12 +82,12 @@ my@infile = <IN> ;
 # ist jetzt also $linfile.circ_candidates_auto_.bed.out_.processsed
 
 
-my$linetwofile= "$linfile.circ_candidates_auto_.bed.out";
+my$linetwofile= "$linfile.circ_candidates_auto_.bed.out.processed";
 #chomp $linetwofile;
 
 
-print "adding unique coordinates\ncreating $currdir/$linetwofile ...\n";
-# output file second argument adding coordinates
+print "adding unique coordinates\ncreating $currdir/$linetwofile ...\n"; 
+# output file second argument adding coordinates 
 open(OUT,">","$currdir/$linetwofile")|| die "$!";
 
 foreach my $line (@infile){
@@ -107,43 +107,43 @@ foreach my $line (@infile){
 
 # now the fitting outfile is $currdir/$linetwofile and this is the input for next steps
 # command3, the sort
-print "sorting by coordinates...\ncreating $currdir/$linetwofile.sorted ...\n";
+print "sorting by coordinates...\ncreating $currdir/$linfile.sort.bed ...\n";
 my$errso=system("sort -k 1,1 $currdir/$linetwofile  > $currdir/$linetwofile.sorted");
-print "errors:\n$errso\n\n";			#$linfile.circ_candidates_auto_.bed.out.sorted
+print "errors:\n$errso\n\n";
 ### now reorder the output file, delete unwanted information
 # file to dump information into
 print "reordering $currdir/$linetwofile.sorted entries...\n";
 
 
-#my$outfilethre="$currdir/$linfile.csv";
+my$outfilethre="$currdir/$linfile.csv";
 
 
 # outfile for finding relevant columns...
-print "creating $currdir/$linfile.csv...\n";
-open(ND,">","$currdir/$linfile.csv")|| die "$!";
+print "creating $outfilethre...\n";
+open(ND,">",$outfilethre)|| die "$!";
 print ND "coordinates\tstrand\tsampleid\tunique_counts\tqualA\tqualB\tRefSeqID\n";
 
 
 ## see excel file for that
 # this is the input file for finding the relevant columns,
-# and the outfile from sorting line 87
+# and the outfile from sorting line 87 
 open(SO,"$currdir/$linetwofile.sorted")||die "$!";
-# edit this file
+# edit this file 
 my@newin = <SO>;
 
 foreach my $lein (@newin){
 	chomp $lein;
 	my@all_things=split(/\t+/,$lein);
-	# NOW GET ONLY RELEVANT THINGS
+	# NOW GET ONLY RELEVANT THINGS 
 	my$ccord=$all_things[0]; # should be chr10:101654702-101656154
 	my$long_id=$all_things[4]; # should be auto_circ_004447
 	## this string needs some work : remove circ_..
 	$long_id =~s/circ\_*.[0-9]{1,20}//ig ;
 	# removed circ_8945 for each line
-
+	
 	my$strand=$all_things[6];
 	my$uniques=$all_things[7];
-	my$bestqa=$all_things[8];
+	my$bestqa=$all_things[8];	
 	my$bestqb=$all_things[9];
 	my$refseqid=$all_things[21];
 	#my$bestqa=$all_things[6];# gives you 7th element in line $lein
@@ -153,7 +153,7 @@ foreach my $lein (@newin){
 }
 
 
-#############################################I/O
+#############################################I/O 
 # file descriptions
 
 
@@ -178,3 +178,8 @@ foreach my $lein (@newin){
 #chr10:101689364-101691202       -       daric/Chen01_   2       40      40      NR_024130
 #chr10:101923760-101943594       -       auto_   2       40      6       NM_006459
 #chr10:101923760-101943594       -       auto_   2       40      6       NM_001100626
+
+
+
+
+

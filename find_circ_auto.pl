@@ -24,7 +24,7 @@ chomp $currentdir;
 
 #			# NGS number changes with every reboot
 my$steponedir="/media/daniel/NGS1/RNASeq/find_circ";
-my$steptwodir="/media/daniel/NGS1/RNASeq/find_circ/steptwo";
+my$steptwodir="/media/daniel/NGS1/RNASeq/find_circ";
 my$stepthreedir="/media/daniel/NGS1/RNASeq/find_circ";
 chdir($steponedir);
 ############################################################################# first step 
@@ -40,15 +40,14 @@ print "step 1:\n$errstepone\n";
 
 
 ############################################################################# second step
-my$steptwoinput="$steponedir/run_$samplename/auto_run_$samplename.sites.bed";# right?maybe...
-#my$steptwooutput="$steponedir/run_$samplename";
+my$steptwoinput="$steponedir/run_$samplename/auto_$samplename.sites.bed";# right?maybe...
+my$steptwooutput="$steponedir/run_$samplename";
 
 # auto_run_hal01_r.sites.bed error
 
 # perl steptwo/steptwo.pl important_samples.bed important_samples_processed.csv
-print "trying now perl $steptwodir/steptwo.pl $steptwoinput , will make $steptwoinput.csv\n\n";
-chdir($steponedir);
-my$errsteptwo = system (`perl $steptwodir/steptwo.pl $steptwoinput`);
+print "trying now perl $steptwodir/steptwo.pl $steptwoinput auto_$samplename.sites_processed.csv\n\n";
+my$errsteptwo = system (`perl $steptwodir/steptwo.pl $steptwoinput auto_$samplename.sites_processed.csv`);
 
 
 print "step 2:\n$errsteptwo\n";
@@ -68,12 +67,11 @@ system(`mv $steptwoinput.csv run_$samplename/`);
 
 ## to not process the same file twice...
 
-system(`mv $steponedir/temp.bam run_$samplename/tmp_$samplename.bam`);
-system(`mv $steponedir/temp.sam run_$samplename/tmp_$samplename.sam`);
-system(`mv $steponedir/unmapped_auto.bam run_$samplename/unmapped_auto$samplename.bam`);
+system(`mv $steponedir/tmp.bam tmp_$samplename.bam`);
+system(`mv $steponedir/tmp.sam tmp_$samplename.sam`);
 
 my $end = time;
 my$timeused=(($end-$start)/60);# into minutes
 
-print "done.\n used $timeused minutes for $samplename\n in run_$samplename/$steptwoinput.csv";
+print "done.\n used $timeused minutes for $samplename\n in $steptwooutput/auto_$samplename.sites_processed.csv";
 
