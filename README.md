@@ -9,7 +9,7 @@ detecting circular RNA candidates
 - bowtie2 installed
 - hg19.fa
 - circbase.org known circular RNAs mapping file
-
+- all here listed .pl files in the same directory
 
 
 
@@ -53,7 +53,7 @@ go to find_circ/
 head infiles_for_auto_automaker.pl:
 lineonefile linetwofile samplename1
 lineonefile2  linetwofile2  samplename2
->> auto_automaker.pl is just a small wrapper for find_circ_auto.pl, wich in return is a wrapper for test2.pl and steptwo.pl wich are in return are scripts to simplify find_circ 
+>> auto_automaker.pl is just a small wrapper for find_circ_auto.pl, wich in return is a wrapper for test2.pl and steptwo.pl wich are in return are scripts to simplify find_circ
 
 
 - keep in mind that all mentioned files need to be in the current wdir to be able to work as expected
