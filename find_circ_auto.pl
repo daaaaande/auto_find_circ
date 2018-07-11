@@ -41,7 +41,7 @@ print "step 1:\n$errstepone\n";
 
 ############################################################################# second step
 my$steptwoinput="$steponedir/run_$samplename/auto_$samplename.sites.bed";# right?maybe...
-my$steptwooutput="$steponedir/run_$samplename";
+#my$steptwooutput="$steponedir/run_$samplename";
 
 # auto_run_hal01_r.sites.bed error
 
@@ -73,5 +73,5 @@ system(`mv $steponedir/tmp.sam tmp_$samplename.sam`);
 my $end = time;
 my$timeused=(($end-$start)/60);# into minutes
 
-print "done.\n used $timeused minutes for $samplename\n in $steptwooutput/auto_$samplename.sites_processed.csv";
+print "done.\n used $timeused minutes for $samplename\n ";
 

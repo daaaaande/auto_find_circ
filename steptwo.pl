@@ -46,7 +46,7 @@ my$err = system ("grep circ $linfile | grep -v chrM | python2.7 $scriptplace/sum
 
 print "errors:\n$err\n\n";
 # output of command1
-my$infiletwo="$linfile.circ_candidates_auto_.bed";
+my$infiletwo="$scriptplace/$linfile.circ_candidates_auto_.bed";
 
 
 

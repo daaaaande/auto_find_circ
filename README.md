@@ -1,5 +1,5 @@
 # auto_find_circ
-## automating the find_circ pipeline on a server
+### automating the find_circ pipeline on a server
 detecting circular RNA candidates
 
 
