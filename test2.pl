@@ -6,7 +6,7 @@ use strict;
 #system("clear");
 
 
-######################################## example run 
+######################################## example run
 # perl test2.pl line_1_file.fastq.gz line_2_file.fastq.gz _important_sample_dir
 #########################################
 
@@ -19,7 +19,7 @@ print "started at $start\n";
 
 # call needs to be :
 
-#input files could be anywhere, script NEEDS to run in find_circ, output folder will be created in find_circ/** 
+#input files could be anywhere, script NEEDS to run in find_circ, output folder will be created in find_circ/**
 
 #			perl test2.pl daric/HAL01_R1_trimmed.fastq.gz daric/HAL01_R2_trimmed.fastq.gz outdir
 
@@ -52,14 +52,14 @@ print "doing currently:\nbowtie2 -p 12 --very-sensitive --mm --score-min=C,-15,0
 
 print "creating temp.bam...\n";
 my$err2 = system (`samtools view -hbuS -o temp.bam temp.sam`);
-print "errors:\n$err2\n\n";
+print "errors aligning :\n$err2\n\n";
 system ("cp temp.bam $dirn/temp.bam");
 #
 
 # new name convention MB01==auto , MB01.bam=auto.bam
 print "sorting temp.bam...\n";
 my$err3 = system (`samtools sort -O bam -o auto.bam temp.bam`);
-print "errors:\n$err3\n\n";
+print "errors samtools:\n$err3\n\n";
 system ("cp auto.bam $dirn/auto.bam");
 #echo ">>> get the unmapped"
 print"getting the unmapped...\n";
@@ -70,7 +70,7 @@ system ("cp unmapped_auto.bam  $dirn/unmapped_auto.bam");
 #echo ">>> split into anchors"
 print "splitting into anchors...\n";
 my$err5 = system (`python2.7 $bowtiepace/unmapped2anchors.py unmapped_auto.bam > auto_anchors.qfa`);
-print "errors:\n$err5\n\n";
+print "errors anchoring:\n$err5\n\n";
 #echo ">>> run find_circ.py"
 
 
@@ -78,7 +78,7 @@ print "errors:\n$err5\n\n";
 print "creating $dirn/auto_$dirn.sites.reads \tand  $dirn/auto_$dirn.sites.bed\n";
 my$err7 = system (`bowtie2 --reorder --mm --score-min=C,-15,0 -q -x hg19 -U auto_anchors.qfa 2> auto_bt2_secondpass.log | python2.7 $bowtiepace/find_circ.py -G $bowtiepace/genome/chroms/ -p $dirn -s $bowtiepace/$dirn/$dirn.sites.log > $dirn/auto_$dirn.sites.bed 2> $dirn/auto_$dirn.sites.reads`);
 
-print "errors:\n$err7\n\n";
+print "errors bowtie2:\n$err7\n\n";
 
 my $duration = time - $start;
 print "Execution time: $duration s\n";
@@ -89,4 +89,3 @@ print "done.\n";
 
 
 ##bowtie2 -p 12 --very-sensitive --mm --score-min=C,-15,0 -x hg19 -1 daric/HAL01_R1_trimmed.fastq.gz -2 daric/HAL01_R2_trimmed.fastq.gz >tmp.sam 2> log.log
-

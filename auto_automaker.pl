@@ -9,7 +9,7 @@ open(IN,$inputfile)|| die "$!";
 my@lines=<IN>;
 my$error="";# collecting dump
 foreach my $singleline (@lines){
-	if($singleline =~ /[a-z]/g){
+	if($singleline =~ /[a-z]/g){# checking for empty lines to avoid weird errors
 		chomp $singleline;
 		my@lineparts=split(/\s+/,$singleline);
 		my$fileone=$lineparts[0];
