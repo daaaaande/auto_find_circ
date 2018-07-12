@@ -3,6 +3,9 @@ use strict;
 
 system("clear");
 
+open(ER,'>>',"logfile_auto.log")||die "$!";
+
+
 my$inputfile=$ARGV[0];
 chomp$inputfile;
 open(IN,$inputfile)|| die "$!";
@@ -24,5 +27,6 @@ foreach my $singleline (@lines){
 
 
 }
-print "errors:\n$error\n\n";
-print "finished\n";
+
+print ER "errors:\n$error\n\n";
+print ER "finished\n";

@@ -12,6 +12,7 @@ detecting circular RNA candidates
 - all here listed .pl files in the same directory
 
 
+>> auto_automaker.pl is just a small wrapper for find_circ_auto.pl, wich in return is a wrapper for test2.pl and steptwo.pl wich are in return are scripts to simplify find_circ
 
 
 
@@ -19,7 +20,7 @@ detecting circular RNA candidates
   1. manually; perl test2.pl | perl steptwo.pl
   2. find_circ_auto.pl above scripts executed for one sample
   3. auto_automaker.pl above scripts for multiple samples
-    -> perl matrixmaker.pl needs to be done manually in each of the above cases with chosen sapmle(s)!
+    -> perl matrixmaker.pl needs to be done manually in each of the above cases with chosen sample(s)!
 
 
 
@@ -49,11 +50,10 @@ go to find_circ/
 
 
 
-## or start auto_automaker.pl with inputfile1 inputfile2 and samplename table, separated by qq{\t}
+## or start auto_automaker.pl with inputfile1 inputfile2 and samplename table, separated by \t
 head infiles_for_auto_automaker.pl:
 lineonefile linetwofile samplename1
 lineonefile2  linetwofile2  samplename2
->> auto_automaker.pl is just a small wrapper for find_circ_auto.pl, wich in return is a wrapper for test2.pl and steptwo.pl wich are in return are scripts to simplify find_circ
 
 
 - keep in mind that all mentioned files need to be in the current wdir to be able to work as expected
@@ -64,5 +64,4 @@ lineonefile2  linetwofile2  samplename2
 ## ideas to improve auto_find_circ
 
 1. make in auto_automaker and its input a fourth column indicating the samplegroup.
-  auto_auautomaker.pl should then in the end move only the relevant outputfile into the groupdir that it will create
-2. make global logfile that all scripts attach to so that all output is to be found in one single place.  
+  auto_auautomaker.pl should then in the end move only the relevant outputfile into the groupdir that it will create  

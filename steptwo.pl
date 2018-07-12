@@ -46,7 +46,7 @@ my$err = system ("grep circ $linfile | grep -v chrM | python2.7 $scriptplace/sum
 
 print "errors:\n$err\n\n";
 # output of command1
-my$infiletwo="$scriptplace/$linfile.circ_candidates_auto.bed";
+my$infiletwo="$linfile.circ_candidates_auto.bed";
 
 
 
@@ -77,7 +77,7 @@ my$newnametwo="$infiletwo.out";
 open(IN,$newnametwo)|| die "$!";
 my@infile = <IN> ;
 
-
+open(ER,'>>',"logfile_auto.log")||die "$!";
 # new filename for steptwo output ;
 # ist jetzt also $linfile.circ_candidates_auto_.bed.out_.processsed
 
@@ -86,9 +86,9 @@ my$linetwofile= "$linfile.circ_candidates_auto_.bed.out.processed";
 #chomp $linetwofile;
 
 
-print "adding unique coordinates\ncreating $currdir/$linetwofile ...\n"; 
+print ER "adding unique coordinates\ncreating $linetwofile ...\n"; 
 # output file second argument adding coordinates 
-open(OUT,">","$currdir/$linetwofile")|| die "$!";
+open(OUT,">","$linetwofile")|| die "$!";
 
 foreach my $line (@infile){
 	#print "$line";
@@ -107,19 +107,19 @@ foreach my $line (@infile){
 
 # now the fitting outfile is $currdir/$linetwofile and this is the input for next steps
 # command3, the sort
-print "sorting by coordinates...\ncreating $currdir/$linfile.sort.bed ...\n";
-my$errso=system("sort -k 1,1 $currdir/$linetwofile  > $currdir/$linetwofile.sorted");
-print "errors:\n$errso\n\n";
+print ER "sorting $linetwofile by coordinates...\ncreating $linetwofile.sorted ...\n";
+my$errso=system("sort -k 1,1 $linetwofile  > $linetwofile.sorted");
+print ER "errors:\n$errso\n\n";
 ### now reorder the output file, delete unwanted information
 # file to dump information into
-print "reordering $currdir/$linetwofile.sorted entries...\n";
+print ER "reordering $linetwofile.sorted entries...\n";
 
 
-my$outfilethre="$currdir/$linfile.csv";
+my$outfilethre="$linfile.csv";
 
 
 # outfile for finding relevant columns...
-print "creating $outfilethre...\n";
+print ER "creating $outfilethre...\n";
 open(ND,">",$outfilethre)|| die "$!";
 print ND "coordinates\tstrand\tsampleid\tunique_counts\tqualA\tqualB\tRefSeqID\n";
 
@@ -127,7 +127,7 @@ print ND "coordinates\tstrand\tsampleid\tunique_counts\tqualA\tqualB\tRefSeqID\n
 ## see excel file for that
 # this is the input file for finding the relevant columns,
 # and the outfile from sorting line 87 
-open(SO,"$currdir/$linetwofile.sorted")||die "$!";
+open(SO,"$linetwofile.sorted")||die "$!";
 # edit this file 
 my@newin = <SO>;
 

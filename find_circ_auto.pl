@@ -7,7 +7,7 @@ use strict;
 my $start = time;
 # Do stuff
 print "started at $start\n";
-
+open(ER,'>>',"logfile_auto.log")||die "$!";
 # get test2.pl input vars
 
 my$infile1=$ARGV[0];
@@ -32,7 +32,7 @@ chdir($steponedir);
 my$errstepone = system (`perl $steponedir/test2.pl $infile1 $infile2 $samplename`);
 
 
-print "step 1:\n$errstepone\n";
+print ER "step 1:\n$errstepone\n";
 #$outfn=$ARGV[2]
 #$dirn="run_$outfn"					
 # output will be $dirn/auto_$dirn.sites.bed
@@ -46,12 +46,12 @@ my$steptwoinput="$steponedir/run_$samplename/auto_run_$samplename.sites.bed";# r
 # auto_run_hal01_r.sites.bed error
 
 # perl steptwo/steptwo.pl important_samples.bed important_samples_processed.csv
-print "trying now perl $steptwodir/steptwo.pl $steptwoinput auto_$samplename.sites_processed.csv\n\n";
-my$errsteptwo = system (`perl $steptwodir/steptwo.pl $steptwoinput auto_$samplename.sites_processed.csv`);
+print ER "trying now perl $steptwodir/steptwo.pl $steptwoinput \n";
+my$errsteptwo = system (`perl $steptwodir/steptwo.pl $steptwoinput`);
 
 
-print "step 2:\n$errsteptwo\n";
-print "done making $steptwoinput.csv, moving it to run_$samplename/... \n";
+print ER "step 2:\n$errsteptwo\n";
+print ER "done making $steptwoinput.csv, moving it to run_$samplename/... \n";
 
 system(`mv $steptwoinput.csv run_$samplename/`);
 # $linfile.csv
@@ -74,5 +74,5 @@ system(`mv $steponedir/temp.sam tmp_$samplename.sam`);
 my $end = time;
 my$timeused=(($end-$start)/60);# into minutes
 
-print "done.\n used $timeused minutes for $samplename\n ";
+print ER "done.\n used $timeused minutes for $samplename\n ";
 
