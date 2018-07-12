@@ -16,6 +16,8 @@ detecting circular RNA candidates
 
 
 
+ for debugging: in the dir where either of the scripts is stared, logfile_auto.log will be created that includes errormessages from every of these scripts
+
 # three levels of automation:
   1. manually; perl test2.pl | perl steptwo.pl
   2. find_circ_auto.pl above scripts executed for one sample
@@ -59,10 +61,3 @@ the group will lead to auto_automaker making a directory named after the group w
 
 - keep in mind that all mentioned files need to be in the current wdir to be able to work as expected
 - directories of mapping files for all scripts need to be changed for each environment*
-
-
-
-## ideas to improve auto_find_circ
-
-1. make in auto_automaker and its input a fourth column indicating the samplegroup.
-  auto_auautomaker.pl should then in the end move only the relevant outputfile into the groupdir that it will create  
