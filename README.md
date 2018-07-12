@@ -16,7 +16,7 @@ detecting circular RNA candidates
 
 
 
- for debugging: in the dir where either of the scripts is stared, logfile_auto.log will be created that includes errormessages from every of these scripts
+ // for debugging: in the dir where either of the scripts is started, logfile_auto.log will be created that includes errormessages from every of these scripts
 
 # three levels of automation:
   1. manually; perl test2.pl | perl steptwo.pl
