@@ -80,10 +80,10 @@ my$err7 = system (`bowtie2 --reorder -p 12 --mm --score-min=C,-15,0 -q -x hg19 -
 
 print ER "errors:\n$err7\n\n";
 
-my $duration = time - $start;
-print ER "Execution time: $duration s\n";
+my $duration = ((time - $start)/60);
+print ER "Execution time first steps: $duration minutes\n";
 
-print ER "done.\n";
+print ER "done with first steps with sample $outfn.\n";
 
 
 
