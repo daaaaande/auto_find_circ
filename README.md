@@ -52,8 +52,9 @@ go to find_circ/
 
 ## or start auto_automaker.pl with inputfile1 inputfile2 and samplename table, separated by \t
 head infiles_for_auto_automaker.pl:
-lineonefile linetwofile samplename1
-lineonefile2  linetwofile2  samplename2
+lineonefile linetwofile samplename1 group1
+lineonefile2  linetwofile2  samplename2 group1
+the group will lead to auto_automaker making a directory named after the group where all the resulting .csv files will be copied into.
 
 
 - keep in mind that all mentioned files need to be in the current wdir to be able to work as expected
