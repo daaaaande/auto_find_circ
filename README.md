@@ -21,8 +21,9 @@ detecting circular RNA candidates
 # three levels of automation:
   1. manually; perl test2.pl | perl steptwo.pl
   2. find_circ_auto.pl above scripts executed for one sample
-  3. auto_automaker.pl above scripts for multiple samples
     -> perl matrixmaker.pl needs to be done manually in each of the above cases with chosen sample(s)!
+  3. auto_automaker.pl above scripts for multiple samples, makes one matrix.txt for each group if given in the auto_automaker input file
+
 
 
 
@@ -47,17 +48,17 @@ go to find_circ/
 
 
 ## or start find_circ_auto.pl with first_readline second_inline samplename as input vars
-  - here you will have to start matrixmaker.pl with the final outfile separately fore every sample group you want to look at
+  - here you will have to start matrixmaker.pl with the final outfile separately for every sample group you want to look at
 
 
 
 
-## or start auto_automaker.pl with inputfile1 inputfile2 and samplename table, separated by \t
+## or start auto_automaker.pl with inputfile1 inputfile2 samplename groupname table, separated by \t
 head infiles_for_auto_automaker.pl:
 lineonefile linetwofile samplename1 group1
 lineonefile2  linetwofile2  samplename2 group1
-the group will lead to auto_automaker making a directory named after the group where all the resulting .csv files will be copied into.
+the group will lead to auto_automaker making a directory named after the group where all the resulting .csv files will be copied into, catted into one big .csv file and then run matrixmaker.pl with this as an input
 
 
 - keep in mind that all mentioned files need to be in the current wdir to be able to work as expected
-- directories of mapping files for all scripts need to be changed for each environment*
+- directories of mapping files for all scripts need to be changed for each environment

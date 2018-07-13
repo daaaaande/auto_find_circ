@@ -29,9 +29,9 @@ my$stepthreedir="/media/daniel/NGS1/RNASeq/find_circ";
 chdir($steponedir);
 ############################################################################# first step 
 # test2.pl takes unmapped/trimmed/fastq.gz/line1 and line2 reads...
-my$errstepone = system (`perl $steponedir/test2.pl $infile1 $infile2 $samplename`);
+my$errstepone = system ("perl $steponedir/test2.pl $infile1 $infile2 $samplename");
 
-
+print ER "-------------------------------------------------\nsample $samplename processing:\n";
 print ER "step 1:\n$errstepone\n";
 #$outfn=$ARGV[2]
 #$dirn="run_$outfn"					
@@ -47,7 +47,7 @@ my$steptwoinput="$steponedir/run_$samplename/auto_run_$samplename.sites.bed";# r
 
 # perl steptwo/steptwo.pl important_samples.bed important_samples_processed.csv
 print ER "trying now perl $steptwodir/steptwo.pl $steptwoinput \n";
-my$errsteptwo = system (`perl $steptwodir/steptwo.pl $steptwoinput`);
+my$errsteptwo = system ("perl $steptwodir/steptwo.pl $steptwoinput");
 
 
 print ER "step 2:\n$errsteptwo\n";
@@ -67,8 +67,8 @@ print ER "done making $steptwoinput.csv, moving it to run_$samplename/... \n";
 
 ## to not process the same file twice...
 
-system(`mv $steponedir/temp.bam tmp_$samplename.bam`);
-system(`mv $steponedir/temp.sam tmp_$samplename.sam`);
+system("mv $steponedir/temp.bam tmp_$samplename.bam");
+system("mv $steponedir/temp.sam tmp_$samplename.sam");
 #system()
 
 my $end = time;
