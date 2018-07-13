@@ -11,6 +11,7 @@ chomp$inputfile;
 open(IN,$inputfile)|| die "$!";
 my@lines=<IN>;
 my$error="";# collecting dump
+my@groups=();
 my$errortwo="";
 foreach my $singleline (@lines){
 	if($singleline =~ /[a-z]/g){
@@ -26,17 +27,37 @@ foreach my $singleline (@lines){
 		print "finding circs in sample $samplename...\n";
 		$error=system(`perl find_circ_auto.pl $fileone $filetwo $samplename`);
 		print ER "errors:\n$error\n\n";
-		mkdir $groupname;
+		if($groupname=~/[a-z]/gi){
+			if(!(grep(/$groupname/,@groups))){ # check if group already present
+				mkdir $groupname;		# IF NOT, MAKE GROUPDIR
+				push(@groups,$groupname);	
+			}
 		$errortwo=system (`mv run_$samplename/auto_run_$samplename.sites.bed.csv $groupname/`);
+		}
+		
 		print ER "errors auto_moving:\n$errortwo\n";
 	}
 
 
 }
 
+foreach my $groupname (@groups){
+	my$errcat=system(`cat $groupname/*.csv >$groupname/allsites_bedgroup_$groupname.csv`);
+	my$errmatxrix=system(`perl matrximaker.pl $groupname/allsites_bedgroup_$groupname.csv allcircs_matrixout.txt`);
+	print ER "errors catting $groupname .csv files together:\n$errcat\n";
+	print ER "errors making matrix for $groupname/allsites_bedgroup_$groupname.csv :\n$errmatxrix\n";
+}
 
-print ER "finished\n";
+print ER "finished with all groups\n";
 
 
 ## now adding the groups: extra column for groupname
 ## each steptwo.pl outfile ist afterwards moved into one group directory and then made into one matrix with matrixmaker.pl
+#
+#if(!(grep(/$namesmale/,@allenames))){			# get all samplenames into @allenames
+			#push (	@allenames, $namesmale);
+		#}
+		
+#
+#
+#

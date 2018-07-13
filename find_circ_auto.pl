@@ -53,7 +53,7 @@ my$errsteptwo = system (`perl $steptwodir/steptwo.pl $steptwoinput`);
 print ER "step 2:\n$errsteptwo\n";
 print ER "done making $steptwoinput.csv, moving it to run_$samplename/... \n";
 
-system(`mv $steptwoinput.csv run_$samplename/`);
+#system(`mv $steptwoinput.csv run_$samplename/`);
 # $linfile.csv
 # step three will be done later
 
