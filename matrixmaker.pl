@@ -355,7 +355,9 @@ for(my$count=0;$count<=scalar(@allecooords);$count++){
 	$basicinfo=~s/\n//g;
 	$gene_name=~s/\n//g;
 
-	print OU "$circcand\t$basicinfo\t$gene_name\t$circn\t$allsamplehit\t$ni\t$allquas\t$presencething\t$allsamplelines\n";
+	my$linestring="$circcand\t$basicinfo\t$gene_name\t$circn\t$allsamplehit\t$ni\t$allquas\t$presencething\t$allsamplelines\n";
+	$linestring  =~s/\t\t/\t/g;
+	 print OU $linestring;
 	#						|				|				|			|							|				|									|								$ni												t$allquas			$allsamplelines one after another
 	#coordinates\tstrand\tRefseqID\tGene\tknown_circ\tnum_samples_present\tpresent_in_sample\ttotal_sum_unique_counts\tqualities\t
 	#print "$line\t$presencething\t$totalcounts\t$allquas\n";# presecething is a list of samples where circ candidate is present, totalcounts is the unique counts added together
