@@ -285,7 +285,7 @@ for(my$count=0;$count<=scalar(@allecooords);$count++){
 	}
 
 	else{
-		$circn="\t";
+		$circn="unknown";
 	}
 
 
