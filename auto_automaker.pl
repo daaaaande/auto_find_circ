@@ -44,7 +44,7 @@ foreach my $singleline (@lines){
 
 foreach my $groupname (@groups){
 	my$errcat=system("cat $groupname/*.csv >$groupname/allsites_bedgroup_$groupname.csv");
-	my$errmatxrix=system("perl matrixmaker.pl $groupname/allsites_bedgroup_$groupname.csv allcircs_matrixout.txt");
+	my$errmatxrix=system("perl matrixmaker.pl $groupname/allsites_bedgroup_$groupname.csv $groupname/allcircs_matrixout.txt");
 	print ER "errors catting $groupname .csv files together:\n$errcat\n";
 	print ER "errors making matrix for $groupname/allsites_bedgroup_$groupname.csv :\n$errmatxrix\n";
 }
