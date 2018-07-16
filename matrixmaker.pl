@@ -3,7 +3,7 @@ use strict;
 # get the candidatelist_auto_all_sites.bed.csv file created with steptwo.pl
 
 
-######################################## example run 
+######################################## example run
 # perl matrixmaker.pl candidatelist_importantsamples_processed.csv important_sample_circpresencematrix.csv
 #########################################
 
@@ -18,8 +18,8 @@ chomp $linfile;
 # candidatelist_auto_all_sites.bed.csv file created with steptwo.pl
 
 
-print "reading input file $linfile ...\n"; 
-# output file second argument adding coordinates 
+print "reading input file $linfile ...\n";
+# output file second argument adding coordinates
 open(IN,$linfile)|| die "$!";
 
 
@@ -29,9 +29,9 @@ open(IN,$linfile)|| die "$!";
 my%mapping=();
 open(MA,"/media/daniel/NGS1/RNASeq/find_circ/nc_and_mRNA_mapping.txt")|| die "$!";
 
-my@allemappings= <MA>; 
+my@allemappings= <MA>;
 ########################################################################### gene mapping file reading into hash %mapping
-	
+
 # each line now one array part
 print "reading gene mapping...\n";
 
@@ -52,7 +52,7 @@ foreach my $mapline (@allemappings){
 		}
 	}
 
-# 
+#
 
 
 close MA;
@@ -96,9 +96,9 @@ close MA;
 my%known_circs=();
 open(CI,"/media/daniel/NGS1/RNASeq/find_circ/bed_files/circbase_known_circs.bed")|| die "$!";
 
-my@alleci= <CI>; 
+my@alleci= <CI>;
 ########################################################################### gene mapping file reading into hash %mapping
-	
+
 # each line now one array part
 print "reading known circs...\n";
 
@@ -112,14 +112,14 @@ foreach my $circline (@alleci){			# fill a hash that is used later
 	my$fullcordmap="$chr:$cordst-$cordnd";# does this work??
 	chomp $fullcordmap;
 	#print "full coordinates are $fullcordmap\n";
-	
-	# now filling the hash- key are coords and value is circ name		
+
+	# now filling the hash- key are coords and value is circ name
 	$known_circs{"$fullcordmap"}="$circname";
-	# hash filled		
+	# hash filled
 
 	}
 
-# 
+#
 
 
 close CI;
@@ -149,7 +149,7 @@ close CI;
 ############################################################################ get samlenames into array, get coordinates and basic info into arrays allenames, allecoords allebasicinfo
 my@dataarray=();
 
-my@allelines= <IN>; 
+my@allelines= <IN>;
 my@allenames=();
 my@allecooords=();
 
@@ -174,25 +174,25 @@ for (my$i=0;$i<=scalar(@allelines);$i++){
 		if(!(grep(/$namesmale/,@allenames))){			# get all samplenames into @allenames
 			push (	@allenames, $namesmale);
 		}
-		
-		
-		
+
+
+
 
 		if(!(grep(/$cord/,@allecooords))){			# get first threee columns into two arrays
 			push (	@allecooords, $cord);
 			push ( @allebasicinfo, "$strand\t$Refseqid\t");
-			
+
 		}
-		
+
 
 	}
-	
+
 }
-#print "$dataarray[0][2]\n";
+#print "$gene_nametaarray[0][2]\n";
 #print "allenames are\n";
 #print "should be only one sample name:$allenames[0]\n";
 #print "\n";
-# now for each sample name fill ona array with all info 
+# now for each sample name fill ona array with all info
 
 
 ############################################################################ split file into subfiles for each sample and get it into hash
@@ -208,8 +208,8 @@ foreach my $samplenames (@allenames){
 		#print "$sampleout\n\n\n is grep $samplenames $linfile\n";
 		$allinfoonesamplehash{"$samplenames"} = "$sampleout";
 		# hast structure= KEY=SAMPLENAME, VALUE = ALL INFO , full line
-		my@onlysample=split(/\n+/,$sampleout);		# each line for each sample, 
-		
+		my@onlysample=split(/\n+/,$sampleout);		# each line for each sample,
+
 }
 
 ############################################################################ prepare for output file
@@ -229,15 +229,15 @@ open(OU,">",$outfile)|| die "$!";
 ############################################################################ actual output file craetion- sorting by coordinates ald listing info for each sample, adding some info
 
 # file header
-print OU "coordinates\tstrand\tRefseqID\tGene\tknown_circ\tnum_samples_present\tpresent_in_sample\ttotal_sum_unique_counts\tqualities\t";
+print OU "coordinates\tstrand\tRefseqID\tGene\tknown_circ\tnum_samples_present\ttotal_sum_unique_counts\tqualities\tpresent_in_sample\t";
 foreach my $sampls  (@allenames) {
-	print OU "sample\t-unique_count\t-qualA\t-qualB\t"; # $sampls not in same order as below, need to change it 
+	print OU "sample\t-unique_count\t-qualA\t-qualB\t"; # $sampls not in same order as below, need to change it
 }
 print OU "\n";
 
 
 my$numcou=0;
-## opening the two mapping files, catted into one big file, 
+## opening the two mapping files, catted into one big file,
 
 my$ni=0;
 my$countm=0;
@@ -261,19 +261,19 @@ for(my$count=0;$count<=scalar(@allecooords);$count++){
 	my$allsamplelines="";
 	my$allsamplehit=0;
 	#print "now looking for $tolookup...";
-	# now find tolookup in one of the two files 	
-	my$da="";
+	# now find tolookup in one of the two files
+	my$gene_name="";
 	if(exists($mapping{$tolookup})){
 		my$geneo=$mapping{$tolookup};
 		$line="$line\t$geneo";
-		$da=$geneo;
+		$gene_name=$geneo;
 	}
-	
+
 	else {
 		$line="$line\tunkn";
-		$da="unkn";
+		$gene_name="unkn";
 	}
-	
+
 	# built in; $known_circs{"$fullcordmap"}="$circname";
 
 	#### circrna mapping added
@@ -281,30 +281,30 @@ for(my$count=0;$count<=scalar(@allecooords);$count++){
 	if(exists($known_circs{$circcand})){
 		$circn=$known_circs{$circcand};
 		#$line="$line\t$geneo";
-		#$da=$geneo;
+		#$gene_name=$geneo;
 	}
-	
+
 	else{
 		$circn="\t";
 	}
 
 
 
-	
+
 	#print "line is:\n$circcand\t$basicinfo\t::";
-	for my $fruit (@samples) {
+	for my $single_sample (@samples) {
 		#$numcou=scalar(@samples);# number of samples where the candidate is in
-    		#print "The color of '$fruit' is $color_of{$fruit}\n";
-		my$allonesample= $allinfoonesamplehash{$fruit};
+    		#print "The color of '$single_sample' is $color_of{$single_sample}\n";
+		my$allonesample= $allinfoonesamplehash{$single_sample};
 		# first split into lines
 		my@everyline=split(/\n/,$allonesample);
-		#print "looking for $circcand in sample $fruit...\n";
-				
+		#print "looking for $circcand in sample $single_sample...\n";
+
 		foreach my $lineonesample (@everyline){
 			#$countm=0;
 		# see if coord match
 			if($lineonesample =~s/$circcand//){
-				
+
 				chomp $lineonesample;
 				$lineonesample=~s/\t+\+//;	# removing the strand information from the hit
 				$lineonesample=~s/\t+\-//;
@@ -316,15 +316,16 @@ for(my$count=0;$count<=scalar(@allecooords);$count++){
 				$lineonesample =~ tr/\.//;# then withpout
 				$line="$line$lineonesample";
 				$allsamplelines="$allsamplelines$lineonesample";
-				$presencething="$presencething-$fruit";
+				$presencething="$presencething-$single_sample";
 				#print "lineonesqampleis:$lineonesample::\t";
-				# line has still the strand on it, need to remove it 
+				# line has still the strand on it, need to remove it
 				$countm++;
 				$lineonesample =~/\s+[0-9]{1,4}\s+/;# only first hit is unique count
 				my$findnum = $&; # the unique count for each sample
 				my$twoquals=$'; # the two qualities into one
 				$twoquals =~ s/\s+/;/;
 				$allquas = "$allquas,$twoquals";
+				$allquas =~s/\s+//g;
 				$totalcounts=$totalcounts + $findnum;
 				$ni=$totalcounts;
 				$allsamplehit++;
@@ -336,33 +337,35 @@ for(my$count=0;$count<=scalar(@allecooords);$count++){
 			if($countm==1){		# if found one entry in a sample for the circ candidate, finish
 				last;
 			}
-		} 
-		if($countm==0){		# at the end of each sample, if not found fill space with zeroes				
-			chomp $fruit;
-			#print "nohit is:$fruit\t0\t0\t0\t0\t::";
-			$line="$line\t$fruit\t0\t0\t0\t";
-			$allsamplelines="$allsamplelines$fruit\t0\t0\t0\t";
-			
 		}
-		
+		if($countm==0){		# at the end of each sample, if not found fill space with zeroes
+			chomp $single_sample;
+			#print "nohit is:$single_sample\t0\t0\t0\t0\t::";
+			$line="$line\t$single_sample\t0\t0\t0\t";
+			$allsamplelines="$allsamplelines$single_sample\t0\t0\t0\t";
+
+		}
+
 	$countm=0;
 	#$allsamplenames should be all sample information to stick at the end...
 	#print "done looking for coordinates $circcand\n";
-	
+
 	}
 	chomp $line;
-	$basicinfo=~s/\n//g;	
-	$da=~s/\n//g;	
-	
-	print OU "$circcand\t$basicinfo\t$da\t$circn\t$allsamplehit\t$presencething\t$ni\t$allquas\t$allsamplelines\n";
-	#print "$line\t$presencething\t$totalcounts\t$allquas\n";# presecething is a list of samples where circ candidate is present, totalcounts is the unique counts added together 
+	$basicinfo=~s/\n//g;
+	$gene_name=~s/\n//g;
+
+	print OU "$circcand\t$basicinfo\t$gene_name\t$circn\t$allsamplehit\t$ni\t$allquas\t$presencething\t$allsamplelines\n";
+	#						|				|				|			|							|				|									|								$ni												t$allquas			$allsamplelines one after another
+	#coordinates\tstrand\tRefseqID\tGene\tknown_circ\tnum_samples_present\tpresent_in_sample\ttotal_sum_unique_counts\tqualities\t
+	#print "$line\t$presencething\t$totalcounts\t$allquas\n";# presecething is a list of samples where circ candidate is present, totalcounts is the unique counts added together
 	#print "next line , circ should be fully done by now...\n";
 	#print "\n";
 	#$count++;
 }
 
 
-#############################################I/O 
+#############################################I/O
 
 
 # input ; is ARGV[0] ;candidatelist_auto_$linfile.csv";
@@ -375,10 +378,10 @@ for(my$count=0;$count<=scalar(@allecooords);$count++){
 
 
 
-## output is ARGV[1] created in directory where it is run; 
-# coordinates     strand  RefseqID        Gene    present_in_sample       total_sum_unique_counts qualities       sample  -unique_count   -qualA  -qualB  sample  -unique_count   -qualA  -qualB  sample  -unique_count   -qualA  -qualB  sample  -unique_count   -qualA  -qualB  
-#chr10:101654702-101656154       -       NM_015221               DNMBP   -run_3r_testneu 3       ,34;40          run_3679_testneu        0       0       0       daric/Chen01_   0       0       0       auto_   0       0       0               run_3r_testneu  3       34      40      
-#chr10:101689364-101691202       -       NM_015221               DNMBP   -daric/Chen01_  2       ,40;40          run_3679_testneu        0       0       0               daric/Chen01_   2       40      40      auto_   0       0       0       run_3r_testneu  0       0       0       
+## output is ARGV[1] created in directory where it is run;
+# coordinates     strand  RefseqID        Gene    present_in_sample       total_sum_unique_counts qualities       sample  -unique_count   -qualA  -qualB  sample  -unique_count   -qualA  -qualB  sample  -unique_count   -qualA  -qualB  sample  -unique_count   -qualA  -qualB
+#chr10:101654702-101656154       -       NM_015221               DNMBP   -run_3r_testneu 3       ,34;40          run_3679_testneu        0       0       0       daric/Chen01_   0       0       0       auto_   0       0       0               run_3r_testneu  3       34      40
+#chr10:101689364-101691202       -       NM_015221               DNMBP   -daric/Chen01_  2       ,40;40          run_3679_testneu        0       0       0               daric/Chen01_   2       40      40      auto_   0       0       0       run_3r_testneu  0       0       0
 
 # make a score # present# cpount matrix for each candidate with one for each sample
 
@@ -413,4 +416,3 @@ for(my$count=0;$count<=scalar(@allecooords);$count++){
 #
 #
 ##
-

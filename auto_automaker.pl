@@ -3,13 +3,14 @@ use strict;
 
 system("clear");
 
-open(ER,'>>',"logfile_auto.log")||die "$!";
+open(ER,'>>',"logfile_auto.log")||die "$!";		# global logfile
 
-system(`rm auto.bam.*.bam`);# just deleting leftovers to be sure
+system("rm auto.bam.*.bam");# just deleting leftovers to be sure
+system("rm tmp_*.bam");
 
 my$inputfile=$ARGV[0];
 chomp$inputfile;
-open(IN,$inputfile)|| die "$!";
+open(IN,$inputfile)|| die "$!";	# infile is a .csv file steptwo output.csv
 my@lines=<IN>;
 my$error="";# collecting dump
 my@groups=();
@@ -31,11 +32,11 @@ foreach my $singleline (@lines){
 		if($groupname=~/[a-z]/gi){
 			if(!(grep(/$groupname/,@groups))){ # check if group already present
 				mkdir $groupname;		# IF NOT, MAKE GROUPDIR
-				push(@groups,$groupname);	
+				push(@groups,$groupname);
 			}
 		$errortwo=system ("cp run_$samplename/auto_run_$samplename.sites.bed.csv $groupname/");
 		}
-		
+
 		print ER "errors auto_moving:\n$errortwo\n";
 	}
 
@@ -50,15 +51,3 @@ foreach my $groupname (@groups){
 }
 
 print ER "finished with all groups\n";
-
-
-## now adding the groups: extra column for groupname
-## each steptwo.pl outfile ist afterwards moved into one group directory and then made into one matrix with matrixmaker.pl
-#
-#if(!(grep(/$namesmale/,@allenames))){			# get all samplenames into @allenames
-			#push (	@allenames, $namesmale);
-		#}
-		
-#
-#
-#

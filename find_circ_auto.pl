@@ -27,14 +27,14 @@ my$steponedir="/media/daniel/NGS1/RNASeq/find_circ";
 my$steptwodir="/media/daniel/NGS1/RNASeq/find_circ";
 my$stepthreedir="/media/daniel/NGS1/RNASeq/find_circ";
 chdir($steponedir);
-############################################################################# first step 
+############################################################################# first step
 # test2.pl takes unmapped/trimmed/fastq.gz/line1 and line2 reads...
 my$errstepone = system ("perl $steponedir/test2.pl $infile1 $infile2 $samplename");
 
 print ER "-------------------------------------------------\nsample $samplename processing:\n";
 print ER "step 1:\n$errstepone\n";
 #$outfn=$ARGV[2]
-#$dirn="run_$outfn"					
+#$dirn="run_$outfn"
 # output will be $dirn/auto_$dirn.sites.bed
 # also get files in find_circ/run_$samplename/auto_$samplename.sites.bed
 
@@ -53,19 +53,6 @@ my$errsteptwo = system ("perl $steptwodir/steptwo.pl $steptwoinput");
 print ER "step 2:\n$errsteptwo\n";
 print ER "done making $steptwoinput.csv, moving it to run_$samplename/... \n";
 
-#system(`mv $steptwoinput.csv run_$samplename/`);
-# $linfile.csv
-# step three will be done later
-
-############################################################################# third step
-#my$errstepthree = system(`perl $stepthreedir/matrixmaker.pl $steptwooutput/auto_$samplename.sites_processed.csv $steptwooutput/auto_$samplename.circmatrix.csv`);
-
-
-
-#print "step 3:\n$errstepthree\n";
-
-
-## to not process the same file twice...
 
 system("mv $steponedir/temp.bam tmp_$samplename.bam");
 system("mv $steponedir/temp.sam tmp_$samplename.sam");
@@ -75,4 +62,3 @@ my $end = time;
 my$timeused=(($end-$start)/60);# into minutes
 
 print ER "done.\n used $timeused minutes for $samplename\n ";
-
