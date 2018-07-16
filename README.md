@@ -32,18 +32,18 @@ detecting circular RNA candidates
 go to find_circ/
 
 1. perl test2.pl sample_line_1_trimmed_reads.fastq.gz sample_line_2_trimmed_reads.fastq.gz samplename
-   this will create the dir find_circ/run_samplename/ and put the outfile in $dirn/auto_run_samplename.sites.bed
+this will create the dir find_circ/run_samplename/ and put the outfile in $dirn/auto_run_samplename.sites.bed
 
 
 2. perl steptwo.pl $dirn/auto_run_samplename.sites.bed (output from 1. )
-  will create $dirn/auto_run_samplename.sites.bed.csv with better coordinates and only relevant information in one easy to parse \t separated file
+will create $dirn/auto_run_samplename.sites.bed.csv with better coordinates and only relevant information in one easy to parse \t separated file
 
 
 
 
  choose several or one auto_run_samplename.sites.bed.csv file from 2. (group) and cat allimportantones>allsamples.csv
 3. perl matrixmaker allsamples.csv allimportantmatrix.txt
-  this will create the file allimportantmatrix.txt where all circs with the relevent information is in.
+this will create the file allimportantmatrix.txt where all circs with the relevent information is in.
 
 
 
