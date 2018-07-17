@@ -178,7 +178,9 @@ for (my$i=0;$i<=scalar(@allelines);$i++){
 
 			my$namesmale=$parts[2];
 			if(!(grep(/$namesmale/,@allenames))){			# get all samplenames into @allenames
-				push (	@allenames, $namesmale);
+					if($namesmale ne "sampleid"){
+						push (	@allenames, $namesmale);
+					}
 			}
 
 
@@ -300,7 +302,7 @@ for(my$count=0;$count<scalar(@allecooords);$count++){
 
 
 	#print "line is:\n$circcand\t$basicinfo\t::";
-	for my $single_sample (@samples) {
+	foreach my $single_sample (@samples) {
 		#$numcou=scalar(@samples);# number of samples where the candidate is in
     		#print "The color of '$single_sample' is $color_of{$single_sample}\n";
 		my$allonesample= $allinfoonesamplehash{$single_sample};
@@ -370,7 +372,7 @@ for(my$count=0;$count<scalar(@allecooords);$count++){
 	 	$linestring="";
 	}
 		else{			# in case something with the line is wrong
-			print "eror in line: circand is $circcand \n basicinfo is $basicinfo \n and $presencething is $presencething\n";
+			print "error in line: circand is $circcand \n basicinfo is $basicinfo \n and $presencething is $presencething\n";
 		}
  }
 	#						|				|				|			|							|				|									|								$ni												t$allquas			$allsamplelines one after another
@@ -383,7 +385,7 @@ for(my$count=0;$count<scalar(@allecooords);$count++){
 
 
 #############################################I/O
-
+## additional mapping : http://www.ensembl.org/biomart/martview/d34523b70fd370bdc53ee6e882e8cff8
 
 # input ; is ARGV[0] ;candidatelist_auto_$linfile.csv";
 # coordinates     strand  sampleid        unique_counts   qualA   qualB   RefSeqID
