@@ -44,6 +44,7 @@ foreach my $singleline (@lines){
 }
 
 foreach my $groupname (@groups){
+	my$errseding=system("sed -i '1d' $groupname/*.csv"); # will remove first line from steptwo output i.e headers
 	my$errcat=system("cat $groupname/*.csv >$groupname/allsites_bedgroup_$groupname.csv");
 	my$errmatxrix=system("perl matrixmaker.pl $groupname/allsites_bedgroup_$groupname.csv $groupname/allcircs_matrixout.txt");
 	print ER "errors catting $groupname .csv files together:\n$errcat\n";

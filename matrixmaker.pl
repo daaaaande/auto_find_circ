@@ -38,19 +38,22 @@ print "reading gene mapping...\n";
 foreach my $mapline (@allemappings){
 	# fill a hash that is used later
 		chomp $mapline;
-		my@slit=split(/\s+/,$mapline);
-		my$genene=$slit[1];
-		$genene =~ s/\s+//g; # remove emptieness
-		my$nnum=$slit[2];# will be key
-		$nnum =~ s/\s+//g;
-		if($nnum=~/N/){ # empty lines do not help
-			$mapping{"$nnum"}="$genene";
+		if(!($mapline=~/^$/)){
+			my@slit=split(/\s+/,$mapline);
+			my$genene=$slit[1];
+			$genene =~ s/\s+//g; # remove emptieness
+			my$nnum=$slit[2];# will be key
+			$nnum =~ s/\s+//g;
+			if($nnum=~/N/){ # empty lines do not help
+				$mapping{"$nnum"}="$genene";
+			#	print "mapping now gene $nnum to $genene \n";
 			# hash now = mapping
 			# filled= key = NE_???
 			# value = gene name
 			#print " key is $nnum \t value is $genene\n";
+			}
 		}
-	}
+}
 
 #
 
@@ -70,7 +73,7 @@ close MA;
 #chr1	674213	678730	hsa_circ_0007211	1000	-	678730	678730	0,0,255	1	#4517	0
 #chr1	682074	684761	hsa_circ_0009046	1000	-	684761	684761	0,0,255	1	#2687	0
 #chr1	704876	714068	hsa_circ_0009182	1000	-	714068	714068	0,0,255	4	#216,132,110,405	0,3479,4674,8787
-#chr1	709550	714068	hsa_circ_0009183	1000	-	714068	714068	0,0,255	2	#110,405	0,4113
+#chr1	709550	714068	hsa_circ_0009183	1000	-\t\t	714068	714068	0,0,255	2	#110,405	0,4113
 #chr1	741178	745550	hsa_circ_0002333	1000	-	745550	745550	0,0,255	3	#93,50,104	0,2775,4268
 #
 #
@@ -104,19 +107,21 @@ print "reading known circs...\n";
 
 foreach my $circline (@alleci){			# fill a hash that is used later
 	chomp $circline;
-	my@slit=split(/\s+/,$circline);
-	my$chr=$slit[0];	# plan ; chr:start-end to regex the coordinates of candidates
-	my$cordst=$slit[1];
-	my$cordnd=$slit[2];
-	my$circname=$slit[3];
-	my$fullcordmap="$chr:$cordst-$cordnd";# does this work??
-	chomp $fullcordmap;
+	if($circline=~/[a-z]/){
+		my@slit=split(/\s+/,$circline);
+		my$chr=$slit[0];	# plan ; chr:start-end to regex the coordinates of candidates
+		my$cordst=$slit[1];
+		my$cordnd=$slit[2];
+		my$circname=$slit[3];
+		my$fullcordmap="$chr:$cordst-$cordnd";# does this work??
+		chomp $fullcordmap;
 	#print "full coordinates are $fullcordmap\n";
 
 	# now filling the hash- key are coords and value is circ name
-	$known_circs{"$fullcordmap"}="$circname";
+		$known_circs{"$fullcordmap"}="$circname";
 	# hash filled
 
+		}
 	}
 
 #
@@ -164,26 +169,27 @@ for (my$i=0;$i<=scalar(@allelines);$i++){
 	if ($i>=1){
 		## now only relevant stuff
 		my$line=$allelines[$i];	# current line
-		my@parts=split(/\t+/,$line);
-		my$cord=$parts[0];
+		if((!($line=~/coordinates/)) && ($line=~/[a-z]/)){			# check for empty line
+			my@parts=split(/\t+/,$line);
+			my$cord=$parts[0];
 
-		my$strand=$parts[1];
-		my$Refseqid=$parts[6];
+			my$strand=$parts[1];
+			my$Refseqid=$parts[6];
 
-		my$namesmale=$parts[2];
-		if(!(grep(/$namesmale/,@allenames))){			# get all samplenames into @allenames
-			push (	@allenames, $namesmale);
+			my$namesmale=$parts[2];
+			if(!(grep(/$namesmale/,@allenames))){			# get all samplenames into @allenames
+				push (	@allenames, $namesmale);
+			}
+
+
+
+
+			if(!(grep(/$cord/,@allecooords))){			# get first threee columns into two arrays
+				push (	@allecooords, $cord);
+				push ( @allebasicinfo, "$strand\t$Refseqid\t");
+
+			}
 		}
-
-
-
-
-		if(!(grep(/$cord/,@allecooords))){			# get first threee columns into two arrays
-			push (	@allecooords, $cord);
-			push ( @allebasicinfo, "$strand\t$Refseqid\t");
-
-		}
-
 
 	}
 
@@ -242,7 +248,7 @@ my$numcou=0;
 my$ni=0;
 my$countm=0;
 
-for(my$count=0;$count<=scalar(@allecooords);$count++){
+for(my$count=0;$count<scalar(@allecooords);$count++){
 	my$circcand=$allecooords[$count];
 	my$basicinfo=$allebasicinfo[$count];
 	chomp $circcand;
@@ -264,8 +270,10 @@ for(my$count=0;$count<=scalar(@allecooords);$count++){
 	# now find tolookup in one of the two files
 	my$gene_name="";
 	if(exists($mapping{$tolookup})){
+	#	print "looking for key value $tolookup in gene hash\n";
 		my$geneo=$mapping{$tolookup};
 		$line="$line\t$geneo";
+	#	print "found $geneo\n";
 		$gene_name=$geneo;
 	}
 
@@ -354,17 +362,24 @@ for(my$count=0;$count<=scalar(@allecooords);$count++){
 	chomp $line;
 	$basicinfo=~s/\n//g;
 	$gene_name=~s/\n//g;
+	if(((($circcand=~/\:/)&&($presencething=~/[a-z]/)))){
+		my$linestring="$circcand\t$basicinfo\t$gene_name\t$circn\t$allsamplehit\t$ni\t$allquas\t$presencething\t$allsamplelines\n";
+		$linestring  =~s/\t\t/\t/g;
 
-	my$linestring="$circcand\t$basicinfo\t$gene_name\t$circn\t$allsamplehit\t$ni\t$allquas\t$presencething\t$allsamplelines\n";
-	$linestring  =~s/\t\t/\t/g;
-	 print OU $linestring;
+	 	print OU $linestring;
+	 	$linestring="";
+	}
+		else{			# in case something with the line is wrong
+			print "eror in line: circand is $circcand \n basicinfo is $basicinfo \n and $presencething is $presencething\n";
+		}
+ }
 	#						|				|				|			|							|				|									|								$ni												t$allquas			$allsamplelines one after another
 	#coordinates\tstrand\tRefseqID\tGene\tknown_circ\tnum_samples_present\tpresent_in_sample\ttotal_sum_unique_counts\tqualities\t
 	#print "$line\t$presencething\t$totalcounts\t$allquas\n";# presecething is a list of samples where circ candidate is present, totalcounts is the unique counts added together
 	#print "next line , circ should be fully done by now...\n";
 	#print "\n";
 	#$count++;
-}
+
 
 
 #############################################I/O
