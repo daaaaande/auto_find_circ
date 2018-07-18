@@ -30,6 +30,7 @@ colnames(df) =c("circname","fChalo","fCr697","abshalo1","abs697","abs697_R","abs
 
 ################################################################################################
 # filtering 
+
 #at first for total low counts. later find group specific circs and then ones that are in all samples present 
 
 # at first at least one two-fold change from total to rnaseR treated
@@ -52,7 +53,6 @@ in_halo1=subset(df_filter4,((as.numeric(abshalo1) >= 3 ) &  (as.numeric(abshalo1
 # circs that are at least once in each of the four samples 
 in_all=subset(df_filter4,((as.numeric(abshalo1) >= 1 ) &  (as.numeric(abshalo1_R) >= 1) & (as.numeric(abs697) >= 1 ) &  (as.numeric(abs697_R) >= 1)))
 # are here 1250
-
-
+# 
 
 
