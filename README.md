@@ -62,3 +62,11 @@ the group will lead to auto_automaker making a directory named after the group w
 
 - keep in mind that all mentioned files need to be in the current wdir to be able to work as expected
 - directories of mapping files for all scripts need to be changed for each environment
+
+## the last steps for each group in auto_automaker.pl:
+- removes header lines from each groupname/.csv
+- cat all .csv files into one groupname/allsites_bedgroup_groupname.csv
+- create a matrix with matrixmaker.pl groupname/allcircs_matrixout.txt
+- create a second, more dense matrix with groupname/allcircs_matrix_heatmap.txt
+
+-> from there on first_heatmap.R will filter the results, needs to be run manually and should be an example of how to handle the  allcircs_matrix_heatmap.txt
