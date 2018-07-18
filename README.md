@@ -54,9 +54,9 @@ this will create the file allimportantmatrix.txt where all circs with the releve
 
 
 ## or start auto_automaker.pl with inputfile1 inputfile2 samplename groupname table, separated by \t
-~ head infiles_for_auto_automaker.txt \  
-lineonefile1 linetwofile1 samplename1 group1 \  
-lineonefile2  linetwofile2  samplename2 group1 \   
+~ head infiles_for_auto_automaker.txt   
+lineonefile1 linetwofile1 samplename1 group1   
+lineonefile2  linetwofile2  samplename2 group1    
 the group will lead to auto_automaker making a directory named after the group where all the resulting .csv files will be copied into, catted into one big .csv file and then run matrixmaker.pl with this as an input
 
 
