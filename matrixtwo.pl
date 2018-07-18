@@ -1,6 +1,7 @@
 #/usr/bin/perl -w
 use strict;
 
+use List::MoreUtils qw(uniq);
 system("clear");
 
 open(ER,'>>',"logfile_auto.log")||die "$!";		# global logfile
@@ -8,10 +9,15 @@ my $start = time;
 
 my$linfile= $ARGV[0];
 chomp $linfile;
-print "reading input file $linfile ...\n";
+print ER "reading input file $linfile ...\n";
 # output file second argument adding coordinates
 open(IN,$linfile)|| die "$!";
 my@allelines= <IN>;
+
+my$outfile=$ARGV[1];  # outfile
+chomp $outfile;
+open (OUT ,">",$outfile)|| die "$!";
+
 
 my@sampleuniqc=();# positions of unique count columns
 my@samplenames=();# names of all detected samples
@@ -38,7 +44,7 @@ for (my $var = 0; $var < scalar(@allelines); $var++) {
         $e++; # second coordinate for two-dimensional array of all unique counts
         my$samplename = $lineparts[$samplepos-1];
         push(@uniqcounts,$lineparts[$samplepos]); #the unique
-        print "found a sample= $samplename \nand its counts are $lineparts[$samplepos] circrna of interest is $lineparts[4]\n";
+      #  print "found a sample= $samplename \nand its counts are $lineparts[$samplepos] circrna of interest is $lineparts[4]\n";
         push (@samplenames,$samplename);
         ## do the magic and find all unique counts for each sample for each circrna candindate, get all this into a string and then print all that out later
         $allthings="$allthings\t$lineparts[$samplepos]";
@@ -65,7 +71,7 @@ for (my $var = 0; $var < scalar(@allelines); $var++) {
         if(!($headername=~/\_sample/)){
           push (@sampleuniqc,$i);  #get positions of sample ids
           # body...
-          print "header position is $i in $headername\n";
+        #  print "header position is $i in $headername\n";
         }
       }
     }
@@ -73,15 +79,19 @@ for (my $var = 0; $var < scalar(@allelines); $var++) {
 
 
 }
-
-
-print "coordinates\trefseqid\tgene\tcircn";
-foreach my $sampl (@samplenames){
-  print "$sampl\t";
+# header line in output file ...
+my@uniques= uniq @samplenames;
+print OUT"coordinates\trefseqid\tgene\tcircn\t";
+foreach my $sampl (@uniques){
+  print OUT"$sampl\t";
 }
+print OUT "\n";
 
 for (my $v = 0; $v < scalar(@headers); $v++) {
-  print "$headers[$v]\t";
-  print "$alluniques[$v]\n";
+  my$outline="$headers[$v]$alluniques[$v]";
+  $outline=~s/\t\t+/\t/g;
+  $outline=~s/\t\s+/\t/g;
+  #print "$headers[$v]\t";
+  print OUT "$outline\n";
 
 }
