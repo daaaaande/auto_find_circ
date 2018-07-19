@@ -44,7 +44,7 @@ foreach my $mapline (@allemappings){
   # rest of the line is all hallmark genes, need to be cleaned up before saving
   foreach my $hallmg (@mappingline_parts){
     $mapping_hash{"$hallmg"}="$hallmarktype_full";
-      print "mapping $hallmg to type $hallmarktype_full g ---\n";
+  #    print "mapping $hallmg to type $hallmarktype_full g ---\n";
   }
 #  $mapping_hash{"$allhallmarkg"}="$hallmarktype_full"# gene string is key, hallmark type is value
 
@@ -75,7 +75,7 @@ for (my $var = 0; $var < scalar(@allelines); $var++) {
     my$circn=$lineparts[4];
     # adding hallmark gene type
     if(grep(/$gene/,@allehallmarkg)){			# get all samplenames into @allenames)
-    print "looking for $gene in gene mapping ---\n";
+  #  print "looking for $gene in gene mapping ---\n";
     # find hallmark class  and add to matrix file
       $hallm=$mapping_hash{$gene};
     ####
