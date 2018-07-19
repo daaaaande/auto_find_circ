@@ -27,8 +27,8 @@ foreach my $singleline (@lines){
 		chomp $fileone;
 		chomp $filetwo;
 		print "finding circs in sample $samplename...\n";
-		$error=system(`perl find_circ_auto.pl $fileone $filetwo $samplename`);
-		print ER "errors:\n$error\n\n";
+		$error=system("perl find_circ_auto.pl $fileone $filetwo $samplename");
+		print ER "errors running find_circ :\n$error\n\n";
 		if($groupname=~/[a-z]/gi){
 			if(!(grep(/$groupname/,@groups))){ # check if group already present
 				mkdir $groupname;		# IF NOT, MAKE GROUPDIR
