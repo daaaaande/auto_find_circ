@@ -2,7 +2,7 @@ heat=read.table(file='~/auto_find_circ/heatmap_input.tsv', header=T)
 
 
 ##################
-# new, smaller matrix 
+# new, smaller matrix : one column for each sample
 bettersmall=as.matrix(cbind(as.numeric(heat$run_hal01_test1a),as.numeric(heat$run_697_test1c),as.numeric(heat$run_697_r_test1a),as.numeric(heat$run_hal01_r_test1a)))
 #heatmap(bettersmall)
 
@@ -10,21 +10,22 @@ bettersmall=as.matrix(cbind(as.numeric(heat$run_hal01_test1a),as.numeric(heat$ru
 
 
 #########################################
-#calculate fold changes, filter circs found in 1 or 3 samples
+#calculate fold changes, filter circs found in 1 or 3 samples 
+# only the interesting quotas get calculated
 
 foldchhalo=as.numeric(heat$run_hal01_r_test1a/as.numeric(heat$run_hal01_test1a))# total/rnase treated absolute counts
 foldchsix=as.numeric(heat$run_697_r_test1a/as.numeric(heat$run_697_test1c))
 
 
 # combining fold change and names of circular RNA candidates
-circsofinterest=cbind(as.character(heat$circn),as.numeric(foldchhalo),as.numeric(foldchsix))
+circsofinterest=cbind(as.character(heat$circn),as.character(heat$biom_desc),as.character(heat$hallm),as.numeric(foldchhalo),as.numeric(foldchsix))
 
 #adding raw unique reads per sample 
 newmatrxi=as.matrix(cbind(circsofinterest,bettersmall))
 
 # making a datafram out of it, adding labels
 df=as.data.frame(newmatrxi)
-colnames(df) =c("circname","fChalo","fCr697","abshalo1","abs697","abs697_R","abshalo1_R")
+colnames(df) =c("circname","desc","hallm","fChalo","fCr697","abshalo1","abs697","abs697_R","abshalo1_R")
 
 
 
@@ -55,4 +56,18 @@ in_all=subset(df_filter4,((as.numeric(abshalo1) >= 1 ) &  (as.numeric(abshalo1_R
 # are here 1250
 # 
 
+# heatmap
+heatmap_matrix=cbind(as.numeric(in_697$abs697),as.numeric(in_697$abs697_R))
+
+x11()
+heatmap(heatmap_matrix,labRow = in_697$circname,scale = "column",labCol = c("697","697_R"),Rowv = NA,Colv = "Rowv")
+
+
+
+
+# heatmap fold change for all circs included in 697 for 697 and halo1
+heatmap_fold_change=cbind(as.numeric(in_697$fCr697),as.numeric(in_697$fChalo))
+
+x11()
+heatmap(heatmap_fold_change,labRow = in_697$circname,scale = "column",labCol = c("697fC","hal01fC"),Rowv = NA,Colv = "Rowv")
 
