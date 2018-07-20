@@ -1,4 +1,4 @@
-heat=read.table(file='~/auto_find_circ/heatmapone.txt', header=T)
+heat=read.table(file='~/auto_find_circ/heatmap_input.tsv', header=T)
 
 
 ##################

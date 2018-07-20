@@ -2,7 +2,13 @@
 use strict;
 require "/home/daric/auto_find_circ/read_mapping.pl";
 use List::MoreUtils qw(uniq);
-system("clear");
+#system("clear");
+
+############################################################ usage
+# perl matrixtwo.pl matrixmaker_outfile.csv matrixtwo_output.tsv
+############################################################
+
+
 
 open(ER,'>>',"logfile_auto.log")||die "$!";		# global logfile
 my $start = time;
@@ -20,8 +26,12 @@ open (OUT ,">",$outfile)|| die "$!";
 
 ## mapping file with hallmark gene names : beginning of line is hallmark** then website http://www.broadinstitute.org/gsea/msigdb/cards/HALLMARK_CHOLESTEROL_HOMEOSTASIS then gene names
 
-my$hallmark_mapping_file="/home/daric/auto_find_circ/hallmark_genes.tsv";
+my$hallmark_mapping_file="/home/daric/auto_find_circ/hallmark_genes.tsv"; # unusual mapping file, not one gene per line
 open(MA,$hallmark_mapping_file) || die "$!";
+
+# uses subroutine map_file from read_mapping.pl
+my%mart_info=map_file("/home/daric/auto_find_circ/mart_export_ensembl_gene_desc.txt",1,2,"\t");
+my@mart_infos= keys %mart_info;
 
 
 ########################################################################### gene mapping file reading into hash %mapping
@@ -61,40 +71,8 @@ foreach my $mapline (@allemappings){
 }
 my@allehallmarkg=keys %mapping_hash;
 my@all_hm_genes= values %mapping_hash;
-#################
-# next useful gene mapping is https://www.proteinatlas.org/search/protein_class:COSMIC%20Somatic%20Mutations .tsv downloaded
-# ACKR3	CMKOR1, CXCR7, GPR159, RDC1	ENSG00000144476	Atypical chemokine receptor 3	2	236567787-236582358	Cancer-related genes, G-protein coupled receptors, Predicted membrane proteins	Evidence at protein level	HPA032003, HPA049718	Approved		Supported	Vesicles<br>Plasma membrane	Renal cancer:1.76e-6 (unfavourable), Stomach cancer:2.01e-4 (unfavourable), Urothelial cancer:2.93e-4 (unfavourable), Cervical cancer:4.64e-4 (unfavourable)	Expressed in all	Expressed in all			placenta: 176.7	Cell line enhanced		RT4: 248.8;SiHa: 100.8;U-2197: 297.4
-
-
-
-
-# making more with
-
-# key is gene name, value is description
-my%mapping_more_info=map_file("/home/daric/auto_find_circ/protein_class_COSMIC.tsv",0,3);
-
-my@mapping_info_genes= keys %mapping_more_info;
-
-
-
-
-### do the same now with mart_export_ensembl_gene... in fin_circ dir
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+############################################################################
+# arrays in use
 my@sampleuniqc=();# positions of unique count columns
 my@samplenames=();# names of all detected samples
 my@uniqcounts=(); # where maybe all unique counts will be added into a two-dimensional array?
@@ -102,11 +80,14 @@ my@headers=();    # headers with relevant information for each circ candidates
 my@alluniques=();# empty yet
 
 
+
+# default non-matching descriptions
+my$marti="NaN";
 my$hallm="none\t";
-my$desc="nA\t";
+# starting to read inputfile line by line
 for (my $var = 0; $var < scalar(@allelines); $var++) {
   my$longline=$allelines[$var];
-  if (!($longline=~/coordinates/g)) {
+  if (!($longline=~/coordinates/g)) {   # ignoring header
 
     # getting relevant information for each circ candidate ...
     my@lineparts=split(/\t/,$longline);
@@ -120,25 +101,21 @@ for (my $var = 0; $var < scalar(@allelines); $var++) {
     # find hallmark class  and add to matrix file
       if($mapping_hash{$gene}=~/[A-Z]/){
         $hallm=$mapping_hash{$gene};
-        #print "found hallmark $hallm for $gene  in gene mapping ---\n";
-
-    ####
       }
     }
-    # second information mapping
-    if(grep(/$gene/,@mapping_info_genes)){
+
+    if(grep(/$gene?/,@mart_infos)){              # mart mapping
       # gene has information available to it
-      $desc=$mapping_more_info{$gene};
+      $marti=$mart_info{$gene};
+      $marti=~s/\[.*\]//g;
+			$marti=~s/\ /_/g;
+    }
+    # check for empty mart information
+    if(!($marti=~/[A-z]/gi)){
+      $marti="NaN";
     }
 
-
-
-
-
-
-
-
-    push(@headers,"$coords\t$refseqID\t$gene\t$circn\t$hallm\t$desc\t");# header into array
+    push(@headers,"$coords\t$refseqID\t$gene\t$circn\t$hallm\t$marti\t");# header into array
     #if($var==1){# to test first only the second line , later all lines
       my$e=0;
       my$allthings="";
@@ -151,20 +128,12 @@ for (my $var = 0; $var < scalar(@allelines); $var++) {
         ## do the magic and find all unique counts for each sample for each circrna candindate, get all this into a string and then print all that out later
         $allthings="$allthings\t$lineparts[$samplepos]";
         #$alluniques[$var][$e]=$lineparts[$samplepos];# two-dimensional array
-
-
-
-
-
-
-
-
       }
       push(@alluniques,$allthings);
     #}
   }
   else{
-  # header bar
+  # header bar only- catch columns with samplenames in it and their position
     my@wholeheader=split(/\t/,$longline);
     my $i=0;
     foreach my $headername (@wholeheader){
@@ -178,21 +147,25 @@ for (my $var = 0; $var < scalar(@allelines); $var++) {
       }
     }
   }
-
-
 }
+
+
+
+# actual file creation:
 # header line in output file ...
 my@uniques= uniq @samplenames;
-print OUT"coordinates\trefseqid\tgene\tcircn\thallm\tinfo_m\t";
+print OUT"coordinates\trefseqid\tgene\tcircn\thallm\tbiom_desc\t";
 foreach my $sampl (@uniques){
   print OUT"$sampl\t";
 }
 print OUT "\n";
-
+# now the real content, cleaning it from junk and then printing it
 for (my $v = 0; $v < scalar(@headers); $v++) {
   my$outline="$headers[$v]$alluniques[$v]";
   $outline=~s/\t\t+/\t/g;
   $outline=~s/\t\s+/\t/g;
+	$outline=~s/\s+\t/\t/g;
+
   #print "$headers[$v]\t";
   print OUT "$outline\n";
 
