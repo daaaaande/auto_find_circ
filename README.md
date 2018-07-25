@@ -67,6 +67,6 @@ the group will lead to auto_automaker making a directory named after the group w
 - removes header lines from each groupname/.csv
 - cat all .csv files into one groupname/allsites_bedgroup_groupname.csv
 - create a matrix with matrixmaker.pl groupname/allcircs_matrixout.txt
-- create a second, more dense matrix with groupname/allcircs_matrix_heatmap.txt
+- create a second, more dense matrix with perl matrixtwo.pl groupname/allcircs_matrix_heatmap.txt
 
 -> from there on first_heatmap.R will filter the results, needs to be run manually and should be an example of how to handle the  allcircs_matrix_heatmap.txt
