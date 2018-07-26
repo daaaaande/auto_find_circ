@@ -10,21 +10,17 @@ detecting circular RNA candidates
 - hg19.fa
 - circbase.org known circular RNAs mapping file
 - all here listed .pl files in the same directory
-
+- for each run/sample: two reads.fastq.gz files, and a samplename to be handled by find_circ_auto.pl
 
 >> auto_automaker.pl is just a small wrapper for find_circ_auto.pl, wich in return is a wrapper for test2.pl and steptwo.pl wich are in return are scripts to simplify find_circ
 
-
-
- // for debugging: in the dir where either of the scripts is started, logfile_auto.log will be created that includes errormessages from every of these scripts
+ // for debugging: in the dir where either of the scripts is started, logfile_auto.log will be created that includes error messages from every of these scripts and additional information
 
 # three levels of automation:
   1. manually; perl test2.pl | perl steptwo.pl
   2. find_circ_auto.pl above scripts executed for one sample
     -> perl matrixmaker.pl needs to be done manually in each of the above cases with chosen sample(s)!
   3. auto_automaker.pl above scripts for multiple samples, makes one matrix.txt for each group if given in the auto_automaker input file
-
-
 
 
 
@@ -67,7 +63,7 @@ the group will lead to auto_automaker making a directory named after the group w
 - directories of mapping files for all scripts need to be changed for each environment
 
 ## the last steps for each group in auto_automaker.pl:
-- removes header lines from each groupname/.csv
+- removes header lines from each groupname/.csv just be be sure
 - cat all .csv files into one groupname/allsites_bedgroup_groupname.csv
 - create a matrix with matrixmaker.pl groupname/allcircs_matrixout.txt
 - create a second, more dense matrix with perl matrixtwo.pl groupname/allcircs_matrix_heatmap.txt
