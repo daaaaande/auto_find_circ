@@ -45,6 +45,8 @@ will create $dirn/auto_run_samplename.sites.bed.csv with better coordinates and 
 3. perl matrixmaker allsamples.csv allimportantmatrix.txt
 this will create the file allimportantmatrix.txt where all circs with the relevent information is in.
 
+4. perl matrixtwo.pl allimportantmatrix.txt smallerallimportantmatrix.tsv
+this will create a second, more dense form of information from the first matrix and add a few extra mappings
 
 
 ## or start find_circ_auto.pl with first_readline second_inline samplename as input vars
@@ -70,3 +72,10 @@ the group will lead to auto_automaker making a directory named after the group w
 - create a second, more dense matrix with perl matrixtwo.pl groupname/allcircs_matrix_heatmap.txt
 
 -> from there on first_heatmap.R will filter the results, needs to be run manually and should be an example of how to handle the  allcircs_matrix_heatmap.txt
+
+
+
+ >the main data output is already done for the steptwo output, the matrixmaker.pl and matrixtwo.pl combined with the first_hetmap.R will just make it more easy to analyze the data that comes out. so in theory you could ignore the last 3 steps!
+
+
+ > when mapping files for the matrix making steps are missing you could just comment those lines if you do not want the addistional information!

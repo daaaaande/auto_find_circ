@@ -1,10 +1,11 @@
 #/usr/bin/perl -w
 use strict;
-
+# automating running find_circ even more.
+# needs a file with 3-4 columns in each row : firstread secondread samplename group
 system("clear");
-
+# global logfile
 open(ER,'>>',"logfile_auto.log")||die "$!";		# global logfile
-
+# remove leftovers from last run
 system("rm auto.bam.*.bam");# just deleting leftovers to be sure
 system("rm tmp_*.bam");
 

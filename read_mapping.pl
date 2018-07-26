@@ -1,6 +1,6 @@
 #/usr/bin/perl -w
 use strict;
-
+# this file to be used as a function in several parts when a file needs to be mapped into a hash 
 sub map_file  {
   # given params
   my$file=$_[0];

@@ -16,13 +16,14 @@ chomp $infile1;
 my$infile2=$ARGV[1];
 chomp $infile2;
 
-my$samplename=$ARGV[2];# danach sollten alle anderen files benannt werden die da raus kommen, und auch in die unterdir verschoben werden
+my$samplename=$ARGV[2];# sample name and dir where the files will be moved
 chomp $samplename;
 
 my$currentdir=`pwd`;
 chomp $currentdir;
 
 #			# NGS number changes with every reboot
+# find_circ need to be in dir where this was started
 my$steponedir="/media/daniel/NGS1/RNASeq/find_circ";
 my$steptwodir="/media/daniel/NGS1/RNASeq/find_circ";
 my$stepthreedir="/media/daniel/NGS1/RNASeq/find_circ";
@@ -31,7 +32,7 @@ chdir($steponedir);
 # test2.pl takes unmapped/trimmed/fastq.gz/line1 and line2 reads...
 my$errstepone = system ("perl $steponedir/test2.pl $infile1 $infile2 $samplename");
 
-print ER "\n\n\n-------------------------------------------------\nsample $samplename processing:\n"; 
+print ER "\n\n\n-------------------------------------------------\nsample $samplename processing:\n";
 print ER "step 1:\n$errstepone\n";
 #$outfn=$ARGV[2]
 #$dirn="run_$outfn"
