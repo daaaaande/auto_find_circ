@@ -48,6 +48,7 @@ this will create the file allimportantmatrix.txt where all circs with the releve
 4. perl matrixtwo.pl allimportantmatrix.txt smallerallimportantmatrix.tsv
 this will create a second, more dense form of information from the first matrix and add a few extra mappings
 
+5. play with the output from 4. in the first_heatmap.R script, find candidates suiting your use case  
 
 ## or start find_circ_auto.pl with first_readline second_inline samplename as input vars
   - here you will have to start matrixmaker.pl with the final outfile separately for every sample group you want to look at
