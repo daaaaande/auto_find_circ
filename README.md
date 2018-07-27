@@ -5,11 +5,12 @@ detecting circular RNA candidates
 
 ## will not work if one of these things is missing:
 - find_circ scripts from the official repo
-- bedtools installed
-- bowtie2 installed
-- hg19.fa
-- circbase.org known circular RNAs mapping file
-- all here listed .pl files in the same directory
+- bedtools installed                                      -> sudo apt install bedtools -y
+- bowtie2 installed                                       -> sudo apt install bowtie2 -y
+- hg19.fa                                                 -> download instructions from https://www.gungorbudak.com/blog/2014/04/13/download-human-reference-genome-hg19/
+- circbase.org known circular RNAs mapping file           ->(.txt) http://circbase.org/cgi-bin/downloads.cgi
+- all here listed .pl files in the same directory         -> git clone http://github.com/daaaaande/auto_find_circ/ .
+
 - for each run/sample: two reads.fastq.gz files, and a samplename to be handled by find_circ_auto.pl
 
 >> auto_automaker.pl is just a small wrapper for find_circ_auto.pl, wich in return is a wrapper for test2.pl and steptwo.pl wich are in return are scripts to simplify find_circ
