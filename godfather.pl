@@ -8,6 +8,12 @@ open(ER,'>>',"logfile_auto.log")||die "$!";		# global logfile
 my$infile=$ARGV[0];
 chomp $infile;
 
+
+## enter your directories for the pipelines .pl files here 
+my$find_circ_dir="/media/daniel/NGS1/RNASeq/find_circ";
+my$circexplorer1_dir="/media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer";
+
+
 my$cu=`pwd`;
 
 my$there=`ls $infile`;
@@ -19,21 +25,21 @@ else{
   die  "did not find $infile in $cu\n";
 }
 # copying fastq files
-my$err_cpone=system("cp *.fastq /media/daniel/NGS1/RNASeq/find_circ/");
-my$err_cptwo=system("cp *.fastq /media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer/");
+my$err_cpone=system("cp *.fastq $find_circ_dir/");
+my$err_cptwo=system("cp *.fastq $circexplorer1_dir/");
 
 print "errors moving fastq files:\n$err_cpone\n$err_cptwo\n";
 
 # copying filesheet
-my$copyfind_circ= system("cp $infile /media/daniel/NGS1/RNASeq/find_circ/auto_infile.txt");
-my$copycircexone= system("cp $infile /media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer/auto_infile.txt");
+my$copyfind_circ= system("cp $infile $find_circ_dir/auto_infile.txt");
+my$copycircexone= system("cp $infile $circexplorer1_dir/auto_infile.txt");
 
 # now start both auto_automaker.pl with auto_infile.txt
-chdir "/media/daniel/NGS1/RNASeq/find_circ/";
-my$startfin_ci= system("perl auto_automaker.pl auto_infile.txt");
+chdir "$find_circ_dir/";
+my$startfin_ci= system("perl $find_circ_dir/auto_automaker.pl auto_infile.txt");
 
-chdir "/media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer/";
-my$startcirex= system("perl auto_automaker.pl auto_infile.txt");
+chdir "$circexplorer1_dir/";
+my$startcirex= system("perl $circexplorer1_dir/auto_automaker.pl auto_infile.txt");
 
 print "logs find_circ: $startfin_ci\n";
 print "logs circexplorer1 : $startcirex\n";
