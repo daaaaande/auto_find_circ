@@ -407,6 +407,8 @@ for(my$count=0;$count<scalar(@allecooords);$count++){
 
 
 
+## relies on mapping files from ensembl http://www.ensembl.org/biomart/martview/e6bfa814a8ad21d2591da4206dabbb19 ;
+
 # file needs to be in find_circ/nc_and_mRNA_mapping.txt
 
 
