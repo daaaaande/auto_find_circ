@@ -7,7 +7,7 @@ use strict;
 my $start = time;
 # Do stuff
 print "started at $start\n";
-open(ER,'>>',"logfile_auto.log")||die "$!";
+open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 # get test2.pl input vars
 
 my$infile1=$ARGV[0];

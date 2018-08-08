@@ -3,7 +3,7 @@ use strict;
 
 system("clear");
 
-open(ER,'>>',"logfile_auto.log")||die "$!";		# global logfile
+open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 
 my$infile=$ARGV[0];
 chomp $infile;
@@ -47,11 +47,12 @@ chdir "$dcc_dir/";
 my$start_dcc= system("perl $dcc_dir/auto_automaker.pl auto_infile.txt");
 
 # copy all three outputs into one dir where it all started
-print "moving all outfiles into all/...\n";
-mkdir "all";
-system("cp $find_circ_dir/all_run_*/*.tsv all/");
-system("cp $circexplorer1_dir//all_run_*/*.tsv all/");
-system("cp $dcc_dir/all_run_*/*.tsv all/");
+#print "moving all outfiles into all/...\n";
+
+#kdir "all";
+#system("cp $find_circ_dir/all_run_*/*.tsv all/");
+#system("cp $circexplorer1_dir//all_run_*/*.tsv all/");
+#system("cp $dcc_dir/all_run_*/*.tsv all/");
 
 
 

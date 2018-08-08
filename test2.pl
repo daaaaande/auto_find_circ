@@ -6,20 +6,20 @@ use strict;
 #system("clear");
 
 
-######################################## example run 
+######################################## example run
 # perl test2.pl line_1_file.fastq.gz line_2_file.fastq.gz _important_sample_dir
 #########################################
 
 
 my$bowtiepace="/media/daniel/NGS1/RNASeq/find_circ";
-open(ER,'>>',"logfile_auto.log")||die "$!";
+open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 my $start = time;
 # Do stuff
 print ER "started at $start\n";
 
 # call needs to be :
 
-#input files could be anywhere, script NEEDS to run in find_circ, output folder will be created in find_circ/** 
+#input files could be anywhere, script NEEDS to run in find_circ, output folder will be created in find_circ/**
 
 #			perl test2.pl daric/HAL01_R1_trimmed.fastq.gz daric/HAL01_R2_trimmed.fastq.gz outdir
 
@@ -89,4 +89,3 @@ print ER "done with first steps with sample $outfn.\n";
 
 
 ##bowtie2 -p 12 --very-sensitive --mm --score-min=C,-15,0 -x hg19 -1 daric/HAL01_R1_trimmed.fastq.gz -2 daric/HAL01_R2_trimmed.fastq.gz >tmp.sam 2> log.log
-

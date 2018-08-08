@@ -10,7 +10,7 @@ use List::MoreUtils qw(uniq);
 
 
 
-open(ER,'>>',"logfile_auto.log")||die "$!";		# global logfile
+open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 my $start = time;
 
 my$linfile= $ARGV[0];

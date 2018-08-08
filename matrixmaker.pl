@@ -6,7 +6,7 @@ use strict;
 ######################################## example run
 # perl matrixmaker.pl candidatelist_importantsamples_processed.csv important_sample_circpresencematrix.csv
 #########################################
-
+open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 
 ########################################################################### input start
 #system("clear");
@@ -18,7 +18,7 @@ chomp $linfile;
 # candidatelist_auto_all_sites.bed.csv file created with steptwo.pl
 
 
-print "reading input file $linfile ...\n";
+print ER "reading input file $linfile ...\n";
 # output file second argument adding coordinates
 open(IN,$linfile)|| die "$!";
 
@@ -33,7 +33,7 @@ my@allemappings= <MA>;
 ########################################################################### gene mapping file reading into hash %mapping
 
 # each line now one array part
-print "reading gene mapping...\n";
+print ER "reading gene mapping...\n";
 
 foreach my $mapline (@allemappings){
 	# fill a hash that is used later
@@ -103,7 +103,7 @@ my@alleci= <CI>;
 ########################################################################### gene mapping file reading into hash %mapping
 
 # each line now one array part
-print "reading known circs...\n";
+print ER "reading known circs...\n";
 
 foreach my $circline (@alleci){			# fill a hash that is used later
 	chomp $circline;
@@ -163,7 +163,7 @@ my@allebasicinfo=();
 my@allecircarrays=();
 
 my@linieperline=();
-print "collecting sample names...\n";
+ print ER "collecting sample names...\n";
 for (my$i=0;$i<=scalar(@allelines);$i++){
 	# ignore first line
 	if ($i>=1){
@@ -209,9 +209,9 @@ my%allinfoonesamplehash;
 my$sampleout;
 
 #$color_of{'apple'} = 'red';
-print "looking for circs for each sample...\n";
+ print ER "looking for circs for each sample...\n";
 foreach my $samplenames (@allenames){
-		print "looking for $samplenames circs...\n";# for each sample find all lines
+		print ER "looking for $samplenames circs...\n";# for each sample find all lines
 		$sampleout= `grep $samplenames $linfile`;	#
 		#print "$sampleout\n\n\n is grep $samplenames $linfile\n";
 		$allinfoonesamplehash{"$samplenames"} = "$sampleout";
@@ -372,7 +372,7 @@ for(my$count=0;$count<scalar(@allecooords);$count++){
 	 	$linestring="";
 	}
 		else{			# in case something with the line is wrong
-			print "error in line: circand is $circcand \n basicinfo is $basicinfo \n and $presencething is $presencething\n";
+			print ER "error in line: circand is $circcand \n basicinfo is $basicinfo \n and $presencething is $presencething\n";
 		}
  }
 	#						|				|				|			|							|				|									|								$ni												t$allquas			$allsamplelines one after another

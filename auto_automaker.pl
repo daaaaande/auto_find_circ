@@ -3,7 +3,7 @@ use strict;
 
 system("clear");
 
-open(ER,'>>',"logfile_auto.log")||die "$!";		# global logfile
+open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 
 system("rm auto.bam.*.bam");# just deleting leftovers to be sure
 system("rm tmp_*.bam");

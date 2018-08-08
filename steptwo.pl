@@ -15,20 +15,20 @@ use strict;
 
 
 
-
+open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 
 
 
 my $start = time;
 
 # Do stuff
-print "started at $start\n";
+print ER "started at $start\n";
 
 
 # get starting place to return to later
 my$currdir=`pwd`;
 chomp $currdir;
-print "started step two at dir $currdir\n";
+print ER "started step two at dir $currdir\n";
 # input should be all .bed files cat into one
 my$linfile= $ARGV[0];
 chomp $linfile;
@@ -41,10 +41,10 @@ my$chdirort="/media/daniel/NGS1/RNASeq/find_circ";
 
 chdir($chdirort);
 
-print "creating $linfile.circ_candidates_auto.bed with score filtering...\n";
+print ER "creating $linfile.circ_candidates_auto.bed with score filtering...\n";
 my$err = system ("grep circ $linfile | grep -v chrM | python2.7 $scriptplace/sum.py -2,3 | python2.7 $scriptplace/scorethresh.py -16 1 | python2.7 $scriptplace/scorethresh.py -15 2 | python2.7 $scriptplace/scorethresh.py -14 2 | python2.7 $scriptplace/scorethresh.py 7 2 | python2.7 $scriptplace/scorethresh.py 8,9 35 | python2.7 $scriptplace/scorethresh.py -17 100000 >$linfile.circ_candidates_auto.bed");
 
-print "errors:\n$err\n\n";
+print ER "errors:\n$err\n\n";
 # output of command1
 my$infiletwo="$linfile.circ_candidates_auto.bed";
 
@@ -55,9 +55,9 @@ my$infiletwo="$linfile.circ_candidates_auto.bed";
 
 # command2
 # will only take the present windows, the circ_candidates.window_not_present.bed will not be created
-print "looking up generefs with $Generefplace/Genes_RefSeq_hg19_09.20.2013.bed\ncreating $infiletwo.out...\n";
+print ER "looking up generefs with $Generefplace/Genes_RefSeq_hg19_09.20.2013.bed\ncreating $infiletwo.out...\n";
 my$err2=system("bedtools window -a $infiletwo -b $Generefplace/Genes_RefSeq_hg19_09.20.2013.bed -w 1 >$infiletwo.out");
-print "errors:\n$err2\n\n";
+print ER "errors:\n$err2\n\n";
 # output of command2
 my$newnametwo="$infiletwo.out";
 
@@ -77,7 +77,7 @@ my$newnametwo="$infiletwo.out";
 open(IN,$newnametwo)|| die "$!";
 my@infile = <IN> ;
 
-open(ER,'>>',"logfile_auto.log")||die "$!";
+
 # new filename for steptwo output ;
 # ist jetzt also $linfile.circ_candidates_auto_.bed.out_.processsed
 
