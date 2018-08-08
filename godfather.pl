@@ -9,10 +9,10 @@ my$infile=$ARGV[0];
 chomp $infile;
 
 
-## enter your directories for the pipelines .pl files here 
+## enter your directories for the pipelines .pl files here cd
 my$find_circ_dir="/media/daniel/NGS1/RNASeq/find_circ";
 my$circexplorer1_dir="/media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer";
-
+my$dcc_dir="/media/daniel/NGS1/RNASeq/find_circ/dcc";
 
 my$cu=`pwd`;
 
@@ -27,12 +27,14 @@ else{
 # copying fastq files
 my$err_cpone=system("cp *.fastq $find_circ_dir/");
 my$err_cptwo=system("cp *.fastq $circexplorer1_dir/");
+my$err_cpthr=system("cp *.fastq $dcc_dir/");
 
-print "errors moving fastq files:\n$err_cpone\n$err_cptwo\n";
+print "errors moving fastq files:\n$err_cpone\n$err_cptwo\n$err_cpthr\n";
 
 # copying filesheet
 my$copyfind_circ= system("cp $infile $find_circ_dir/auto_infile.txt");
 my$copycircexone= system("cp $infile $circexplorer1_dir/auto_infile.txt");
+my$copy_dcc=      system("cp $infile $dcc_dir/auto_infile.txt");
 
 # now start both auto_automaker.pl with auto_infile.txt
 chdir "$find_circ_dir/";
@@ -41,7 +43,12 @@ my$startfin_ci= system("perl $find_circ_dir/auto_automaker.pl auto_infile.txt");
 chdir "$circexplorer1_dir/";
 my$startcirex= system("perl $circexplorer1_dir/auto_automaker.pl auto_infile.txt");
 
+chdir "$dcc_dir/";
+my$start_dcc= system("perl $dcc_dir/auto_automaker.pl auto_infile.txt");
+
+
 print "logs find_circ: $startfin_ci\n";
 print "logs circexplorer1 : $startcirex\n";
+print "logs dcc: $start_dcc\n";
 # need to copy all .gz files into the two folders?
 # delete copies of fastq?
