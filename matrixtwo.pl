@@ -1,6 +1,6 @@
 #/usr/bin/perl -w
 use strict;
-require "/home/daric/auto_find_circ/read_mapping.pl";
+require "/media/daniel/NGS1/RNASeq/find_circ/read_mapping.pl";
 use List::MoreUtils qw(uniq);
 #system("clear");
 
@@ -26,11 +26,11 @@ open (OUT ,">",$outfile)|| die "$!";
 
 ## mapping file with hallmark gene names : beginning of line is hallmark** then website http://www.broadinstitute.org/gsea/msigdb/cards/HALLMARK_CHOLESTEROL_HOMEOSTASIS then gene names
 
-my$hallmark_mapping_file="/home/daric/auto_find_circ/hallmark_genes.tsv"; # unusual mapping file, not one gene per line
+my$hallmark_mapping_file="/media/daniel/NGS1/RNASeq/find_circ/hallmark_genes.tsv"; # unusual mapping file, not one gene per line
 open(MA,$hallmark_mapping_file) || die "$!";
 
 # uses subroutine map_file from read_mapping.pl
-my%mart_info=map_file("/home/daric/auto_find_circ/mart_export_ensembl_gene_desc.txt",1,2,"\t");
+my%mart_info=map_file("/media/daniel/NGS1/RNASeq/find_circ/mart_export_ensembl_gene_desc.txt",1,2,"\t");
 my@mart_infos= keys %mart_info;
 
 

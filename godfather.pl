@@ -25,11 +25,11 @@ else{
   die  "did not find $infile in $cu\n";
 }
 # copying fastq files
-my$err_cpone=system("cp *.fastq $find_circ_dir/");
-my$err_cptwo=system("cp *.fastq $circexplorer1_dir/");
-my$err_cpthr=system("cp *.fastq $dcc_dir/");
+#my$err_cpone=system("cp *.fastq $find_circ_dir/");
+#my$err_cptwo=system("cp *.fastq $circexplorer1_dir/");
+#my$err_cpthr=system("cp *.fastq $dcc_dir/");
 
-print "errors moving fastq files:\n$err_cpone\n$err_cptwo\n$err_cpthr\n";
+#print "errors moving fastq files:\n$err_cpone\n$err_cptwo\n$err_cpthr\n";
 
 # copying filesheet
 my$copyfind_circ= system("cp $infile $find_circ_dir/auto_infile.txt");
@@ -45,6 +45,14 @@ my$startcirex= system("perl $circexplorer1_dir/auto_automaker.pl auto_infile.txt
 
 chdir "$dcc_dir/";
 my$start_dcc= system("perl $dcc_dir/auto_automaker.pl auto_infile.txt");
+
+# copy all three outputs into one dir where it all started
+print "moving all outfiles into all/...\n";
+mkdir "all";
+system("cp $find_circ_dir/all_run_*/*.tsv all/");
+system("cp $circexplorer1_dir//all_run_*/*.tsv all/");
+system("cp $dcc_dir/all_run_*/*.tsv all/");
+
 
 
 print "logs find_circ: $startfin_ci\n";
