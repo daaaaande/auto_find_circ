@@ -39,14 +39,14 @@ foreach my $mapline (@allemappings){
 	# fill a hash that is used later
 		chomp $mapline;
 		if(!($mapline=~/^$/)){
-			my@slit=split(/\s+/,$mapline);
-			my$genene=$slit[1];
+			my@slit=split(/\t+/,$mapline);
+			my$genene=$slit[11];
 			$genene =~ s/\s+//g; # remove emptieness
-			my$nnum=$slit[2];# will be key
+			my$nnum=$slit[10];# will be key
 			$nnum =~ s/\s+//g;
 			if($nnum=~/N/){ # empty lines do not help
 				$mapping{"$nnum"}="$genene";
-			#	print "mapping now gene $nnum to $genene \n";
+				#print "mapping now key  $nnum to $genene \n";
 			# hash now = mapping
 			# filled= key = NE_???
 			# value = gene name
@@ -313,6 +313,7 @@ for(my$count=0;$count<scalar(@allecooords);$count++){
 		foreach my $lineonesample (@everyline){
 			#$countm=0;
 		# see if coord match
+		my@hitsamples=();
 			if($lineonesample =~s/$circcand//){
 
 				chomp $lineonesample;
@@ -325,21 +326,28 @@ for(my$count=0;$count<scalar(@allecooords);$count++){
 				$lineonesample =~ tr/\.\s+//; # first remove the dot with space
 				$lineonesample =~ tr/\.//;# then withpout
 				$line="$line$lineonesample";
-				$allsamplelines="$allsamplelines$lineonesample";
-				$presencething="$presencething-$single_sample";
+
+				# check for presence of sample
+				# full name. i.e 697 should not match 697_r
+				if(!(grep(/^$single_sample$/,@hitsamples))){			# get all samplenames into @allenames
+
+					$allsamplelines="$allsamplelines$lineonesample";
+					push(@hitsamples,$single_sample);# if detected, get samplename into this array
+					$presencething="$presencething-$single_sample";
 				#print "lineonesqampleis:$lineonesample::\t";
 				# line has still the strand on it, need to remove it
-				$countm++;
-				$lineonesample =~/\s+[0-9]{1,4}\s+/;# only first hit is unique count
-				my$findnum = $&; # the unique count for each sample
-				my$twoquals=$'; # the two qualities into one
-				$twoquals =~ s/\s+/;/;
-				$allquas = "$allquas,$twoquals";
-				$allquas =~s/\s+//g;
-				$totalcounts=$totalcounts + $findnum;
-				$ni=$totalcounts;
-				$allsamplehit++;
+					$countm++;
+					$lineonesample =~/\s+[0-9]{1,4}\s+/;# only first hit is unique count
+					my$findnum = $&; # the unique count for each sample
+					my$twoquals=$'; # the two qualities into one
+					$twoquals =~ s/\s+/;/;
+					$allquas = "$allquas,$twoquals";
+					$allquas =~s/\s+//g;
+					$totalcounts=$totalcounts + $findnum;
+					$ni=$totalcounts;
+					$allsamplehit++;
 				#print "totalcount $ni for $circcand\n";
+				}
 			}
 			else{# else space needs to be filled with zeros
 				#print "0\t0\t0\t0\t"	# did print a 0 for every non match in samplespace,
