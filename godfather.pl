@@ -32,9 +32,12 @@ else{
 #print "errors moving fastq files:\n$err_cpone\n$err_cptwo\n$err_cpthr\n";
 
 # copying filesheet
-my$copyfind_circ= system("cp $infile $find_circ_dir/auto_infile.txt");
+
 my$copycircexone= system("cp $infile $circexplorer1_dir/auto_infile.txt");
 my$copy_dcc=      system("cp $infile $dcc_dir/auto_infile.txt");
+# find_circ needs the .gz files..
+#system("");
+my$copyfind_circ= system("cp $infile $find_circ_dir/auto_infile.txt");
 
 # now start both auto_automaker.pl with auto_infile.txt
 chdir "$find_circ_dir/";

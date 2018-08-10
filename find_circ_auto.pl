@@ -54,11 +54,14 @@ print ER "step 2:\n$errsteptwo\n";
 print ER "done making $steptwoinput.csv, moving it to run_$samplename/... \n";
 
 
-system("mv $steponedir/temp.bam tmp_$samplename.bam");
-system("mv $steponedir/temp.sam tmp_$samplename.sam");
+system("mv $steponedir/temp.bam run_$samplename/tmp_$samplename.bam");
+system("mv $steponedir/temp.sam run_$samplename/tmp_$samplename.sam");
 #system()
+system("rm run_$samplename/*.bam");
+system("rm run_$samplename/*.sam");
 
 my $end = time;
 my$timeused=(($end-$start)/60);# into minutes
+print ER "############################################################\nsample $samplename done :\n";
 
 print ER "done.\n used $timeused minutes for $samplename\n ";
