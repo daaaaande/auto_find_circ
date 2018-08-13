@@ -212,7 +212,7 @@ my$sampleout;
  print ER "looking for circs for each sample...\n";
 foreach my $samplenames (@allenames){
 		print ER "looking for $samplenames circs...\n";# for each sample find all lines
-		$sampleout= `grep $samplenames $linfile`;	#
+		$sampleout= `grep -w $samplenames $linfile`;	#
 		#print "$sampleout\n\n\n is grep $samplenames $linfile\n";
 		$allinfoonesamplehash{"$samplenames"} = "$sampleout";
 		# hast structure= KEY=SAMPLENAME, VALUE = ALL INFO , full line
