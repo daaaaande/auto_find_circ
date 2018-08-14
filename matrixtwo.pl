@@ -103,6 +103,9 @@ for (my $var = 0; $var < scalar(@allelines); $var++) {
         $hallm=$mapping_hash{$gene};
       }
     }
+		else{
+			$hallm="none";
+		}
 
     if(grep(/$gene?/,@mart_infos)){              # mart mapping
       # gene has information available to it
@@ -110,6 +113,9 @@ for (my $var = 0; $var < scalar(@allelines); $var++) {
       $marti=~s/\[.*\]//g;
 			$marti=~s/\ /_/g;
     }
+		else{
+			$marti="NaN";
+		}
     # check for empty mart information
     if(!($marti=~/[A-z]/gi)){
       $marti="NaN";
