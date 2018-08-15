@@ -8,7 +8,7 @@ use List::MoreUtils qw(uniq);
 # perl matrixtwo.pl matrixmaker_outfile.csv matrixtwo_output.tsv
 ############################################################
 
-chdir "../";
+#chdir "../";
 
 open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 my $start = time;
