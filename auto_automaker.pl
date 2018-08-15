@@ -65,7 +65,7 @@ foreach my $groupname (@groups){
 	print ER "errors catting $groupname .csv files together:\n$errcat\n";
 	print ER "errors making matrix for $groupname/allsites_bedgroup_$groupname.csv :\n$errmatxrix\n";
 }
-my$erralcat=system("cat all_run_$date/* >all_run_$date.allbeds.find_circ.out");
+my$erralcat=system("cat all_run_$date/* >all_run_$date/all_run_$date.allbeds.find_circ.out");
 my$erralm1=system("perl auto_find_circ/matrixmaker.pl all_run_$date/all_run_$date.allbeds.find_circ.out all_run_$date/allsamples_matrix.find_circ.tsv");
 my$err_mat2=system("perl auto_find_circ/matrixtwo.pl all_run_$date/allsamples_matrix.find_circ.tsv all_run_$date/allsamples_m_heatmap.find_circ.tsv");
 
