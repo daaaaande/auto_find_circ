@@ -48,8 +48,8 @@ my$startfin_ci= system("perl $find_circ_dir/auto_automaker.pl auto_infile.txt");
 chdir "$circexplorer1_dir/";
 my$startcirex= system("perl $circexplorer1_dir/auto_automaker.pl auto_infile.txt");
 
-chdir "$dcc_dir/";
-my$start_dcc= system("perl $dcc_dir/automate_DCC/auto_automaker.pl auto_infile.txt");# but execute auto from repo
+chdir "$dcc_dir/automate_DCC/";
+my$start_dcc= system("perl auto_automaker.pl auto_infile.txt");# but execute auto from repo
 
 # copy all three outputs into one dir where it all started
 #print "moving all outfiles into all/...\n";
