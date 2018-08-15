@@ -5,6 +5,7 @@ use strict;
 # output; $dirn/auto_$dirn.sites.reads and logfiles
 #system("clear");
 
+chdir "../";
 
 ######################################## example run
 # perl test2.pl line_1_file.fastq.gz line_2_file.fastq.gz _important_sample_dir
@@ -47,7 +48,7 @@ chdir $bowtiepace ;
 
 # first alignment
 print ER "doing currently:\nbowtie2 -p 12 --very-sensitive --mm --score-min=C,-15,0 -x hg19 -1 $lineonefile -2 $linetwofile >temp.sam 2> firstpass.log\n";
-       my$err = system ("bowtie2 -p 12 --very-sensitive --mm --score-min=C,-15,0 -x hg19 -1 $lineonefile -2 $linetwofile >temp.sam 2> firstpass.log");
+my$err = system ("bowtie2 -p 12 --very-sensitive --mm --score-min=C,-15,0 -x hg19 -1 $lineonefile -2 $linetwofile >temp.sam 2> firstpass.log");
 
 
 print ER "creating temp.bam...\n";

@@ -12,7 +12,7 @@ use strict;
 # perl steptwo.pl important_samples.bed important_samples_processed.csv
 #########################################
 
-
+chdir "../";
 
 
 open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile

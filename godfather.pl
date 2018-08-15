@@ -3,6 +3,8 @@ use strict;
 
 system("clear");
 
+chdir "../";
+
 open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 
 my$infile=$ARGV[0];
@@ -10,7 +12,7 @@ chomp $infile;
 
 
 ## enter your directories for the pipelines .pl files here cd
-my$find_circ_dir="/media/daniel/NGS1/RNASeq/find_circ";
+my$find_circ_dir="/media/daniel/NGS1/RNASeq/find_circ/auto_find_circ";
 my$circexplorer1_dir="/media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer";
 my$dcc_dir="/media/daniel/NGS1/RNASeq/find_circ/dcc";
 
