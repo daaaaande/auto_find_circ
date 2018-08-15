@@ -28,8 +28,11 @@ foreach my $singleline (@lines){
 		chomp $samplename;
 		chomp $fileone;
 		chomp $filetwo;
+		my$tim=localtime();
 		print ER "##############################################################\n";
-		print ER "finding circs in sample $samplename...\n";
+		print ER "starting @ $tim \nfinding circs in sample $samplename...\n";
+
+
 		$error=system("perl auto_find_circ/find_circ_auto.pl $fileone $filetwo $samplename");
 		print ER "errors:\n$error\n\n";
 		if($groupname=~/[a-z]/gi){
