@@ -30,7 +30,7 @@ foreach my $singleline (@lines){
 		chomp $filetwo;
 		my$tim=localtime();
 		print ER "##############################################################\n";
-		print ER "starting @ $tim \nfinding circs in sample $samplename...\n";
+		print ER "starting @ $tim \nfinding circs in sample $samplename with find_circ ...\n";
 
 
 		$error=system("perl auto_find_circ/find_circ_auto.pl $fileone $filetwo $samplename");
