@@ -47,7 +47,7 @@ my$steptwoinput="$steponedir/run_$samplename/auto_run_$samplename.sites.bed";# r
 
 # perl steptwo/steptwo.pl important_samples.bed important_samples_processed.csv
 print ER "trying now perl auto_find_circ/steptwo.pl $steptwoinput \n";
-my$errsteptwo = system ("perl $steptwodir/steptwo.pl $steptwoinput");
+my$errsteptwo = system ("perl $steptwodir/auto_find_circ/steptwo.pl $steptwoinput");
 
 
 print ER "step 2:\n$errsteptwo\n";
