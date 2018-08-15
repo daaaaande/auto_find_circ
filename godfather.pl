@@ -35,7 +35,7 @@ else{
 
 # copying filesheet
 
-my$copycircexone= system("cp $infile $circexplorer1_dir/auto_infile.txt");
+my$copycircexone= system("cp $infile $circexplorer1_dir/auto_infile.txt");# keep the samplefile in the parent dir
 my$copy_dcc=      system("cp $infile $dcc_dir/auto_infile.txt");
 # find_circ needs the .gz files..
 #system("");
@@ -49,7 +49,7 @@ chdir "$circexplorer1_dir/";
 my$startcirex= system("perl $circexplorer1_dir/auto_automaker.pl auto_infile.txt");
 
 chdir "$dcc_dir/";
-my$start_dcc= system("perl $dcc_dir/auto_automaker.pl auto_infile.txt");
+my$start_dcc= system("perl $dcc_dir/automate_DCC/auto_automaker.pl auto_infile.txt");# but execute auto from repo
 
 # copy all three outputs into one dir where it all started
 #print "moving all outfiles into all/...\n";
