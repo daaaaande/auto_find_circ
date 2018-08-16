@@ -12,7 +12,7 @@ chomp $infile;
 
 
 ## enter your directories for the pipelines .pl files here cd
-my$find_circ_dir="/media/daniel/NGS1/RNASeq/find_circ/auto_find_circ";
+my$find_circ_dir="/media/daniel/NGS1/RNASeq/find_circ";
 my$circexplorer1_dir="/media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer";
 my$dcc_dir="/media/daniel/NGS1/RNASeq/find_circ/dcc";
 
@@ -36,17 +36,18 @@ else{
 # copying filesheet
 
 my$copycircexone= system("cp $infile $circexplorer1_dir/auto_infile.txt");# keep the samplefile in the parent dir
-my$copy_dcc=      system("cp $infile $dcc_dir/auto_infile.txt");
-# find_circ needs the .gz files..
-#system("");
+my$copy_dcc= system("cp $infile $dcc_dir/auto_infile.txt");
 my$copyfind_circ= system("cp $infile $find_circ_dir/auto_infile.txt");
 
+
+
+
 # now start both auto_automaker.pl with auto_infile.txt
-chdir "$find_circ_dir/";
-my$startfin_ci= system("perl $find_circ_dir/auto_automaker.pl auto_infile.txt");
+chdir "$find_circ_dir/auto_find_circ";
+my$startfin_ci= system("perl auto_automaker.pl auto_infile.txt");
 
 chdir "$circexplorer1_dir/";
-my$startcirex= system("perl $circexplorer1_dir/auto_automaker.pl auto_infile.txt");
+my$startcirex= system("perl auto_automaker.pl auto_infile.txt");
 
 chdir "$dcc_dir/automate_DCC/";
 my$start_dcc= system("perl auto_automaker.pl auto_infile.txt");# but execute auto from repo
