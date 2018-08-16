@@ -43,7 +43,7 @@ my$copyfind_circ= system("cp $infile $find_circ_dir/auto_infile.txt");
 
 
 # now start both auto_automaker.pl with auto_infile.txt
-chdir "$find_circ_dir/auto_find_circ";
+chdir "$find_circ_dir/auto_find_circ/";
 my$startfin_ci= system("perl auto_automaker.pl auto_infile.txt");
 
 chdir "$circexplorer1_dir/";
