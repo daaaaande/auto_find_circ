@@ -5,6 +5,10 @@ system("clear");
 
 chdir "../";
 
+# usage: get samples.csv into find_circ/
+#					 go to find_circ/auto_find_circ/
+#						perl auto_automaker.pl samples.csv 
+
 open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 
 system("rm auto.bam.*.bam");# just deleting leftovers to be sure
