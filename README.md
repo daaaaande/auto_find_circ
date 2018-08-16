@@ -77,7 +77,7 @@ the group will lead to auto_automaker making a directory named after the group w
 -> from there on first_heatmap.R will filter the results, needs to be run manually and should be an example of how to handle the  allcircs_matrix_heatmap.txt
 
 ## godfather.pl
-->  will start the auto_automaker with the same input file for all three here seen pipelines, then add everything together into one dir
+->  will start the auto_automaker with the same input file for all three here seen pipelines, then add everything together into one dir called all_run_DAY_MONTH/
 
  >the main data output is already done for the steptwo output, the matrixmaker.pl and matrixtwo.pl combined with the first_hetmap.R will just make it more easy to analyze the data that comes out. so in theory you could ignore the last 3 steps!
 
