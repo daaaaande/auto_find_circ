@@ -39,7 +39,7 @@ chomp $outfn;
 
 
 my$dirn="run_$outfn";
-mkdir $dirn ;
+mkdir "$bowtiepace/$dirn";
 
 
 #this NEEDS to be executed in find_circ dir, otherwise bowtie will not run
@@ -54,20 +54,20 @@ my$err = system ("bowtie2 -p 12 --very-sensitive --mm --score-min=C,-15,0 -x hg1
 print ER "creating temp.bam...\n";
 my$err2 = system ("samtools view -hbuS -o temp.bam temp.sam");
 print "errors:\n$err2\n\n";
-system ("cp temp.bam $dirn/temp.bam");
+system ("cp temp.bam $bowtiepace/$dirn/temp.bam");
 #
 
 # new name convention MB01==auto , MB01.bam=auto.bam
 print ER "sorting temp.bam...\n";
 my$err3 = system ("samtools sort -O bam -o auto.bam temp.bam");
 print ER "errors:\n$err3\n\n";
-system ("cp auto.bam $dirn/auto.bam");
+system ("cp auto.bam $bowtiepace/$dirn/auto.bam");
 #echo ">>> get the unmapped"
 print ER "getting the unmapped...\n";
 my$err4 = system ("samtools view -hf 4 auto.bam | samtools view -Sb - > unmapped_auto.bam");
 
 
-system ("cp unmapped_auto.bam  $dirn/unmapped_auto.bam");
+system ("cp unmapped_auto.bam  $bowtiepace/$dirn/unmapped_auto.bam");
 #echo ">>> split into anchors"
 print ER "splitting into anchors...\n";
 my$err5 = system ("python2.7 $bowtiepace/unmapped2anchors.py unmapped_auto.bam > $dirn/auto_anchors.qfa");
@@ -76,8 +76,8 @@ print ER "errors:\n$err5\n\n";
 
 # maybe the dirn in the bowtie command is the problem?
 
-print ER "creating $dirn/auto_$dirn.sites.reads \tand  $dirn/auto_$dirn.sites.bed\n";
-my$err7 = system ("bowtie2 --reorder --mm --score-min=C,-15,0 -q -x hg19 -U $dirn/auto_anchors.qfa 2> $dirn/auto_bt2_secondpass.log | python2.7 $bowtiepace/find_circ.py -G $bowtiepace/genome/chroms/ -p $dirn -s $bowtiepace/$dirn/$dirn.sites.log > $dirn/auto_$dirn.sites.bed 2> $dirn/auto_$dirn.sites.reads");
+print ER "creating $bowtiepace/$dirn/auto_$dirn.sites.reads \tand  $bowtiepace/$dirn/auto_$dirn.sites.bed\n";
+my$err7 = system ("bowtie2 --reorder --mm --score-min=C,-15,0 -q -x hg19 -U $bowtiepace/$dirn/auto_anchors.qfa 2> $bowtiepace/$dirn/auto_bt2_secondpass.log | python2.7 $bowtiepace/find_circ.py -G $bowtiepace/genome/chroms/ -p $bowtiepace/$dirn -s $bowtiepace/$dirn/$dirn.sites.log > $bowtiepace/$dirn/auto_$dirn.sites.bed 2> $bowtiepace/$dirn/auto_$dirn.sites.reads");
 
 print ER "errors:\n$err7\n\n";
 
