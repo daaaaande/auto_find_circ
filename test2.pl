@@ -77,7 +77,7 @@ print ER "errors:\n$err5\n\n";
 # maybe the dirn in the bowtie command is the problem?
 
 print ER "creating $bowtiepace/$dirn/auto_$dirn.sites.reads \tand  $bowtiepace/$dirn/auto_$dirn.sites.bed\n";
-my$err7 = system ("bowtie2 --reorder --mm --score-min=C,-15,0 -q -x hg19 -U $bowtiepace/$dirn/auto_anchors.qfa 2> $bowtiepace/$dirn/auto_bt2_secondpass.log | python2.7 $bowtiepace/find_circ.py -G $bowtiepace/genome/chroms/ -p $bowtiepace/$dirn -s $bowtiepace/$dirn/$dirn.sites.log > $bowtiepace/$dirn/auto_$dirn.sites.bed 2> $bowtiepace/$dirn/auto_$dirn.sites.reads");
+my$err7 = system ("bowtie2 --reorder --mm --score-min=C,-15,0 -q -x hg19 -U $bowtiepace/$dirn/auto_anchors.qfa 2> $bowtiepace/$dirn/auto_bt2_secondpass.log | python2.7 $bowtiepace/find_circ.py -G $bowtiepace/genome/chroms/ -p $outfn -s $bowtiepace/$dirn/$dirn.sites.log > $bowtiepace/$dirn/auto_$dirn.sites.bed 2> $bowtiepace/$dirn/auto_$dirn.sites.reads");
 
 print ER "errors:\n$err7\n\n";
 

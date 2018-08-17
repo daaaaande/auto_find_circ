@@ -137,6 +137,7 @@ foreach my $lein (@newin){
 	# NOW GET ONLY RELEVANT THINGS
 	my$ccord=$all_things[0]; # should be chr10:101654702-101656154
 	my$long_id=$all_things[4]; # should be auto_circ_004447
+	$long_id=~s/run_//;
 	## this string needs some work : remove circ_..
 	$long_id =~s/circ\_*.[0-9]{1,20}//ig ;
 	# removed circ_8945 for each line
