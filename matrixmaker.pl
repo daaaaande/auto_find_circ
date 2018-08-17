@@ -12,6 +12,7 @@ open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 #system("clear");
 
 my $start = time;
+
 #chdir "../";
 
 my$linfile= $ARGV[0];
@@ -213,7 +214,7 @@ my$sampleout;
  print ER "looking for circs for each sample...\n";
 foreach my $samplenames (@allenames){
 		print ER "looking for $samplenames circs...\n";# for each sample find all lines
-		$sampleout= `grep -w $samplenames $linfile`;	#
+		$sampleout= `grep -w $samplenames $linfile`;	# -w for exact matching...
 		#print "$sampleout\n\n\n is grep $samplenames $linfile\n";
 		$allinfoonesamplehash{"$samplenames"} = "$sampleout";
 		# hast structure= KEY=SAMPLENAME, VALUE = ALL INFO , full line
@@ -309,13 +310,24 @@ for(my$count=0;$count<scalar(@allecooords);$count++){
 		my$allonesample= $allinfoonesamplehash{$single_sample};
 		# first split into lines
 		my@everyline=split(/\n/,$allonesample);
-		#print "looking for $circcand in sample $single_sample...\n";
+	#	print "looking for $circcand in sample $single_sample...\n";
 
 		foreach my $lineonesample (@everyline){
 			#$countm=0;
 		# see if coord match
 		my@hitsamples=();
 			if($lineonesample =~s/$circcand//){
+				#print "lineonesampleis:$lineonesample\t";
+				my@matches= $lineonesample=~/\t[-+]?[0-9]{1,5}\t/g;
+				my$quant=$matches[0];
+				$quant=~s/\s+//g;
+				my$qual=$matches[1];
+				$qual =~s/\s+//g;
+				$lineonesample=~s/[+-]//g;
+				$lineonesample=~/\S{1,22}\t/;
+				my$namer=$&;
+				#print "qual is $qual qunat is $quant name is $namer\n";
+
 
 				chomp $lineonesample;
 				$lineonesample=~s/\t+\+//;	# removing the strand information from the hit
@@ -327,22 +339,33 @@ for(my$count=0;$count<scalar(@allecooords);$count++){
 				$lineonesample =~ tr/\.\s+//; # first remove the dot with space
 				$lineonesample =~ tr/\.//;# then withpout
 				$line="$line$lineonesample";
-
+				$lineonesample=~s/\t[-+]?[0-9]\t//g;# remove junk
+				# get samplename somewhere else? spits out doubles...
+				$lineonesample="";
+				#print "lineone redone: $lineonesample\n";
 				# check for presence of sample
 				# full name. i.e 697 should not match 697_r
 				if(!(grep(/^$single_sample$/,@hitsamples))){			# get all samplenames into @allenames
-
+					$lineonesample="$namer\t$quant\t$qual\t$qual\t";
+					#print "found for $circcand in sample $single_sample;\n\n";
 					$allsamplelines="$allsamplelines$lineonesample";
 					push(@hitsamples,$single_sample);# if detected, get samplename into this array
 					$presencething="$presencething-$single_sample";
-				#print "lineonesqampleis:$lineonesample::\t";
+
 				# line has still the strand on it, need to remove it
 					$countm++;
-					$lineonesample =~/\s+[0-9]{1,4}\s+/;# only first hit is unique count
+					$lineonesample =~/\s+[0-9]{1,5}\s+/;# only first hit is unique count
 					my$findnum = $&; # the unique count for each sample
 					my$twoquals=$'; # the two qualities into one
+					$twoquals=~/[+-]?[0-9]{1,3}/;# get first quality
+					my$firstqual=$qual;
 					$twoquals =~ s/\s+/;/;
-					$allquas = "$allquas,$twoquals";
+					$allquas = "$allquas;$firstqual,$firstqual";# APPENDING ALL FOUND QUALITIES
+				#	print "allsl=|$lineonesample|\n";
+
+							#print "aquals are $allquas and two are $twoquals\n";
+
+
 					$allquas =~s/\s+//g;
 					$totalcounts=$totalcounts + $findnum;
 					$ni=$totalcounts;
@@ -368,7 +391,7 @@ for(my$count=0;$count<scalar(@allecooords);$count++){
 	$countm=0;
 	#$allsamplenames should be all sample information to stick at the end...
 	#print "done looking for coordinates $circcand\n";
-
+	#@hitsamples=();# emtying hits for each coordinates
 	}
 	chomp $line;
 	$basicinfo=~s/\n//g;
