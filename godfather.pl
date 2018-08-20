@@ -1,12 +1,25 @@
 #/usr/bin/perl -w
 use strict;
-
+# clean command line before starting the whole analysis
 system("clear");
-
+# change into the parent dir- find_circ- where all the action happens
 chdir "../";
-
+# global logfile- every pipeline and godfather.pl dumps its errors there
 open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
-
+######################################################
+## usage: get samples.csv into find_circ/
+#					 go to find_circ/auto_find_circ/
+#						perl godfather.pl samples.csv
+######################################################
+# godfather.pl
+#   - as a wrapper for all three pipelines
+#   - the in .fastq files need to be in all thre directories before the analysis starts- otherwise only those pipelines will run that find the files in their parent dir
+#   - will copy the infile into the three parent directories where the processing will be done (so one cd .. away from the corresponding .pl scripts) into the file auto_infile.txt
+#   - will then first start find_circ_auto pipeline, then circexplorer1_auto and in the end automate_DCC
+#   - drops errors into the global logfile as every other script does aswell- keep in mind to redirect the stdout from STAR and bowtie aligner into a file, otherwise it will get lost
+#   - for each pipeline it cd's into the script dir, but copies the infile into the parent dir (from scriptdir 'cd ..'). THAT IS EXPEXTED BEHAVIOUR to keep the git repos free from samplesheets!
+#
+##################################################
 my$infile=$ARGV[0];
 chomp $infile;
 

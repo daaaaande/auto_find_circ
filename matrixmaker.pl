@@ -5,15 +5,22 @@ use strict;
 
 ######################################## example run
 # perl matrixmaker.pl candidatelist_importantsamples_processed.csv important_sample_circpresencematrix.csv
-#########################################
+##########################################
+#	matrixmaker.pl for find_circ
+#		- takes the outfiles from steptwo (processed.csv)
+#		- for more than one sample (more useful matrix) cat the .processed.csv files into one big file, the rest will be handled by matrixmaker.pl
+#		- adds a little relevant information to each candidate
+#		- needs an output filename- itwill output in .tsv format to be readable for matrixtwo.pl (look at the bottom of this file for example lines for each relevant file)
+#		- tracks time of usage
+#		- dumps errors into logfile into global logfile
+##########################################
+
 open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 
 ########################################################################### input start
-#system("clear");
 
 my $start = time;
 
-#chdir "../";
 
 my$linfile= $ARGV[0];
 chomp $linfile;

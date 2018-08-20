@@ -1,22 +1,31 @@
 #/usr/bin/perl -w
 use strict;
 
-#system("clear");
-
+# expecting input files in the parent dir...
 chdir "../";
-my $start = time;
+
+my $start = time;# uses for one sample about one hour on 10 cores
 # Do stuff
 print "started at $start\n";
+# global logfile
 open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
+####################################################################### usage
+# perl find_circ_auto.pl read1.fastq.trimmed read2.fastq.trimmed samplename
+#######################################################################
+# find_circ_auto.pl
+#   - starts test2.pl (the alignment steps of find_circ)
+#   - and then starts steptwo.pl with its output
+#   - also removed the .bam and .sam files created that take a lot of space to not fill up the storage when they are no longer needed
+#   - keeps track of used time for each run
+######################################################################
 # get test2.pl input vars
-
 my$infile1=$ARGV[0];
 chomp $infile1;
 
 my$infile2=$ARGV[1];
 chomp $infile2;
 
-my$samplename=$ARGV[2];# danach sollten alle anderen files benannt werden die da raus kommen, und auch in die unterdir verschoben werden
+my$samplename=$ARGV[2];# samplename
 chomp $samplename;
 
 my$currentdir=`pwd`;

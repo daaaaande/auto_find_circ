@@ -1,13 +1,20 @@
 #/usr/bin/perl -w
 use strict;
-
-system("clear");
-
+# change into the parent dir - this is where the infile needs to be
 chdir "../";
-
+#######################################################
 # usage: get samples.csv into find_circ/
 #					 go to find_circ/auto_find_circ/
 #						perl auto_automaker.pl samples.csv
+#######################################################
+#auto_automaker.pl for find_circ
+# 		- needs a inputfile as specified in the README.md
+#			- will start find_circ_auto.pl for every sample
+#			- can in return be started by the godfather.pl script, this will handle the infile location correctly
+#			- makes a group into a dir of the parent dir where the bed.csv files for each group will be collected
+#			- then makes the two matrices for each group in the groupfolders
+#			- also makes one dir run_startdate in the parent dir where data from all samples will be made into two big matrices
+###############################################
 
 open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 

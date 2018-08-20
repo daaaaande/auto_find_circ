@@ -10,7 +10,16 @@ use strict;
 # mkdir samplename
 # when more than one sample ;(cat important_sample_*.sites.bed >important_samples.bed)
 # perl steptwo.pl important_samples.bed important_samples_processed.csv
-#########################################
+##########################################
+#steptwo.pl
+#		- is heavily dependent on the python scripts of find_circ located in the same directory
+#		- runs the last find_circ commands and puts out a file format that can be converted into a matrix by matrixmaker.pl as an input
+#		- does NOT need a output file name-> for the input sample1 its final output file will be sample1circ_candidates.auto.bed.out.provessed.csv
+#		- expects infile in the parent dir from where it was started
+#		- dumps logs into global logfile
+
+##
+
 
 chdir "../";
 
