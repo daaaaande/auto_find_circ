@@ -7,7 +7,7 @@ chdir "../";
 
 # usage: get samples.csv into find_circ/
 #					 go to find_circ/auto_find_circ/
-#						perl auto_automaker.pl samples.csv 
+#						perl auto_automaker.pl samples.csv
 
 open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 
@@ -21,6 +21,16 @@ my@lines=<IN>;
 my$error="";# collecting dump
 my@groups=();
 my$errortwo="";
+
+
+my$date= localtime();
+$date=~s/\s+/_/g;
+$date=~s/[0-9]//g;
+$date=~s/\://g;
+$date=~s/\_\_//g;
+mkdir "all_run_$date";
+
+
 foreach my $singleline (@lines){
 	if($singleline =~ /[a-z]/gi){
 		chomp $singleline;
@@ -52,12 +62,7 @@ foreach my $singleline (@lines){
 
 
 }
-my$date= localtime();
-$date=~s/\s+/_/g;
-$date=~s/[0-9]//g;
-$date=~s/\://g;
-$date=~s/\_\_//g;
-mkdir "all_run_$date";
+
 
 foreach my $groupname (@groups){
 	my$errseding=system("sed -i '1d' $groupname/*.csv"); # will remove first line from steptwo output i.e headers
