@@ -29,13 +29,9 @@ my$error="";# collecting dump
 my@groups=();
 my$errortwo="";
 
-
-my$date= localtime();
-$date=~s/\s+/_/g;
-$date=~s/[0-9]//g;
-$date=~s/\://g;
-$date=~s/\_\_//g;
-mkdir "all_run_$date";
+my$ndir=$ARGV[1];
+chomp $ndir;
+mkdir "$ndir";
 
 
 foreach my $singleline (@lines){
@@ -77,15 +73,15 @@ foreach my $groupname (@groups){
 	my$errmatxrix=system("perl auto_find_circ/matrixmaker.pl $groupname/allsites_bedgroup_$groupname.csv $groupname/allcircs_matrixout.txt");
 	my$matrtmaker=system("perl auto_find_circ/matrixtwo.pl $groupname/allcircs_matrixout.txt $groupname/allc_matrixtwo.tsv");
 	print ER "errors making second matrix for $groupname/allsites_bedgroup_$groupname.csv :\n$matrtmaker\n";
-	system("cp $groupname/allsites_bedgroup_$groupname.csv all_run_$date/");
+	system("cp $groupname/allsites_bedgroup_$groupname.csv $ndir/");
 	print ER "errors catting $groupname .csv files together:\n$errcat\n";
 	print ER "errors making matrix for $groupname/allsites_bedgroup_$groupname.csv :\n$errmatxrix\n";
 }
-my$erralcat=system("cat all_run_$date/* >all_run_$date/all_run_$date.allbeds.find_circ.out");
-my$erralm1=system("perl auto_find_circ/matrixmaker.pl all_run_$date/all_run_$date.allbeds.find_circ.out all_run_$date/allsamples_matrix.find_circ.tsv");
-my$err_mat2=system("perl auto_find_circ/matrixtwo.pl all_run_$date/allsamples_matrix.find_circ.tsv all_run_$date/allsamples_m_heatmap.find_circ.tsv");
+my$erralcat=system("cat $ndir/* >$ndir/$ndir.allbeds.find_circ.out");
+my$erralm1=system("perl auto_find_circ/matrixmaker.pl $ndir/$ndir.allbeds.find_circ.out $ndir/allsamples_matrix.find_circ.tsv");
+my$err_mat2=system("perl auto_find_circ/matrixtwo.pl $ndir/allsamples_matrix.find_circ.tsv $ndir/allsamples_m_heatmap.find_circ.tsv");
 
-print "error making files in all_run_$date :\ncat:\t$erralcat\nmatrix 1 creation:\t$erralm1 \nmatrix 2 creation:\n$err_mat2\n";
+print "error making files in $ndir :\ncat:\t$erralcat\nmatrix 1 creation:\t$erralm1 \nmatrix 2 creation:\n$err_mat2\n";
 
 
 print ER "finished with all groups\n";

@@ -22,6 +22,8 @@ open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 ##################################################
 my$infile=$ARGV[0];
 chomp $infile;
+my$ndir=$ARGV[1];# the final output dir
+chomp $ndir;
 
 
 ## enter your directories for the pipelines .pl files here cd
@@ -57,13 +59,13 @@ my$copyfind_circ= system("cp $infile $find_circ_dir/auto_infile.txt");
 
 # now start both auto_automaker.pl with auto_infile.txt
 chdir "$find_circ_dir/auto_find_circ/";
-my$startfin_ci= system("perl auto_automaker.pl auto_infile.txt");
+my$startfin_ci= system("perl auto_automaker.pl auto_infile.txt $ndir");
 
 chdir "$circexplorer1_dir/circexplorer1_auto/";
-my$startcirex= system("perl auto_automaker.pl auto_infile.txt");
+my$startcirex= system("perl auto_automaker.pl auto_infile.txt $ndir");
 
 chdir "$dcc_dir/automate_DCC/";
-my$start_dcc= system("perl auto_automaker.pl auto_infile.txt");# but execute auto from repo
+my$start_dcc= system("perl auto_automaker.pl auto_infile.txt $ndir");# but execute auto from repo
 
 # copy all three outputs into one dir where it all started
 #print "moving all outfiles into all/...\n";
