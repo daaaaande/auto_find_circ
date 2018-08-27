@@ -403,7 +403,7 @@ for(my$count=0;$count<scalar(@allecooords);$count++){
 	chomp $line;
 	$basicinfo=~s/\n//g;
 	$gene_name=~s/\n//g;
-	if(((($circcand=~/\:/)&&($presencething=~/[a-z]/)))){
+	if(((($circcand=~/\:/)&&($presencething=~/[A-z]/)))){
 		my$linestring="$circcand\t$basicinfo\t$gene_name\t$circn\t$allsamplehit\t$ni\t$allquas\t$presencething\t$allsamplelines\n";
 		$linestring  =~s/\t\t/\t/g;
 
