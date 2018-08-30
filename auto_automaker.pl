@@ -5,7 +5,7 @@ chdir "../";
 #######################################################
 # usage: get samples.csv into find_circ/
 #					 go to find_circ/auto_find_circ/
-#						perl auto_automaker.pl samples.csv
+#						perl auto_automaker.pl samples.csv dirname
 #######################################################
 #auto_automaker.pl for find_circ
 # 		- needs a inputfile as specified in the README.md

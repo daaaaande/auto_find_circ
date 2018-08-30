@@ -9,7 +9,7 @@ open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 ######################################################
 ## usage: get samples.csv into find_circ/
 #					 go to find_circ/auto_find_circ/
-#						perl godfather.pl samples.csv
+#						perl godfather.pl samples.csv dirname
 ######################################################
 # godfather.pl
 #   - as a wrapper for all three pipelines
