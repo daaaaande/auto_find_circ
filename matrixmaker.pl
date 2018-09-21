@@ -36,7 +36,7 @@ open(IN,$linfile)|| die "$!";
 
 
 my%mapping=();
-open(MA,"/media/daniel/NGS1/RNASeq/find_circ/nc_and_mRNA_mapping.txt")|| die "$!";
+open(MA,"/media/daniel/NGS1/RNASeq/find_circ/genes_to_refseqID_nc_and_nr.tsv")|| die "$!";
 
 my@allemappings= <MA>;
 ########################################################################### gene mapping file reading into hash %mapping
@@ -48,10 +48,10 @@ foreach my $mapline (@allemappings){
 	# fill a hash that is used later
 		chomp $mapline;
 		if(!($mapline=~/^$/)){
-			my@slit=split(/\t+/,$mapline);
-			my$genene=$slit[11];
+			my@slit=split(/\s+/,$mapline);
+			my$genene=$slit[0];
 			$genene =~ s/\s+//g; # remove emptieness
-			my$nnum=$slit[10];# will be key
+			my$nnum=$slit[1];# will be key
 			$nnum =~ s/\s+//g;
 			if($nnum=~/N/){ # empty lines do not help
 				$mapping{"$nnum"}="$genene";
