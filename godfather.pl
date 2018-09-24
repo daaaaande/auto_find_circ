@@ -24,6 +24,8 @@ my$infile=$ARGV[0];
 chomp $infile;
 my$ndir=$ARGV[1];# the final output dir
 chomp $ndir;
+my$date=localtime();
+$date=~s/\s+/_/gi;
 
 
 ## enter your directories for the pipelines .pl files here cd
@@ -36,7 +38,7 @@ my$cu=`pwd`;
 my$there=`ls $infile`;
 
 if($there=~/$infile/){
-  print "found file $infile in $cu, starting ...\n";
+  print ER "found file $infile in $cu, starting ...\n";
 }
 else{
   die  "did not find $infile in $cu\n";
@@ -47,6 +49,16 @@ else{
 #my$err_cpthr=system("cp *.fastq $dcc_dir/");
 
 #print "errors moving fastq files:\n$err_cpone\n$err_cptwo\n$err_cpthr\n";
+# deleting maybe old filesheet, just to be sure and make a small backup
+
+my$inf_backup=system("cp $infile $find_circ_dir/infile_$date.backup")
+
+my$rmcircexone= system("rm $circexplorer1_dir/auto_infile.txt");# keep the samplefile in the parent dir
+my$rm_dcc= system("rm $dcc_dir/auto_infile.txt");
+my$rmfind_circ= system("rm $find_circ_dir/auto_infile.txt");
+
+print ER "deleted old input files:\ncircexplorer1: $rmcircexone\nDCC: $rm_dcc\nfind_circ: $rmfind_circ\n\n";
+
 
 # copying filesheet
 
@@ -67,6 +79,15 @@ my$startcirex= system("perl auto_automaker.pl auto_infile.txt $ndir");
 chdir "$dcc_dir/automate_DCC/";
 my$start_dcc= system("perl auto_automaker.pl auto_infile.txt $ndir");# but execute auto from repo
 
+
+#preparation for plugin of r scripts that get to consensus and save that in a file
+## params for r script: input files x3 (heatmaps), median/min/mean ? and output filename
+#
+#
+#make consensus
+chdir "$find_circ_dir/$ndir";
+my$r_scriptout=  system("Rscript --vanilla auto_filtering.R allsamples_m_heatmap.find_circ.tsv allsamples_m_heatmap.circex1.tsv allsamples_m_heatmap.dcc.tsv consensus_adundances_median_out.csv median");
+print ER "errors creating consensus abundances consensus_adundances_median_out.csv:\n $r_scriptout \n";
 # copy all three outputs into one dir where it all started
 #print "moving all outfiles into all/...\n";
 
