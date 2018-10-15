@@ -70,7 +70,7 @@ foreach my $singleline (@lines){
 foreach my $groupname (@groups){
 	my$errseding=system("sed -i '1d' $groupname/*.csv"); # will remove first line from steptwo output i.e headers
 	my$errcat=system("cat $groupname/*.csv >$groupname/allsites_bedgroup_$groupname.csv");
-	my$errmatxrix=system("perl auto_find_circ/matrixmaker.pl $groupname/allsites_bedgroup_$groupname.csv $groupname/allcircs_matrixout.txt");
+	my$errmatxrix=system("nice perl auto_find_circ/matrixmaker-V2.pl $groupname/allsites_bedgroup_$groupname.csv $groupname/allcircs_matrixout.txt");
 	my$matrtmaker=system("perl auto_find_circ/matrixtwo.pl $groupname/allcircs_matrixout.txt $groupname/allc_matrixtwo.tsv");
 	print ER "errors making second matrix for $groupname/allsites_bedgroup_$groupname.csv :\n$matrtmaker\n";
 	system("cp $groupname/allsites_bedgroup_$groupname.csv $ndir/");
@@ -78,7 +78,7 @@ foreach my $groupname (@groups){
 	print ER "errors making matrix for $groupname/allsites_bedgroup_$groupname.csv :\n$errmatxrix\n";
 }
 my$erralcat=system("cat $ndir/* >$ndir/$ndir.allbeds.find_circ.out");
-my$erralm1=system("perl auto_find_circ/matrixmaker.pl $ndir/$ndir.allbeds.find_circ.out $ndir/allsamples_matrix.find_circ.tsv");
+my$erralm1=system("nice perl auto_find_circ/matrixmaker-V2.pl $ndir/$ndir.allbeds.find_circ.out $ndir/allsamples_matrix.find_circ.tsv");
 my$err_mat2=system("perl auto_find_circ/matrixtwo.pl $ndir/allsamples_matrix.find_circ.tsv $ndir/allsamples_m_heatmap.find_circ.tsv");
 
 print "error making files in $ndir :\ncat:\t$erralcat\nmatrix 1 creation:\t$erralm1 \nmatrix 2 creation:\n$err_mat2\n";

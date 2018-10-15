@@ -89,15 +89,10 @@ col_circex=select(all_appr_circex,-c(refseqid,gene,circn,hallm,biom_desc ))
 col_dcc=select(all_appr_dcc,-c(refseqid,gene,circn,hallm,biom_desc ))
 col_findc=select(all_appr_findc,-c(refseqid,gene,circn,hallm,biom_desc ))
 
-# read file= samplename-group association
-
-
-
+# coordinates approved by all 3 pipelines
 quant_all_a_circex=acc_circex[acc_circex$coordinates %in% circ_RNA_candidates_3_out_of_3_approved,]
 quant_all_a_findc=acc_find_circ[acc_find_circ$coordinates %in% circ_RNA_candidates_3_out_of_3_approved,]
 quant_all_a_dcc=acc_dcc[acc_dcc$coordinates %in% circ_RNA_candidates_3_out_of_3_approved,]
-# additional info is enough from one pipeline, the others can be discarded
-all_agree_info=select(quant_all_a_findc,c(coordinates,refseqid,gene,circn,hallm))
 
 # order rows
 quant_all_a_circex=quant_all_a_circex[order(quant_all_a_circex$coordinates),]
@@ -109,25 +104,25 @@ ordered_circex=quant_all_a_circex[ , order(colnames(quant_all_a_circex))]
 ordered_findc=quant_all_a_findc[ , order(colnames(quant_all_a_findc))]
 ordered_dcc=quant_all_a_dcc[ , order(colnames(quant_all_a_dcc))]
 
+# additional info is enough from one pipeline, the others can be discarded
+all_agree_info=select(ordered_findc,c(coordinates,refseqid,gene,circn,hallm))
+
+
 ########### output three filtered circ datasets#####################
 write.csv(ordered_circex,file = "ordered_circex_approved_by_all_three.csv")
 write.csv(ordered_findc,file = "ordered_find_circ_approved_by_all_three.csv")
 write.csv(ordered_dcc,file = "ordered_dcc_approved_by_all_three.csv")
 
-
-
-
-# additional info is enough from one pipeline, the others can be discarded
-all_agree_info=select(ordered_findc,c(coordinates,refseqid,gene,circn,hallm,biom_desc))
+##################### consensus and output #####################
 # get only quantifications for circs on that all agree - into numeric
 only_ab_all_aggr_circex=sapply(select(ordered_circex,-c(coordinates,refseqid,gene,circn,hallm,biom_desc)), as.numeric)
 only_ab_all_aggr_findc=sapply(select(ordered_findc,-c(coordinates,refseqid,gene,circn,hallm,biom_desc)), as.numeric)
 only_ab_all_aggr_dcc=sapply(select(ordered_dcc,-c(coordinates,refseqid,gene,circn,hallm,biom_desc)), as.numeric)
 
 # for presence/detection events matrices into binary
-ordered_bin_findc=quant_into_detection_events(ordered_findc)
-ordered_bin_circex=quant_into_detection_events(ordered_circex)
-ordered_bin_dcc=quant_into_detection_events(ordered_dcc)
+#ordered_bin_findc=quant_into_detection_events(ordered_findc)
+#ordered_bin_circex=quant_into_detection_events(ordered_circex)
+#ordered_bin_dcc=quant_into_detection_events(ordered_dcc)
 
 # get the median of 3 quantifiacations of each sample in each pipeline. options are median, mean, min
 consensus_filtered_abundances_median=apply(abind::abind(only_ab_all_aggr_circex, only_ab_all_aggr_findc, only_ab_all_aggr_dcc,  along = 3), 1:2, args[5])
