@@ -57,7 +57,7 @@ foreach my $singleline (@lines){
 				mkdir $groupname;		# IF NOT, MAKE GROUPDIR
 				push(@groups,$groupname);
 			}
-		$errortwo=system ("cp run_$samplename/auto_run_$samplename.sites.bed.csv $groupname/");
+			$errortwo=system ("cp run_$samplename/auto_run_$samplename.sites.bed.csv $groupname/");
 		}
 
 		print ER "errors auto_moving:\n$errortwo\n";
