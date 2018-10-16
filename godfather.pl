@@ -67,18 +67,71 @@ my$copy_dcc= system("cp $infile $dcc_dir/auto_infile.txt");
 my$copyfind_circ= system("cp $infile $find_circ_dir/auto_infile.txt");
 
 
+# parallel execution of the pipelines: find circ gets executed first, rest gets ncircexplorer1
 
 
+use Parallel::ForkManager;
+
+
+my$find_circ_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/auto_find_circ/";
+my$circexplorer1_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer/circexplorer1_auto/";
+my$dcc_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/dcc/automate_DCC/";
+
+# array with all important places in order # find circ, circex, dcc_s
+my@pipe_dirs=($find_circ_ex_dir,$circexplorer1_ex_dir,$dcc_ex_dir);
+
+my$startfin_ci= "perl auto_automaker.pl auto_infile.txt $ndir";
+my$startcirex= "nice perl auto_automaker.pl auto_infile.txt $ndir";
+my$start_dcc="nice perl auto_automaker.pl auto_infile.txt $ndir";# but execute auto from repo
+
+my@start_commands=($startfin_ci,$startcirex,$start_dcc);
+
+my $pm = Parallel::ForkManager->new(3);
+my@error_messages=();
+for (my $var = 0; $var <= $#pipe_dirs; $var++) {
+      my $pid = $pm->start and next;
+      #print "in child $pid!\n";
+      my$dir=$pipe_dirs[$var];
+      my$command=$start_commands[$var];
+      print "would do now\n1. chdir $dir\n2.$command\n";
+      #chdir $dir;
+      my$error=system("$command");
+      push(@error_messages,$error);
+      #print "aligning, finding circs in TEST...\n";
+      #sleep(10);
+      $pm->finish;
+}
+$pm->wait_all_children;
+
+#my$all_errors= join("\n",@error_messages);
+print ER "errors find_circ run $ndir:\n$error_messages[0]\n";
+print ER "errors circexplorer 1 run $ndir:\n$error_messages[1]\n";
+print ER "errors DCC run $ndir:\n$error_messages[2]\n";
+
+
+
+
+
+
+
+
+
+
+
+
+
+# IF parallel will not work- do one after one
+##################################################################################################
 # now start both auto_automaker.pl with auto_infile.txt
-chdir "$find_circ_dir/auto_find_circ/";
-my$startfin_ci= system("perl auto_automaker.pl auto_infile.txt $ndir");
-
-chdir "$circexplorer1_dir/circexplorer1_auto/";
-my$startcirex= system("perl auto_automaker.pl auto_infile.txt $ndir");
-
-chdir "$dcc_dir/automate_DCC/";
-my$start_dcc= system("perl auto_automaker.pl auto_infile.txt $ndir");# but execute auto from repo
-
+# chdir "$find_circ_dir/auto_find_circ/";
+# my$startfin_ci= system("perl auto_automaker.pl auto_infile.txt $ndir");
+#
+# chdir "$circexplorer1_dir/circexplorer1_auto/";
+# my$startcirex= system("perl auto_automaker.pl auto_infile.txt $ndir");
+#
+# chdir "$dcc_dir/automate_DCC/";
+# my$start_dcc= system("perl auto_automaker.pl auto_infile.txt $ndir");# but execute auto from repo
+##################################################################################################
 
 #preparation for plugin of r scripts that get to consensus and save that in a file
 ## params for r script: input files x3 (heatmaps), median/min/mean ? and output filename
@@ -97,9 +150,9 @@ print ER "errors creating consensus abundances consensus_adundances_median_out.c
 #system("cp $dcc_dir/all_run_*/*.tsv all/");
 
 
-
-print "logs find_circ: $startfin_ci\n";
-print "logs circexplorer1 : $startcirex\n";
-print "logs dcc: $start_dcc\n";
+#
+# print "logs find_circ: $startfin_ci\n";
+# print "logs circexplorer1 : $startcirex\n";
+# print "logs dcc: $start_dcc\n";
 # need to copy all .gz files into the two folders?
 # delete copies of fastq?

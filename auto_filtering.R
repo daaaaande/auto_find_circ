@@ -26,7 +26,7 @@ library('dplyr')
 
 sd_per_row <- function(df){
   sds=c()
-  for(i in seq(1,6722,1)){
+  for(i in seq(1,nrow(df),1)){
     all_nums=df[i,]
     all_nums=as.double(all_nums)
     sd_row=as.numeric(sd(all_nums))
