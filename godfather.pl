@@ -93,8 +93,8 @@ for (my $var = 0; $var <= $#pipe_dirs; $var++) {
       #print "in child $pid!\n";
       my$dir=$pipe_dirs[$var];
       my$command=$start_commands[$var];
-      print "would do now\n1. chdir $dir\n2.$command\n";
-      #chdir $dir;
+      #print "would do now\n1. chdir $dir\n2.$command\n";
+      chdir $dir;
       my$error=system("$command");
       push(@error_messages,$error);
       #print "aligning, finding circs in TEST...\n";
