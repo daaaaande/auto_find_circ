@@ -10,7 +10,7 @@ open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 ## usage: get samples.csv into find_circ/
 #					 go to find_circ/auto_find_circ/
 #                                   perl godfather.pl samples.csv dirname
-#					OR:	perl godfather.pl samples.csv dirname | tee pipeline_run.out | less 
+#					OR:	perl godfather.pl samples.csv dirname | tee pipeline_run.out | less
 ######################################################
 # godfather.pl
 #   - as a wrapper for all three pipelines
@@ -74,16 +74,17 @@ my$copyfind_circ= system("cp $infile $find_circ_dir/auto_infile.txt");
 use Parallel::ForkManager;
 
 
-my$find_circ_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/auto_find_circ/";
-my$circexplorer1_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer/circexplorer1_auto/";
-my$dcc_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/dcc/automate_DCC/";
+#my$find_circ_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/auto_find_circ/";
+#my$circexplorer1_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer/circexplorer1_auto/";
+#my$dcc_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/dcc/automate_DCC/";
 
 # array with all important places in order # find circ, circex, dcc_s
-my@pipe_dirs=($find_circ_ex_dir,$circexplorer1_ex_dir,$dcc_ex_dir);
+#my@pipe_dirs=($find_circ_ex_dir,$circexplorer1_ex_dir,$dcc_ex_dir);
 
-my$startfin_ci= "perl auto_automaker.pl auto_infile.txt $ndir";
-my$startcirex= "nice perl auto_automaker.pl auto_infile.txt $ndir";
-my$start_dcc="nice perl auto_automaker.pl auto_infile.txt $ndir";# but execute auto from repo
+# full commands with full directories- the chdirs do not work as expected in Forks
+my$startfin_ci= "perl /media/daniel/NGS1/RNASeq/find_circ/auto_find_circ/auto_automaker.pl auto_infile.txt $ndir";
+my$startcirex= "nice perl /media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer/circexplorer1_auto/auto_automaker.pl auto_infile.txt $ndir";
+my$start_dcc="nice perl /media/daniel/NGS1/RNASeq/find_circ/dcc/automate_DCC/auto_automaker.pl auto_infile.txt $ndir";# but execute auto from repo
 
 my@start_commands=($startfin_ci,$startcirex,$start_dcc);
 
@@ -92,10 +93,10 @@ my@error_messages=();
 for (my $var = 0; $var <= $#pipe_dirs; $var++) {
       my $pid = $pm->start and next;
       #print "in child $pid!\n";
-      my$dir=$pipe_dirs[$var];
+      #my$dir=$pipe_dirs[$var];
       my$command=$start_commands[$var];
       #print "would do now\n1. chdir $dir\n2.$command\n";
-      chdir $dir;
+      #chdir $dir;
       my$error=system("$command");
       push(@error_messages,$error);
       #print "aligning, finding circs in TEST...\n";
