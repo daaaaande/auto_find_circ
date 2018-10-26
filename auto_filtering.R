@@ -9,18 +9,19 @@ if (length(args)==0) {
   stop("At least one argument must be supplied (input file).\n", call.=FALSE)
 } else if (length(args)<4) {
   # default output file
-  
+
   args[4] = "heatmap_median_approved_all.csv"
   args[5] = "median"
 }
 
 # only the important parts from output_filtering.R
-#install.packages('dplyr') # to delete columns from dataframes 
+#install.packages('dplyr') # to delete columns from dataframes
 #install.packages("VennDiagram")
 #install.packages("gplots")
 
-library(gplots)
+#library(gplots)
 library('dplyr')
+library("methods")
 #library("VennDiagram")
 ###### functions      #######
 
@@ -37,12 +38,12 @@ sd_per_row <- function(df){
 
 # function to get detection events : 1,0->0 || >=2->1
 quant_into_detection_events <- function(x) {
-  
+
   x[x ==1 ] <- 0
   x[x >= 2] <- 1
   return(x)
 }
-# binary matrices= detection events 
+# binary matrices= detection events
 
 ######### full quantifications##################
 #groups=read.csv("~/work_enclave/first_output/groups_medullos.csv",header = T)
@@ -80,11 +81,11 @@ majority_approved_circex_anddcc=intersect(circ_excoords,dcc_coords)
 circ_RNA_candidates_3_out_of_3_approved=intersect(majority_approved_find_circ_andcirc_ex,majority_approved_find_circ_anddcc)
 # all unique by at least two pipelines detected circs
 all_voted_coordinates=unique( c(majority_approved_find_circ_andcirc_ex,majority_approved_find_circ_anddcc,majority_approved_circex_anddcc))
-# get extra data back 
+# get extra data back
 all_appr_dcc=acc_dcc[acc_dcc$coordinates %in% all_voted_coordinates,]
 all_appr_circex=acc_circex[acc_circex$coordinates %in% all_voted_coordinates,]
 all_appr_findc=acc_find_circ[acc_find_circ$coordinates %in% all_voted_coordinates,]
-# get only numeric values, ignore extra stuff 
+# get only numeric values, ignore extra stuff
 col_circex=select(all_appr_circex,-c(refseqid,gene,circn,hallm,biom_desc ))
 col_dcc=select(all_appr_dcc,-c(refseqid,gene,circn,hallm,biom_desc ))
 col_findc=select(all_appr_findc,-c(refseqid,gene,circn,hallm,biom_desc ))
@@ -132,4 +133,3 @@ consensus_filtered_abundances_all_=cbind(all_agree_info,consensus_filtered_abund
 # first output file; full sorted consensus matrix median
 write.csv(consensus_filtered_abundances_all_,file = args[4])
 # get sd for all samples, sort max, cluster based on this top subset
-

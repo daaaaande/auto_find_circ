@@ -1,7 +1,7 @@
 #/usr/bin/perl -w
 use strict;
 # change into the parent dir - this is where the infile needs to be
-chdir "../";
+chdir "/media/daniel/NGS1/RNASeq/find_circ/";
 #######################################################
 # usage: get samples.csv into find_circ/
 #					 go to find_circ/auto_find_circ/
