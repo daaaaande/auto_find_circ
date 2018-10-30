@@ -19,9 +19,10 @@ if (length(args)==0) {
 #install.packages("VennDiagram")
 #install.packages("gplots")
 
-#library(gplots)
+library(gplots)
 library('dplyr')
-library("methods")
+library(methods)
+library(utils)
 #library("VennDiagram")
 ###### functions      #######
 
@@ -50,11 +51,11 @@ quant_into_detection_events <- function(x) {
 
 
 # heatmap files
-heat_find_circ=read.table(file=args[1], header=T)
-heat_circex1=read.table(file=args[2], header=T)
-heat_dcc=read.table(file=args[3], header=T)
+heat_find_circ=read.table(file=args[1], header=T,sep="\t", fill = TRUE,quote = "")
+heat_circex1=read.table(file=args[2], header=T,sep="\t", fill = TRUE,quote = "")
+heat_dcc=read.table(file=args[3], header=T,sep="\t", fill = TRUE,quote = "")
 # DCC had an extra sample name called sample, that should be an error, thus removing it...
-heat_dcc <- select(heat_dcc, -sample)
+# heat_dcc <- select(heat_dcc, -sample)
 # convert to numeric for calculations
 sapply(heat_circex1,as.numeric)# needs to be done with every of the three dataframes: convert to numeric, then apply min reads filter
 sapply(heat_dcc,as.numeric)

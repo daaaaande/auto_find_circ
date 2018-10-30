@@ -98,7 +98,7 @@ my@pipe_dirs=($find_circ_ex_dir,$circexplorer1_ex_dir,$dcc_ex_dir);
 #
 #
 #
- my $pm = Parallel::ForkManager->new(3);
+ my $pm = Parallel::ForkManager->new(20);
  my@error_messages=();
  for (my $var = 0; $var <= $#start_commands; $var++) {
        my $pid = $pm->start and next;
