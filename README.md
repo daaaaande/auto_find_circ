@@ -80,7 +80,7 @@ then  play with the output from 4. in the first_heatmap.R script, find candidate
 start the godfather :
 
 `cd find_circ/`   
-` head infiles_for_auto_automaker.txt      `
+` head infiles_for_auto_automaker.txt  `   
 `lineonefile1.fastq linetwofile1.fastq samplename1 group1   `   
 `lineonefile2.fastq  linetwofile2.fastq  samplename2 group1`   
 `cd auto_find_circ/`   
@@ -104,7 +104,8 @@ the run_dirname creates a folder in each pipeline dir, and dumps the final resul
 -> from there on first_heatmap.R will filter the results, needs to be run manually and should be an example of how to handle the  allcircs_matrix_heatmap.txt
 
 ## godfather.pl
-->  will start the auto_automaker with the same input file for all three here seen pipelines, then add everything together into one dir called all_run_DAY_MONTH/
+->  will start the auto_automaker with the same input file for all three here seen pipelines, then add everything together into one dir called whatever you gave godfather.pl as the second parameter.
+-> will backup the infile, then delete old infiles, then start the pipeline.
 
  >the main data output is already done for the steptwo output, the matrixmaker.pl and matrixtwo.pl combined with the first_hetmap.R will just make it more easy to analyze the data that comes out. so in theory you could ignore the last 3 steps!
 
