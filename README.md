@@ -31,14 +31,14 @@ It also leaves the option open to add samples later, re-run the matrixmaker scri
 
 ## 4 levels of automation:
   1. manually; ```
-  perl test2.pl infilelane1.fastq infilelane2.fastq samplename # this will create the dir find_circ/run_samplename/ and put the outfile in $dirn/auto_run_samplename.sites.bed
-   perl steptwo.pl steptwoinput=steponedir/run_$samplename/auto_run_samplename.sites.bed # will create $dirn/auto_run_samplename.sites.bed.csv with better coordinates and only relevant information in one easy to parse \t separated file
-   #optional
-   cat all_samples_steptwo:output.csv >all_interesting_samples_circs.in
-   #optional
-   perl matrixmaker.pl steptwooutput.csv #(or for multiple samples at once : all_interesting_samples_circs.in ) matrixoutput.tsv : this will create the file allimportantmatrix.txt where all circs with the relevent information is in.
+  perl test2.pl infilelane1.fastq infilelane2.fastq samplename   # this will create the dir find_circ/run_samplename/ and put the outfile in $dirn/auto_run_samplename.sites.bed  
+   perl steptwo.pl steptwoinput=steponedir/run_$samplename/auto_run_samplename.sites.bed   # will create $dirn/auto_run_samplename.sites.bed.csv with better coordinates and only relevant information in one easy to parse \t separated file
    #optional  
-   perl matrixtwo.pl matrixoutput.tsv matrixtwo_out.tsv ```  <- this file should be readable for R, Excel... # this will create a second, more dense form of information from the first matrix and add a few extra mappings
+   cat all_samples_steptwo:output.csv >all_interesting_samples_circs.in  
+   #optional  
+   perl matrixmaker.pl steptwooutput.csv   #(or for multiple samples at once : all_interesting_samples_circs.in ) matrixoutput.tsv : this will create the file allimportantmatrix.txt where all circs with the relevent information is in.
+   #optional    
+   perl matrixtwo.pl matrixoutput.tsv matrixtwo_out.tsv ``` <- this file should be readable for R, Excel... # this will create a second, more dense form of information from the first matrix and add a few extra mappings
 
   2. find_circ_auto.pl above scripts executed for one sample: ```
   perl find_circ_auto.pl infilelane1.fastq infilelane2.fastq samplename
@@ -79,7 +79,7 @@ lineonefile2.fastq  linetwofile2.fastq  samplename2 group1
 ~ cd auto_find_circ/
 ~ nice perl godfather.pl infiles_for_auto_automaker.txt run_dirname # all 3 pipelines
 ~# or
-~ nice perl auto_automaker.pl infiles_for_auto_automaker.txt run_dirname # only find_circ ```    
+~ nice perl auto_automaker.pl infiles_for_auto_automaker.txt run_dirname # only find_circ ``         
 
 the optional group will lead to auto_automaker making a directory named after the group where all the resulting .csv files will be copied into, catted into one big .csv file and then run matrixmaker.pl with this as an input and then start matrixtwo.pl with this as an input
 
