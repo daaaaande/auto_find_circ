@@ -31,47 +31,44 @@ It also leaves the option open to add samples later, re-run the matrixmaker scri
 
 ## 4 levels of automation:
   1. manually:
-  __________________________  bash ```
-
-  perl test2.pl infilelane1.fastq infilelane2.fastq samplename   
+  __________________________  
+`perl test2.pl infilelane1.fastq infilelane2.fastq samplename`
    this will create the dir find_circ/run_samplename/ and put the outfile in $dirn/auto_run_samplename.sites.bed  
-  perl steptwo.pl steptwoinput=steponedir/run_$samplename/auto_run_samplename.sites.bed  
+  `perl steptwo.pl steptwoinput=steponedir/run_$samplename/auto_run_samplename.sites.bed `
    will create $dirn/auto_run_samplename.sites.bed.csv with better coordinates and only relevant information in one easy to parse \t separated file
    optional  step:
-  cat all_samples_steptwo:output.csv >all_interesting_samples_circs.in  
+  `cat all_samples_steptwo:output.csv >all_interesting_samples_circs.in  `
    optional  step:
-  perl matrixmaker.pl steptwooutput.csv   
+  `perl matrixmaker.pl steptwooutput.csv `  
    (or for multiple samples at once : all_interesting_samples_circs.in ) matrixoutput.tsv : this will create the file allimportantmatrix.txt where all circs with the relevent information is in.
    optional  step:
-  perl matrixtwo.pl matrixoutput.tsv matrixtwo_out.tsv <- this file should be readable for R, Excel... # this will create a second, more dense form of information from the first matrix and add a few extra mappings``
+  `perl matrixtwo.pl matrixoutput.tsv matrixtwo_out.tsv `<- this file should be readable for R, Excel... # this will create a second, more dense form of information from the first matrix and add a few extra mappings
 
   2. find_circ_auto.pl above scripts executed for one sample:
- __________________________  bash ```
-perl find_circ_auto.pl infilelane1.fastq infilelane2.fastq samplename
-  ```
+ __________________________
+`perl find_circ_auto.pl infilelane1.fastq infilelane2.fastq samplename`
     -> perl matrixmaker.pl can be done manually with its output aswell as
     -> matrixtwo.pl can be used later to make the same information more dense
 
   3. auto_automaker.pl above scripts for multiple samples, makes one matrix.tsv for each group and all samples if given in the auto_automaker input file and dumps every outfile in specified folder :
-   __________________________  bash  ```
-perl auto_automaker.pl infile.txt full_run_outdir
-```
+   __________________________  
+`perl auto_automaker.pl infile.txt full_run_outdir`
 
   4. godfather.pl -> does everything above for sets of samples but with each of the three pipelines one after another , need to specify a run output dir name (as parameter) aswell as groups and sample names (in the infile) :
-   __________________________  bash ``` perl godfather.pl infile.txt full_run_outdir ```
+   __________________________  
+   `perl godfather.pl infile.txt full_run_outdir `
 
 
 ### you can either start each step manually:
-go to find_circ/ ```
-perl test2.pl sample_line_1_trimmed_reads.fastq.gz sample_line_2_trimmed_reads.fastq.gz samplename
+go to find_circ/
+`perl test2.pl sample_line_1_trimmed_reads.fastq.gz sample_line_2_trimmed_reads.fastq.gz samplename`
 
-perl steptwo.pl $dirn/auto_run_samplename.sites.bed (output from 1. )
+`perl steptwo.pl $dirn/auto_run_samplename.sites.bed `(output from 1. )
 
-choose several or one auto_run_samplename.sites.bed.csv file from 2. (group) and cat allimportantones>allsamples.csv
-perl matrixmaker allsamples.csv allimportantmatrix.txt
+choose several or one auto_run_samplename.sites.bed.csv file from 2. (group) and `cat allimportantones>allsamples.csv`
+`perl matrixmaker allsamples.csv allimportantmatrix.txt`
 
-perl matrixtwo.pl allimportantmatrix.txt smallerallimportantmatrix.tsv
-```
+`perl matrixtwo.pl allimportantmatrix.txt smallerallimportantmatrix.tsv`
 then  play with the output from 4. in the first_heatmap.R script, find candidates suiting your use case  
 
 ### or start find_circ_auto.pl with first_readline second_inline samplename as input vars
@@ -81,15 +78,16 @@ then  play with the output from 4. in the first_heatmap.R script, find candidate
 
 
 ### or start auto_automaker.pl  or godfather.pl with inputfile1 inputfile2 samplename groupname table, separated by \t
-start the godfather : ```
-cd find_circ/
-~ head infiles_for_auto_automaker.txt   
-lineonefile1.fastq linetwofile1.fastq samplename1 group1   
-lineonefile2.fastq  linetwofile2.fastq  samplename2 group1
-~ cd auto_find_circ/
-~ nice perl godfather.pl infiles_for_auto_automaker.txt run_dirname # all 3 pipelines
-~# or
-~ nice perl auto_automaker.pl infiles_for_auto_automaker.txt run_dirname # only find_circ ``         
+start the godfather :
+
+`cd find_circ/`
+` head infiles_for_auto_automaker.txt   `
+`lineonefile1.fastq linetwofile1.fastq samplename1 group1   `
+`lineonefile2.fastq  linetwofile2.fastq  samplename2 group1`
+`cd auto_find_circ/`
+` nice perl godfather.pl infiles_for_auto_automaker.txt run_dirname` all 3 pipelines
+ or
+`nice perl auto_automaker.pl infiles_for_auto_automaker.txt run_dirname` only find_circ      
 
 the optional group will lead to auto_automaker making a directory named after the group where all the resulting .csv files will be copied into, catted into one big .csv file and then run matrixmaker.pl with this as an input and then start matrixtwo.pl with this as an input
 
