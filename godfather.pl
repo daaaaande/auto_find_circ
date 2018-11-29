@@ -87,34 +87,35 @@ my@pipe_dirs=($find_circ_ex_dir,$circexplorer1_ex_dir,$dcc_ex_dir);
 
 # my$mkd2=system("mkdir /media/daniel/NGS1/RNASeq/find_circ/$ndir");
 # # full commands with full directories- the chdirs do not work as expected in Forks
+
  my$startfin_ci= `perl /media/daniel/NGS1/RNASeq/find_circ/auto_find_circ/auto_automaker.pl auto_infile.txt $ndir`;
  my$startcirex= `nice perl /media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer/circexplorer1_auto/auto_automaker.pl auto_infile.txt $ndir`;
  my$start_dcc=`nice perl /media/daniel/NGS1/RNASeq/find_circ/dcc/automate_DCC/auto_automaker.pl auto_infile.txt $ndir`;# but execute auto from repo
 
- my@start_commands=($startcirex,$start_dcc,$startfin_ci);
+ #my@start_commands=($startcirex,$start_dcc,$startfin_ci);
 #
 #
 # #my$err_fc=``;
 #
 #
 #
- my $pm = Parallel::ForkManager->new(20);
- my@error_messages=();
- for (my $var = 0; $var <= $#start_commands; $var++) {
-       my $pid = $pm->start and next;
+ #my $pm = Parallel::ForkManager->new(20);
+ #my@error_messages=();
+ #for (my $var = 0; $var <= $#start_commands; $var++) {
+#       my $pid = $pm->start and next;
        #print "in child $pid!\n";
        #my$dir=$pipe_dirs[$var];
-       my$command=$start_commands[$var];
+#       my$command=$start_commands[$var];
        #print "would do now\n1. chdir $dir\n2.$command\n";
        #chdir $dir;
-       my$error=system("$command");
-       push(@error_messages,$error);
+#       my$error=system("$command");
+#       push(@error_messages,$error);
        #print "aligning, finding circs in TEST...\n";
        #sleep(10);
-       $pm->finish;
- }
- $pm->wait_all_children;
-my$all_errors= join("\n",@error_messages);
+#       $pm->finish;
+# }
+ #$pm->wait_all_children;
+#my$all_errors= join("\n",@error_messages);
 #print ER "errors find_circ run $ndir:\n$startfin_ci\n";
 # print ER "errors circexplorer 1 run $ndir:\n$startcirex\n";
 # print ER "errors DCC run $ndir:\n$start_dcc\n";
