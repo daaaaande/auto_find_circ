@@ -74,7 +74,8 @@ for (my$i=0;$i<scalar(@allelines);$i++){
 					my$strand=$parts[1];
 					my$Refseqid=$parts[6];
 					my$namesmale=$parts[2];
-					if(!(grep(/$namesmale/,@allenames))){			# get all samplenames into @allenames
+					#^123456$
+					if(!(grep(/^$namesmale$/,@allenames))){			# get all samplenames into @allenames
 						if($namesmale ne "sampleid"){
 							push (@allenames, $namesmale);
 						}
@@ -197,6 +198,8 @@ sub findc{
 	    			$lineonesample =~ s/NR_[0-9]{3,11}//g;
 	    			$lineonesample =~ s/\.\s+//; # first remove the dot with space
 	    			$lineonesample =~ tr/\.//;# then withpout
+						$lineonesample =~ s/chr[0-9]{0,3}.*\-[0-9]{1,98}\s+?//g;# remove coords sometimes mixed up in here
+
 	    			if(!(grep(/^$single_sample$/,@hitsamples))){			# get all samplenames into @allenames
   	      			$allsamplelines="$allsamplelines$lineonesample";
 	      			push(@hitsamples,$single_sample);# if detected, get samplename into this array

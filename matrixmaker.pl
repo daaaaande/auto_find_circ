@@ -186,7 +186,7 @@ for (my$i=0;$i<=scalar(@allelines);$i++){
 			my$Refseqid=$parts[6];
 
 			my$namesmale=$parts[2];
-			if(!(grep(/$namesmale/,@allenames))){			# get all samplenames into @allenames
+			if(!(grep(/^$namesmale$/,@allenames))){			# get all samplenames into @allenames
 					if($namesmale ne "sampleid"){
 						push (	@allenames, $namesmale);
 					}
