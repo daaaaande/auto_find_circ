@@ -51,46 +51,46 @@ print ER "reading input file $linfile ...\n";
 open(IN,$linfile)|| die "$!";
 ########################################################################### get samlenames into array, get coordinates and basic info into arrays allenames, allecoords allebasicinfo
 my@allelines= <IN>; #input file
-my@allenames=();		# sample names
-my@allecooords=();	# circ coordinates
-my@allebasicinfo=();	# circ annotations
-# $pm = Parallel::ForkManager->new(10);
+
+my%sample_hash;
+my%basic_info_hash;
+my%alle_coords_hash;
+my%alle_new_info_try_hash; # coords and strand to avoid redundant coords + strands with only different refseqid
+
+DATA_IN:
 for (my$i=0;$i<scalar(@allelines);$i++){
-	# ignore first line
 	my$line_o_o=$allelines[$i];	# current line
-	#my $pid = $pm->start and next;
-	if ($i>0){
-		## without threading, start here
+	if ($i>0){# ignore header
 		get_names($line_o_o);
-		#with threading use this
-		#my $thri = threads->create("get_names","$line_o_o");$thri->detach();
 		sub get_names{# later multithread this also
-			my$lin= shift(@_);
-			if(!($lin eq "")){
-				my$line=$lin;
-				if((!($line=~/coordinates/)) && ($line=~/[a-z]/)){			# check for empty line
-					my@parts=split(/\t+/,$line);
-					my$cord=$parts[0];
-					my$strand=$parts[1];
-					my$Refseqid=$parts[6];
-					my$namesmale=$parts[2];
-					#^123456$
-					if(!(grep(/^$namesmale$/,@allenames))){			# get all samplenames into @allenames
-						if($namesmale ne "sampleid"){
-							push (@allenames, $namesmale);
-						}
-					}
-					if(!(grep(/$cord/,@allecooords))){			# get first threee columns into two arrays
-						push (@allecooords, $cord);
-						push ( @allebasicinfo, "$strand\t$Refseqid\t");
-					}
-				}
+			my$line= shift(@_);
+			my@parts=split(/\t+/,$line);
+			my$cord=$parts[0];
+			my$strand=$parts[1];
+			my$Refseqid=$parts[6];
+			my$namesmale=$parts[2];
+			if(!(exists($sample_hash{$namesmale}))){
+				$sample_hash{$namesmale}=$i;
 			}
+			if(!(exists($alle_new_info_try_hash{"$cord\t$strand\t"}))){ # check for coords+strand redundancy
+				$alle_new_info_try_hash{"$cord\t$strand\t"}=$i;
+				$basic_info_hash{"$strand\t$Refseqid\t$i"}=$i;
+				$alle_coords_hash{"$cord\t$i"}=$i;
+			}
+
 		}
 	}
-#	$pm->finish;
 }
-#$pm->wait_all_children;
+# without tie to sort the hashes we need to sort the hash keys by their value- i.e the line number of the infile
+# sort the hash keys based on their values (line number in infile )
+my@sorted_by_val_allenames = sort{$sample_hash{$a} <=> $sample_hash{$b}} keys %sample_hash;# sort the keys according to their value
+my@allenames=@sorted_by_val_allenames;		# sample names
+my@sorted_by_val_allecooords = sort{$alle_coords_hash{$a} <=> $alle_coords_hash{$b}} keys %alle_coords_hash;
+my@allecooords=@sorted_by_val_allecooords; # coordinates
+my@sorted_by_val_allebasicinfo = sort{$basic_info_hash{$a} <=> $basic_info_hash{$b}} keys %basic_info_hash;
+my@allebasicinfo=@sorted_by_val_allebasicinfo;
+
+
 my%allinfoonesamplehash;
 my$sampleout;
 my%known_circs=();
@@ -114,7 +114,7 @@ foreach my $circline (@alleci){			# fill a hash that is used later
 close CI;
 ############################################# get all information from one sample into a hash , key is samplename and value is all information in one var
 foreach my $samplenames (@allenames){
-	#print ER "looking for $samplenames circs...\n";# for each sample find all lines
+#	print  "looking for $samplenames circs...\n";# for each sample find all lines
 	$sampleout= `grep -w $samplenames $linfile`;	#
 	#print "$sampleout\n\n\n is grep $samplenames $linfile\n";
 	$allinfoonesamplehash{"$samplenames"} = "$sampleout";
@@ -134,20 +134,25 @@ foreach my $sampls  (@allenames) {
 print OU "\n";
 ############################################# look for each circ in each sample and build a matrix
 					# not number of cores, but parallel processes you want, 200 seems good for 8 cores
-my $pm = Parallel::ForkManager->new(1000);
+my $pf = Parallel::ForkManager->new(1000);
+
 my$ni=0;
 our$count=0;
 findc(\@allecooords);
 sub findc{
   my@c=@{$_[0]};
+  DATA_OUT:
   foreach my $circs (@allecooords){
     $count ++;
-    my $pid = $pm->start and next;
+	$pf->start and next DATA_OUT;
     find_circ($circs);
     sub find_circ {
       my$circ= shift(@_);
       my$circcand=$circ;
+	$circcand=~s/\t[0-9]{1,30}//;# remove the attached infile line number to not ignore strand differences
+	#print "circ $circ\n\n\n\n\n";
 	my$basicinfo=$allebasicinfo[$count -1];
+	$basicinfo=~s/\t[0-9]{1,30}//;# remove the unique makwer of maybe double circ information
 	if($basicinfo=~/[A-z]/g){
 		chomp $circcand;
 		my$circn="";
@@ -182,13 +187,14 @@ sub findc{
 		else{
 			$circn="unknown";
 		}
-		foreach my $single_sample (@samples) {# looking for each sample for each circ
+		foreach my $single_sample (@allenames) {# looking for each sample for each circ
+		#print "sample $single_sample\n";
 	  		my$allonesample= $allinfoonesamplehash{$single_sample};
-        		if($allonesample=~/$circcand*.*\n/gi){### is the circ is found in sample
-          			my$line_of_i=$&;
+        		if($allonesample=~/$circcand*.*\n/gi){### is the circ is found in sample###
+				my$line_of_i=$&;
           			my$lineonesample=$line_of_i; #declare the interesting line
-	    			my@hitsamples=();
-          			$lineonesample=~s/$circcand//;
+				#print "starting to destruct line $lineonesample\n";
+      			$lineonesample=~s /$circcand//;
           			$lineonesample=~s/\n//;
 	    			chomp $lineonesample;
 	    			$lineonesample=~s/\t+\+//;	# removing the strand information from the hit
@@ -199,32 +205,37 @@ sub findc{
 	    			$lineonesample =~ s/\.\s+//; # first remove the dot with space
 	    			$lineonesample =~ tr/\.//;# then withpout
 				$lineonesample =~ s/chr[0-9]{0,3}.*\-[0-9]{1,98}\s+?//g;# remove coords sometimes mixed up in here
-
-	    			if(!(grep(/^$single_sample$/,@hitsamples))){			# get all samplenames into @allenames
-  	      			$allsamplelines="$allsamplelines$lineonesample";
-	      			push(@hitsamples,$single_sample);# if detected, get samplename into this array
-	      			$presencething="$presencething-$single_sample";
-	      			$lineonesample =~/\s+[0-9]{1,4}\s+/;# only first hit is unique count
-	      			my$findnum = $&; # the unique count for each sample
-	      			my$twoquals=$'; # the two qualities into one
-	      			$twoquals =~ s/\s+/;/;
+  	      		$allsamplelines="$allsamplelines$lineonesample";
+				if($allsamplelines=~/chr/){
+					warn "error in file: $allsamplelines should not include coordinates , whats the problem?\nfull line: $line_of_i\n";
+				}
+	      		$presencething="$presencething-$single_sample";
+	      		$lineonesample =~/\s+[0-9]{1,4}\s+/;# only first hit is unique count
+	      		my$findnum = $&; # the unique count for each sample
+	      		my$twoquals=$'; # the two qualities into one
+	      		$twoquals =~ s/\s+/;/;
+				if(!($allquas=~/N/g)){ # check for refseqid instead of number
 	      			$allquas = "$allquas,$twoquals";
 	      			$allquas =~s/\s+//g;
 	      			$totalcounts=$totalcounts + $findnum;
 	      			$ni=$totalcounts;
 	      			$allsamplehit++;
-	    			}
+				}
+				else{
+					# refseqid is recognized as strand...
+					warn "line not recognized :$line_of_i ,quality is not $allquas or $twoquals\t totalcounts are $totalcounts for sample $single_sample circ $circcand basicinfo $basicinfo \n";
+				}
 	  		}
-        			else{# new: if circ not in all one samples
-					chomp $single_sample;
-	      			$allsamplelines="$allsamplelines$single_sample\t0\t0\t0\t";
-	  			}
+        		else{# new: if circ not in all one samples
+				chomp $single_sample;
+	      		$allsamplelines="$allsamplelines$single_sample\t0\t0\t0\t";
+	  		}
   		}
 		$basicinfo=~s/\n//g;
 		$gene_name=~s/\n//g;
 		if(((($circcand=~/\:/)&&($presencething=~/[A-z]/)))){
 			#hr10:93590679-93602148 -       NM_001142434    OGA     hsa_circ_0008170
-	  		my$linestring="$circcand\t$basicinfo\t$gene_name\t$circn\t$allsamplehit\t$ni\t$allquas\t$presencething\t$allsamplelines\n";
+  			my$linestring="$circcand\t$basicinfo\t$gene_name\t$circn\t$allsamplehit\t$ni\t$allquas\t$presencething\t$allsamplelines\n";
 	  		$linestring  =~s/\t\t/\t/g;
 	  		print OU $linestring;
 	  		$linestring="";
@@ -234,11 +245,14 @@ sub findc{
 	  		print ER "error in line: circand is $circcand \n basicinfo is $basicinfo \n and presencething is $presencething\n";
 		}
     	}
-    	$pm->finish;
+
     }
+  #  print "ends line $count ..\n";
+    $pf->finish;
   }
+
 }# findc end
-$pm->wait_all_children;
+$pf->wait_all_children;
 my$end=time;
 my$used_mins=($end-$start)/60;
 print ER "done with matrix creation of file $outfile with input $linfile\nBuilding the matrix took $used_mins minutes\n";
