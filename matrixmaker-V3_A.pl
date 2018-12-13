@@ -134,7 +134,7 @@ foreach my $sampls  (@allenames) {
 print OU "\n";
 ############################################# look for each circ in each sample and build a matrix
 					# not number of cores, but parallel processes you want, 200 seems good for 8 cores
-my $pf = Parallel::ForkManager->new(1000);
+my $pf = Parallel::ForkManager->new(20);
 
 my$ni=0;
 our$count=0;
@@ -184,7 +184,7 @@ sub findc{
 		if(exists($known_circs{$circcand})){
 			$circn=$known_circs{$circcand};
 		}
-		else{
+		else{ncbi-blast+
 			$circn="unknown";
 		}
 		foreach my $single_sample (@allenames) {# looking for each sample for each circ
