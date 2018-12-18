@@ -72,9 +72,9 @@ for (my$i=0;$i<scalar(@allelines);$i++){
 			if(!(exists($sample_hash{$namesmale}))){
 				$sample_hash{$namesmale}=$i;
 			}
-			if(!(exists($alle_new_info_try_hash{"$cord\t$strand\t"}))){ # check for coords+strand redundancy
-				$alle_new_info_try_hash{"$cord\t$strand\t"}=$i;
-				$basic_info_hash{"$strand\t$Refseqid\t$i"}=$i;
+			if(!(exists($alle_new_info_try_hash{"$cord"}))){ # check for coords redundancy
+				$alle_new_info_try_hash{"$cord"}=$i;
+				$basic_info_hash{"$Refseqid\t$i"}=$i;
 				$alle_coords_hash{"$cord\t$i"}=$i;
 			}
 
@@ -127,14 +127,14 @@ my$outfile=$ARGV[1];
 chomp $outfile;
 open(OU,">",$outfile)|| die "$!";
 ############################################# get stable header, build resizeable header for samples
-print OU "coordinates\tstrand\tRefseqID\tGene\tknown_circ\tnum_samples_present\ttotal_sum_unique_counts\tqualities\tpresent_in_sample\t";
+print OU "coordinates\tRefseqID\tGene\tknown_circ\tnum_samples_present\ttotal_sum_unique_counts\tqualities\tpresent_in_sample\t";
 foreach my $sampls  (@allenames) {
 	print OU "sample\t-unique_count\t-qualA\t-qualB\t"; # $sampls not in same order as below, need to change it
 }
 print OU "\n";
 ############################################# look for each circ in each sample and build a matrix
 					# not number of cores, but parallel processes you want, 200 seems good for 8 cores
-my $pf = Parallel::ForkManager->new(20);
+my $pf = Parallel::ForkManager->new(24);
 
 my$ni=0;
 our$count=0;
@@ -155,7 +155,7 @@ sub findc{
 	$basicinfo=~s/\t[0-9]{1,30}//;# remove the unique makwer of maybe double circ information
 	if($basicinfo=~/[A-z]/g){
 		chomp $circcand;
-		my$circn="";
+		my$circn="unknown";
 		chomp $basicinfo;
 		my$presencething=""; # for each circ cand, add names of sapmles where it is present
 		my$totalcounts=0;	# for each circ cand, add unique counts
@@ -184,7 +184,7 @@ sub findc{
 		if(exists($known_circs{$circcand})){
 			$circn=$known_circs{$circcand};
 		}
-		else{ncbi-blast+
+		else{
 			$circn="unknown";
 		}
 		foreach my $single_sample (@allenames) {# looking for each sample for each circ
