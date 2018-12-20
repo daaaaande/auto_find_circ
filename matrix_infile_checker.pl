@@ -43,6 +43,6 @@ if(!($Refseqid=~/N/)){
 if($mist > 0){
   print "line with mistaken parts: $line_o_o\n"
 }
-
+$mist=0;
 
 }
