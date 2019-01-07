@@ -35,6 +35,7 @@ mkdir "$ndir";
 
 
 foreach my $singleline (@lines){
+
 	if($singleline =~ /[a-z]/gi){
 		chomp $singleline;
 		my@lineparts=split(/\s+/,$singleline);
@@ -42,6 +43,15 @@ foreach my $singleline (@lines){
 		my$filetwo=$lineparts[1];
 		my$samplename=$lineparts[2];
 		my$groupname=$lineparts[3];
+		## if no group is defined, put one default group there
+		if($groupname eq ''){ # empty or only space-char
+			$groupname="default_group_$ndir";
+		}
+
+
+
+
+		#####
 		chomp $samplename;
 		chomp $fileone;
 		chomp $filetwo;
@@ -65,6 +75,7 @@ foreach my $singleline (@lines){
 
 
 }
+
 
 
 foreach my $groupname (@groups){
