@@ -42,6 +42,7 @@ foreach my $singleline (@lines){
 		my$fileone=$lineparts[0];
 		my$filetwo=$lineparts[1];
 		my$samplename=$lineparts[2];
+		$samplename=~s/\-/_/g;# avoid - in samplenames
 		my$groupname=$lineparts[3];
 		## if no group is defined, put one default group there
 		if($groupname eq ''){ # empty or only space-char

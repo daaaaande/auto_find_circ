@@ -29,6 +29,7 @@ foreach my $mapline (@allemappings){
 	chomp $mapline;
 	#my $pid = $pm->start and next;
 	if(!($mapline=~/^$/)){
+	#	print "$mapline\n";
 		my@slit=split(/\s+/,$mapline);
 		my$genene=$slit[0];
 		$genene =~ s/\s+//g; # remove emptieness
@@ -39,6 +40,7 @@ foreach my $mapline (@allemappings){
 			if($nnum=~/N/){
 				$nnum =~ s/\s+//g;
 				$mapping{"$nnum"}="$genene";
+			#	print "mapping now $nnum to gene $genene\n";
 			}
 		}
 		$nnum="";
@@ -60,7 +62,7 @@ my%alle_new_info_try_hash; # coords and strand to avoid redundant coords + stran
 DATA_IN:
 for (my$i=0;$i<scalar(@allelines);$i++){
 	my$line_o_o=$allelines[$i];	# current line
-	if ($i>0){# ignore header
+#	if ($i>0){# ignore header
 		get_names($line_o_o);
 		sub get_names{# later multithread this also
 			my$line= shift(@_);
@@ -79,7 +81,7 @@ for (my$i=0;$i<scalar(@allelines);$i++){
 			}
 
 		}
-	}
+#	}
 }
 # without tie to sort the hashes we need to sort the hash keys by their value- i.e the line number of the infile
 # sort the hash keys based on their values (line number in infile )
@@ -166,7 +168,8 @@ sub findc{
 		$basicinfo =~ /N*[\+\-]{1}/; # find refseqid
 		my$tolookup = $';
 		chomp $tolookup;
-		#print "finding information for circ $tolookup\n";
+	#	print "finding information for circ $tolookup with $basicinfo \n";
+		$tolookup="N$tolookup"; # fix for missing N in refseqid 
 		$tolookup =~s/\s+//g;
 		my$allsamplelines="";
 		my$allsamplehit=0;
@@ -175,7 +178,7 @@ sub findc{
 			my$geneo=$mapping{$tolookup};
 			$line="$line\t$geneo";
 			$gene_name=$geneo;
-			#	print "found gene $gene_name for circ $tolookup in gene mapping hash\n";
+		#		print "found gene $gene_name for circ $tolookup in gene mapping hash\n";
 		}
 		else {
 			$line="$line\tunkn";
