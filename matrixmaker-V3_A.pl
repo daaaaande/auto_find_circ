@@ -13,6 +13,7 @@ use Parallel::ForkManager;
 #		- tracks time of usage
 #		- dumps errors into logfile into global logfile
 ##########################################
+#
 ############################################# starting- getting input vars
 open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 my$start = time;
@@ -39,7 +40,7 @@ foreach my $mapline (@allemappings){
 			if($nnum=~/N/){
 				$nnum =~ s/\s+//g;
 				$mapping{"$nnum"}="$genene";
-			#	print "mapping now $nnum to gene $genene\n";
+				#	print "mapping now $nnum to gene $genene\n";
 			}
 		}
 		$nnum="";
@@ -137,19 +138,18 @@ print OU "\n";
 ############################################# look for each circ in each sample and build a matrix
 					# not number of cores, but parallel processes you want, 200 seems good for 8 cores
 my $pf = Parallel::ForkManager->new(24);
-
 my$ni=0;
 our$count=0;
 findc(\@allecooords);
 sub findc{
-  my@c=@{$_[0]};
-  DATA_OUT:
-  foreach my $circs (@allecooords){
-    $count ++;
+	my@c=@{$_[0]};
+  	DATA_OUT:
+  	foreach my $circs (@allecooords){
+    		$count ++;
 		$pf->start and next DATA_OUT;
-    find_circ($circs);
-    sub find_circ {
-      my$circcand= shift(@_);
+    		find_circ($circs);
+    		sub find_circ {
+      		my$circcand= shift(@_);
 			#print "old line is $circcand\n";
 			$circcand=~s/\t[0-9]{1,30}//;# remove the attached infile line number to not ignore strand differences
 			# remove strand, attach later in full line
@@ -188,57 +188,57 @@ sub findc{
 					$circn="unknown";
 				}
 				foreach my $single_sample (@allenames) {# looking for each sample for each circ
-	  			my$allonesample= $allinfoonesamplehash{$single_sample};
-        		if($allonesample=~/$circcand*.*\n/gi){### is the circ is found in sample###
-							my$line_of_i=$&;
-          		my$lineonesample=$line_of_i; #declare the interesting line
-      				$lineonesample=~s /$circcand//;
-          		$lineonesample=~s/\n//g;
-	    				$lineonesample=~s/\t+[\+\-]//;	# removing the strand information from the hit
-	    				$lineonesample =~ s/N[MR]_[0-9]{3,11}//g; # removing refseqid- is the same for the same coordinates
-							$lineonesample =~ s/chr[0-9]{0,3}.*\-[0-9]{1,98}\s+?//g;# remove coords sometimes mixed up in here
-  	      		$allsamplelines="$allsamplelines$lineonesample";
-							if($allsamplelines=~/chr/){
-								warn "error in file: $allsamplelines should not include coordinates , whats the problem?\nfull line: $line_of_i\n";
-							}
-	      			$presencething="$presencething-$single_sample";
-	      			$lineonesample =~/\s+[0-9]{1,4}\s+/;# only first hit is unique count
-	      			my$findnum = $&; # the unique count for each sample
-	      			my$twoquals=$'; # the two qualities into one
-	      			$twoquals =~ s/\s+/;/;
-							if(!($allquas=~/N/g)){ # check for refseqid instead of number
-	      				$allquas = "$allquas,$twoquals";
-	      				$allquas =~s/\s+//g;
-	      				$totalcounts=$totalcounts + $findnum;
-	      				$ni=$totalcounts;
-	      				$allsamplehit++;
-							}
-							else{
-								# refseqid is recognized as strand...
-								warn "line not recognized :$line_of_i ,quality is not $allquas or $twoquals\t totalcounts are $totalcounts for sample $single_sample circ $circcand basicinfo $basicinfo \n";
-							}
+	  				my$allonesample= $allinfoonesamplehash{$single_sample};
+        				if($allonesample=~/$circcand*.*\n/gi){### is the circ is found in sample###
+						my$line_of_i=$&;
+          					my$lineonesample=$line_of_i; #declare the interesting line
+      					$lineonesample=~s /$circcand//;
+          					$lineonesample=~s/\n//g;
+	    					$lineonesample=~s/\t+[\+\-]//;	# removing the strand information from the hit
+	    					$lineonesample =~ s/N[MR]_[0-9]{3,11}//g; # removing refseqid- is the same for the same coordinates
+						$lineonesample =~ s/chr[0-9]{0,3}.*\-[0-9]{1,98}\s+?//g;# remove coords sometimes mixed up in here
+  	      				$allsamplelines="$allsamplelines$lineonesample";
+						if($allsamplelines=~/chr/){
+							warn "error in file: $allsamplelines should not include coordinates , whats the problem?\nfull line: $line_of_i\n";
+						}
+	      				$presencething="$presencething-$single_sample";
+	      				$lineonesample =~/\s+[0-9]{1,4}\s+/;# only first hit is unique count
+	      				my$findnum = $&; # the unique count for each sample
+	      				my$twoquals=$'; # the two qualities into one
+	      				$twoquals =~ s/\s+/;/;
+						if(!($allquas=~/N/g)){ # check for refseqid instead of number
+	      					$allquas = "$allquas,$twoquals";
+	      					$allquas =~s/\s+//g;
+	      					$totalcounts=$totalcounts + $findnum;
+	      					$ni=$totalcounts;
+	      					$allsamplehit++;
+						}
+						else{
+							# refseqid is recognized as strand...
+							warn "line not recognized :$line_of_i ,quality is not $allquas or $twoquals\t totalcounts are $totalcounts for sample $single_sample circ $circcand basicinfo $basicinfo \n";
+						}
 	  				}
-        	else{# new: if circ not in all one samples
+        				else{# new: if circ not in all one samples
 						chomp $single_sample;
-	      		$allsamplelines="$allsamplelines$single_sample\t0\t0\t0\t";
-	  			}
-  			}
+	      				$allsamplelines="$allsamplelines$single_sample\t0\t0\t0\t";
+	  				}
+  				}
 				$basicinfo=~s/\n//g;
 				$gene_name=~s/\n//g;
 				if(((($circcand=~/\:/)&&($presencething=~/[A-z]/)))){
-  				my$linestring="$circcand\t$str\t$basicinfo\t$gene_name\t$circn\t$allsamplehit\t$ni\t$allquas\t$presencething\t$allsamplelines\n";
-	  			$linestring  =~s/\t\t/\t/g;
-	  			print OU $linestring;
-	  			$linestring="";
+  					my$linestring="$circcand\t$str\t$basicinfo\t$gene_name\t$circn\t$allsamplehit\t$ni\t$allquas\t$presencething\t$allsamplelines\n";
+	  				$linestring  =~s/\t\t/\t/g;
+	  				print OU $linestring;
+	  				$linestring="";
 					$gene_name="";
 				}
 				else{			# in case something with the line is wrong
-	  			print ER "error in line: circand is $circcand \n basicinfo is $basicinfo \n and presencething is $presencething\n";
+	  				print ER "error in line: circand is $circcand \n basicinfo is $basicinfo \n and presencething is $presencething\n";
 				}
-    	}
-    }
-  $pf->finish;
-  }
+    			}
+    		}
+  		$pf->finish;
+  	}
 }# findc end
 $pf->wait_all_children;
 my$end=time;
