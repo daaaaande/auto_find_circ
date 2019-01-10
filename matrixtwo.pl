@@ -111,10 +111,12 @@ for (my $var = 0; $var < scalar(@allelines); $var++) {
     # getting relevant information for each circ candidate ...
     my@lineparts=split(/\t/,$longline);
     my$coords=$lineparts[0];
+		my$strand=$lineparts[1];
     my$refseqID=$lineparts[2];
     my$gene=$lineparts[3];
     my$circn=$lineparts[4];
     # adding hallmark gene type
+	#	print "refseqid is $refseqID\n";
     if(grep(/$gene/,@allehallmarkg)){			# get all samplenames into @allenames)
   #  print "looking for $gene in gene mapping ---\n";
     # find hallmark class  and add to matrix file
@@ -140,8 +142,7 @@ for (my $var = 0; $var < scalar(@allelines); $var++) {
       $marti="NaN";
     }
 
-    push(@headers,"$coords\t$refseqID\t$gene\t$circn\t$hallm\t$marti\t");# header into array
-    #if($var==1){# to test first only the second line , later all lines
+    push(@headers,"$coords\t$strand\t$refseqID\t$gene\t$circn\t$hallm\t$marti\t");# header into array
       my$e=0;
       my$allthings="";
       foreach my$samplepos (@sampleuniqc){
@@ -154,8 +155,7 @@ for (my $var = 0; $var < scalar(@allelines); $var++) {
         $allthings="$allthings\t$lineparts[$samplepos]";
         #$alluniques[$var][$e]=$lineparts[$samplepos];# two-dimensional array
       }
-      push(@alluniques,$allthings);
-    #}
+      push(@alluniques,$allthings);# all unique count positions in .mat1 file
   }
   else{
   # header bar only- catch columns with samplenames in it and their position
@@ -179,7 +179,7 @@ for (my $var = 0; $var < scalar(@allelines); $var++) {
 # actual file creation:
 # header line in output file ...
 my@uniques= uniq @samplenames;
-print OUT"coordinates\trefseqid\tgene\tcircn\thallm\tbiom_desc\t";
+print OUT"coordinates\tstrand\trefseqid\tgene\tcircn\thallm\tbiom_desc\t";
 foreach my $sampl (@uniques){
   print OUT"$sampl\t";
 }
@@ -187,6 +187,7 @@ print OUT "\n";
 # now the real content, cleaning it from junk and then printing it
 for (my $v = 0; $v < scalar(@headers); $v++) {
   my$outline="$headers[$v]$alluniques[$v]";
+	# messy whitespace cleanup
   $outline=~s/\t\t+/\t/g;
   $outline=~s/\t\s+/\t/g;
 	$outline=~s/\s+\t/\t/g;

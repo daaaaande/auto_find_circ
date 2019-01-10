@@ -43,7 +43,7 @@ if(!($Refseqid=~/N/)){
 if($namesmale=~/\-/){
   warn "line $i file $linfile: samplename $namesmale does have a minus in it! \n";
   $mist++;
-
+}
 
 
 if($mist > 0){
