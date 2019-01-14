@@ -84,7 +84,7 @@ only_num_heat_find_circ=heat_find_circ[ , tokeep_fc, with=FALSE]
 #only_num_heat_circex1=select(heat_circex1,-c(coordinates,refseqid,gene,circn,hallm,biom_desc ))
 #only_num_heat_find_circ=select(heat_find_circ,-c(coordinates,refseqid,gene,circn,hallm,biom_desc ))
 #only_num_heat_dcc=select(heat_dcc,-c(coordinates,refseqid,gene,circn,hallm,biom_desc ))
-# exchanfge this part 
+# exchanfge this part
 
 
 
