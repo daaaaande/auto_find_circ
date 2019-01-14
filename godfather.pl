@@ -71,12 +71,12 @@ my$copyfind_circ= system("cp /media/daniel/NGS1/RNASeq/find_circ/$infile $find_c
 # parallel execution of the pipelines: find circ gets executed first, rest gets ncircexplorer1
 
 
-use Parallel::ForkManager;
+#use Parallel::ForkManager;
 
 
-my$find_circ_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/auto_find_circ/";
-my$circexplorer1_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer/circexplorer1_auto/";
-my$dcc_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/dcc/automate_DCC/";
+#my$find_circ_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/auto_find_circ/";
+#my$circexplorer1_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer/circexplorer1_auto/";
+#my$dcc_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/dcc/automate_DCC/";
 
 # array with all important places in order # find circ, circex, dcc_s
 my@pipe_dirs=($find_circ_ex_dir,$circexplorer1_ex_dir,$dcc_ex_dir);
@@ -95,7 +95,7 @@ my@pipe_dirs=($find_circ_ex_dir,$circexplorer1_ex_dir,$dcc_ex_dir);
 
 
  # making the voting in the output dir
- chdir "/media/daniel/NGS1/RNASeq/find_circ/$ndir/"; #change into dir where df should be placed
+ chdir "/media/daniel/NGS1/RNASeq/find_circ/$ndir"; #change into dir where df should be placed
  my$er_vot=system("Rscript --vanilla ../auto_find_circ/auto_voting.R allsamples_m_heatmap.find_circ.mat2 allsamples_m_heatmap.circex1.mat2 allsamples_m_heatmap.dcc.mat2");
  print"errors doing the vote : $er_vot\n";
  # reverse into default dir
