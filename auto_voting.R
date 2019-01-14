@@ -16,11 +16,11 @@ args = commandArgs(trailingOnly=TRUE)
 # test if there is at least one argument: if not, return an error
 if (length(args)==0) {
   stop("At least one argument must be supplied (input file).\n", call.=FALSE)
-} else if (length(args)<4) {
+} else if (length(args)<3) {
   # default output file
 
-  args[4] = "heatmap_median_approved_all.csv"
-  args[5] = "median"
+#  args[4] = "heatmap_median_approved_all.csv"
+#  args[5] = "median"
 }
 
 # only the important parts from output_filtering.R
@@ -72,13 +72,13 @@ sapply(heat_find_circ,as.numeric)
 
 # cleanup for filtering
 tokeep_cx <- which(sapply(heat_circex1,is.numeric))
-only_num_heat_circex1=heat_circex1[ , tokeep_cx, with=FALSE]
+only_num_heat_circex1=heat_circex1[ , tokeep_cx, ]
 
 tokeep_dc <- which(sapply(heat_dcc,is.numeric))
-only_num_heat_dcc=heat_dcc[ , tokeep_dc, with=FALSE]
+only_num_heat_dcc=heat_dcc[ , tokeep_dc,]
 
 tokeep_fc <- which(sapply(heat_find_circ,is.numeric))
-only_num_heat_find_circ=heat_find_circ[ , tokeep_fc, with=FALSE]
+only_num_heat_find_circ=heat_find_circ[ , tokeep_fc,]
 
 # cleanup for filtering
 #only_num_heat_circex1=select(heat_circex1,-c(coordinates,refseqid,gene,circn,hallm,biom_desc ))
@@ -113,9 +113,9 @@ all_appr_dcc=acc_dcc[acc_dcc$coordinates %in% all_voted_coordinates,]
 all_appr_circex=acc_circex[acc_circex$coordinates %in% all_voted_coordinates,]
 all_appr_findc=acc_find_circ[acc_find_circ$coordinates %in% all_voted_coordinates,]
 # get only numeric values, ignore extra stuff
-col_circex=select(all_appr_circex,-c(refseqid,gene,circn,hallm,biom_desc ))
-col_dcc=select(all_appr_dcc,-c(refseqid,gene,circn,hallm,biom_desc ))
-col_findc=select(all_appr_findc,-c(refseqid,gene,circn,hallm,biom_desc ))
+#col_circex=select(all_appr_circex,-c(refseqid,gene,circn,hallm,biom_desc ))
+#col_dcc=select(all_appr_dcc,-c(refseqid,gene,circn,hallm,biom_desc ))
+#col_findc=select(all_appr_findc,-c(refseqid,gene,circn,hallm,biom_desc ))
 
 # coordinates approved by all 3 pipelines
 quant_all_a_circex=acc_circex[acc_circex$coordinates %in% circ_RNA_candidates_3_out_of_3_approved,]
@@ -153,9 +153,9 @@ only_ab_all_aggr_dcc=sapply(select(ordered_dcc,-c(coordinates,refseqid,gene,circ
 #ordered_bin_dcc=quant_into_detection_events(ordered_dcc)
 
 # get the median of 3 quantifiacations of each sample in each pipeline. options are median, mean, min
-consensus_filtered_abundances_median=apply(abind::abind(only_ab_all_aggr_circex, only_ab_all_aggr_findc, only_ab_all_aggr_dcc,  along = 3), 1:2, args[5])
+#consensus_filtered_abundances_median=apply(abind::abind(only_ab_all_aggr_circex, only_ab_all_aggr_findc, only_ab_all_aggr_dcc,  along = 3), 1:2, args[5])
 # add relevant information
-consensus_filtered_abundances_all_=cbind(all_agree_info,consensus_filtered_abundances_median)
+#consensus_filtered_abundances_all_=cbind(all_agree_info,consensus_filtered_abundances_median)
 #consensus_filtered_abundances_all_=select(consensus_filtered_abundances_all_,-X)
 
 # first output file; full sorted consensus matrix median
