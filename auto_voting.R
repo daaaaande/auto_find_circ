@@ -80,12 +80,35 @@ only_num_heat_dcc=heat_dcc[ , tokeep_dc,]
 tokeep_fc <- which(sapply(heat_find_circ,is.numeric))
 only_num_heat_find_circ=heat_find_circ[ , tokeep_fc,]
 
+
+# get only the samples where all three dfs have data on 
+samples_fc=colnames(only_num_heat_find_circ)
+samples_dc=colnames(only_num_heat_dcc)
+samples_cx=colnames(only_num_heat_circex1)
+
+consensus_samples=intersect(samples_fc,samples_dc)
+consensus_samples=intersect(consensus_samples,samples_cx)
+
+print ("the sample names that all three dfs agree on are")
+print (consensus_samples)
+only_num_heat_find_circ=only_num_heat_find_circ[consensus_samples]
+only_num_heat_dcc=only_num_heat_dcc[consensus_samples]
+only_num_heat_circex1=only_num_heat_circex1[consensus_samples]
+
+
+
+
 # cleanup for filtering
 #only_num_heat_circex1=select(heat_circex1,-c(coordinates,refseqid,gene,circn,hallm,biom_desc ))
 #only_num_heat_find_circ=select(heat_find_circ,-c(coordinates,refseqid,gene,circn,hallm,biom_desc ))
 #only_num_heat_dcc=select(heat_dcc,-c(coordinates,refseqid,gene,circn,hallm,biom_desc ))
 # exchanfge this part
 
+#
+# improvementto be made= select only columns from numeric that all three dfs do have
+#
+#
+#
 
 
 
@@ -143,9 +166,9 @@ write.csv(ordered_dcc,file = "ordered_dcc_approved_by_all_three.csv")
 
 ##################### consensus and output #####################
 # get only quantifications for circs on that all agree - into numeric
-only_ab_all_aggr_circex=sapply(select(ordered_circex,-c(coordinates,refseqid,gene,circn,hallm,biom_desc)), as.numeric)
-only_ab_all_aggr_findc=sapply(select(ordered_findc,-c(coordinates,refseqid,gene,circn,hallm,biom_desc)), as.numeric)
-only_ab_all_aggr_dcc=sapply(select(ordered_dcc,-c(coordinates,refseqid,gene,circn,hallm,biom_desc)), as.numeric)
+#only_ab_all_aggr_circex=sapply(select(ordered_circex,-c(coordinates,refseqid,gene,circn,hallm,biom_desc)), as.numeric)
+#only_ab_all_aggr_findc=sapply(select(ordered_findc,-c(coordinates,refseqid,gene,circn,hallm,biom_desc)), as.numeric)
+#only_ab_all_aggr_dcc=sapply(select(ordered_dcc,-c(coordinates,refseqid,gene,circn,hallm,biom_desc)), as.numeric)
 
 # for presence/detection events matrices into binary
 #ordered_bin_findc=quant_into_detection_events(ordered_findc)
