@@ -63,7 +63,7 @@ foreach my $singleline (@lines){
 
 		$error=system("perl auto_find_circ/find_circ_auto.pl $fileone $filetwo $samplename");
 		print ER "errors:\n$error\n\n";
-		if($groupname=~/[a-z]/gi){
+		if($groupname=~/[A-z]/gi){
 			if(!(grep(/$groupname/,@groups))){ # check if group already present
 				mkdir $groupname;		# IF NOT, MAKE GROUPDIR
 				push(@groups,$groupname);

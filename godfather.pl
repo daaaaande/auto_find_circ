@@ -92,6 +92,19 @@ my@pipe_dirs=($find_circ_ex_dir,$circexplorer1_ex_dir,$dcc_ex_dir);
  my$startcirex= `nice perl /media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer/circexplorer1_auto/auto_automaker.pl auto_infile.txt $ndir`;
  my$start_dcc=`nice perl /media/daniel/NGS1/RNASeq/find_circ/dcc/automate_DCC/auto_automaker.pl auto_infile.txt $ndir`;# but execute auto from repo
 
+
+
+ # making the voting in the output dir
+ chdir "/media/daniel/NGS1/RNASeq/find_circ/$ndir/"; #change into dir where df should be placed
+ my$er_vot=system("Rscript --vanilla ../auto_find_circ/auto_voting.R allsamples_m_heatmap.find_circ.mat2 allsamples_m_heatmap.circex1.mat2 allsamples_m_heatmap.dcc.mat2");
+ print"errors doing the vote : $er_vot\n";
+ # reverse into default dir
+ chdir "/media/daniel/NGS1/RNASeq/find_circ/";
+
+
+
+
+
  #my@start_commands=($startcirex,$start_dcc,$startfin_ci);
 #
 #
