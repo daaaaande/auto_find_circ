@@ -33,8 +33,8 @@ chomp $currentdir;
 
 #			# NGS number changes with every reboot
 my$steponedir="/media/daniel/NGS1/RNASeq/find_circ";
-my$steptwodir="/media/daniel/NGS1/RNASeq/find_circ";
-my$stepthreedir="/media/daniel/NGS1/RNASeq/find_circ";
+my$steptwodir=$steponedir;
+#my$stepthreedir=$steponedir;
 chdir($steponedir);
 ############################################################################# first step
 # test2.pl takes unmapped/trimmed/fastq.gz/line1 and line2 reads...

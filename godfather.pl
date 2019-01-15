@@ -31,8 +31,9 @@ $date=~s/\s+/_/gi;
 
 ## enter your directories for the pipelines .pl files here
 my$find_circ_dir="/media/daniel/NGS1/RNASeq/find_circ";
-my$circexplorer1_dir="/media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer";
-my$dcc_dir="/media/daniel/NGS1/RNASeq/find_circ/dcc";
+
+my$circexplorer1_dir="$find_circ_dir/circexplorer/CIRCexplorer";
+my$dcc_dir="$find_circ_dir/dcc";
 
 my$cu=`pwd`;
 
@@ -44,15 +45,8 @@ if($there=~/$infile/){
 else{
   die  "did not find $infile in $cu\n";
 }
-# copying fastq files
-#my$err_cpone=system("cp *.fastq $find_circ_dir/");
-#my$err_cptwo=system("cp *.fastq $circexplorer1_dir/");
-#my$err_cpthr=system("cp *.fastq $dcc_dir/");
 
-#print "errors moving fastq files:\n$err_cpone\n$err_cptwo\n$err_cpthr\n";
-# deleting maybe old filesheet, just to be sure and make a small backup
-
-my$inf_backup=system("cp /media/daniel/NGS1/RNASeq/find_circ/$infile $find_circ_dir/infile_$date.backup");
+my$inf_backup=system("cp $find_circ_dir/$infile $find_circ_dir/infile_$date.backup");
 
 my$rmcircexone= system("rm $circexplorer1_dir/auto_infile.txt");# keep the samplefile in the parent dir
 my$rm_dcc= system("rm $dcc_dir/auto_infile.txt");
@@ -63,120 +57,19 @@ print ER "deleted old input files:\ncircexplorer1: $rmcircexone\nDCC: $rm_dcc\nf
 
 # copying filesheet
 
-my$copycircexone= system("cp /media/daniel/NGS1/RNASeq/find_circ/$infile $circexplorer1_dir/auto_infile.txt");# keep the samplefile in the parent dir
-my$copy_dcc= system("cp /media/daniel/NGS1/RNASeq/find_circ/$infile $dcc_dir/auto_infile.txt");
-my$copyfind_circ= system("cp /media/daniel/NGS1/RNASeq/find_circ/$infile $find_circ_dir/auto_infile.txt");
+my$copycircexone= system("cp $find_circ_dir/$infile $circexplorer1_dir/auto_infile.txt");# keep the samplefile in the parent dir
+my$copy_dcc= system("cp $find_circ_dir/$infile $dcc_dir/auto_infile.txt");
+my$copyfind_circ= system("cp $find_circ_dir/$infile $find_circ_dir/auto_infile.txt");
 
-
-# parallel execution of the pipelines: find circ gets executed first, rest gets ncircexplorer1
-
-
-#use Parallel::ForkManager;
-
-
-#my$find_circ_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/auto_find_circ/";
-#my$circexplorer1_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer/circexplorer1_auto/";
-#my$dcc_ex_dir="/media/daniel/NGS1/RNASeq/find_circ/dcc/automate_DCC/";
-
-# array with all important places in order # find circ, circex, dcc_s
-my@pipe_dirs=($find_circ_ex_dir,$circexplorer1_ex_dir,$dcc_ex_dir);
-
-
-
-# if DCC or circex finish before find_circ, we need the dir $ndir already created...
-
-# my$mkd2=system("mkdir /media/daniel/NGS1/RNASeq/find_circ/$ndir");
-# # full commands with full directories- the chdirs do not work as expected in Forks
-
- my$startfin_ci= `perl /media/daniel/NGS1/RNASeq/find_circ/auto_find_circ/auto_automaker.pl auto_infile.txt $ndir`;
- my$startcirex= `nice perl /media/daniel/NGS1/RNASeq/find_circ/circexplorer/CIRCexplorer/circexplorer1_auto/auto_automaker.pl auto_infile.txt $ndir`;
- my$start_dcc=`nice perl /media/daniel/NGS1/RNASeq/find_circ/dcc/automate_DCC/auto_automaker.pl auto_infile.txt $ndir`;# but execute auto from repo
-
+# starting the actual auto_automakers...
+ my$startfin_ci= `perl $find_circ_dir/auto_find_circ/auto_automaker.pl auto_infile.txt $ndir`;
+ my$startcirex= `nice perl $circexplorer1_dir/circexplorer1_auto/auto_automaker.pl auto_infile.txt $ndir`;
+ my$start_dcc=`nice perl $dcc_dir/automate_DCC/auto_automaker.pl auto_infile.txt $ndir`;# but execute auto from repo
 
 
  # making the voting in the output dir
- chdir "/media/daniel/NGS1/RNASeq/find_circ/$ndir"; #change into dir where df should be placed
- my$er_vot=system("Rscript --vanilla ../auto_find_circ/auto_voting.R allsamples_m_heatmap.find_circ.mat2 allsamples_m_heatmap.circex1.mat2 allsamples_m_heatmap.dcc.mat2");
+ chdir "$find_circ_dir/$ndir/"; #change into dir where df should be placed
+ my$er_vot=system("Rscript --vanilla $find_circ_dir/auto_find_circ/auto_voting.R allsamples_m_heatmap.find_circ.mat2 allsamples_m_heatmap.circex1.mat2 allsamples_m_heatmap.dcc.mat2");
  print"errors doing the vote : $er_vot\n";
  # reverse into default dir
- chdir "/media/daniel/NGS1/RNASeq/find_circ/";
-
-
-
-
-
- #my@start_commands=($startcirex,$start_dcc,$startfin_ci);
-#
-#
-# #my$err_fc=``;
-#
-#
-#
- #my $pm = Parallel::ForkManager->new(20);
- #my@error_messages=();
- #for (my $var = 0; $var <= $#start_commands; $var++) {
-#       my $pid = $pm->start and next;
-       #print "in child $pid!\n";
-       #my$dir=$pipe_dirs[$var];
-#       my$command=$start_commands[$var];
-       #print "would do now\n1. chdir $dir\n2.$command\n";
-       #chdir $dir;
-#       my$error=system("$command");
-#       push(@error_messages,$error);
-       #print "aligning, finding circs in TEST...\n";
-       #sleep(10);
-#       $pm->finish;
-# }
- #$pm->wait_all_children;
-#my$all_errors= join("\n",@error_messages);
-#print ER "errors find_circ run $ndir:\n$startfin_ci\n";
-# print ER "errors circexplorer 1 run $ndir:\n$startcirex\n";
-# print ER "errors DCC run $ndir:\n$start_dcc\n";
-#
-
-
-
-
-
-
-
-
-
-
-
-
-# IF parallel will not work- do one after one
-##################################################################################################
-#chdir "$find_circ_dir/auto_find_circ/";
-#my$startfin_ci= system("perl auto_automaker.pl auto_infile.txt $ndir");#
-
-#chdir "$circexplorer1_dir/circexplorer1_auto/";
-#my$startcirex= system("perl auto_automaker.pl auto_infile.txt $ndir");
-
-#chdir "$dcc_dir/automate_DCC/";
-#my$start_dcc= system("perl auto_automaker.pl auto_infile.txt $ndir");# but execute auto from repo
-##################################################################################################
-
-#preparation for plugin of r scripts that get to consensus and save that in a file
-## params for r script: input files x3 (heatmaps), median/min/mean ? and output filename
-#
-#
-#make consensus
-#chdir "$find_circ_dir/$ndir";
-#my$r_scriptout=  system("Rscript --vanilla /media/daniel/NGS1/RNASeq/find_circ/auto_find_circ/auto_filtering.R allsamples_m_heatmap.find_circ.tsv allsamples_m_heatmap.circex1.tsv allsamples_m_heatmap.dcc.tsv consensus_adundances_median_out.csv median");
-#print ER "errors creating consensus abundances consensus_adundances_median_out.csv:\n $r_scriptout \n";
-# copy all three outputs into one dir where it all started
-#print "moving all outfiles into all/...\n";
-
-#kdir "all";
-#system("cp $find_circ_dir/all_run_*/*.tsv all/");
-#system("cp $circexplorer1_dir//all_run_*/*.tsv all/");
-#system("cp $dcc_dir/all_run_*/*.tsv all/");allsamples_matrix.circex1.tsv
-
-
-#
-# print "logs find_circ: $startfin_ci\n";
-# print "logs circexplorer1 : $startcirex\n";
-# print "logs dcc: $start_dcc\n";
-# need to copy all .gz files into the two folders?
-# delete copies of fastq?
+ chdir "$find_circ_dir/";
