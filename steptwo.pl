@@ -3,7 +3,7 @@ use strict;
 # get the windows.bed file, add the chr:start-end string in the beginning of the line
 # needs a filename for the sorted output with coordinates added as second argument
 # relies on find_circ scripts and gene ref files in $scriptplace and $generefplace
-#system("clear");
+#`clear`;
 
 
 ######################################## example run
@@ -31,7 +31,7 @@ open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 my $start = time;
 
 # Do stuff
-print ER "started at $start\n";
+print ER "started with second part of find_circ_auto at $start\n";
 
 
 # get starting place to return to later
@@ -51,7 +51,7 @@ my$chdirort="/media/daniel/NGS1/RNASeq/find_circ";
 chdir($chdirort);
 
 print ER "creating $linfile.circ_candidates_auto.bed with score filtering...\n";
-my$err = system ("grep circ $linfile | grep -v chrM | python2.7 $scriptplace/sum.py -2,3 | python2.7 $scriptplace/scorethresh.py -16 1 | python2.7 $scriptplace/scorethresh.py -15 2 | python2.7 $scriptplace/scorethresh.py -14 2 | python2.7 $scriptplace/scorethresh.py 7 2 | python2.7 $scriptplace/scorethresh.py 8,9 35 | python2.7 $scriptplace/scorethresh.py -17 100000 >$linfile.circ_candidates_auto.bed");
+my$err = `grep circ $linfile | grep -v chrM | python2.7 $scriptplace/sum.py -2,3 | python2.7 $scriptplace/scorethresh.py -16 1 | python2.7 $scriptplace/scorethresh.py -15 2 | python2.7 $scriptplace/scorethresh.py -14 2 | python2.7 $scriptplace/scorethresh.py 7 2 | python2.7 $scriptplace/scorethresh.py 8,9 35 | python2.7 $scriptplace/scorethresh.py -17 100000 >$linfile.circ_candidates_auto.bed`;
 
 print ER "errors:\n$err\n\n";
 # output of command1
@@ -65,7 +65,7 @@ my$infiletwo="$linfile.circ_candidates_auto.bed";
 # command2
 # will only take the present windows, the circ_candidates.window_not_present.bed will not be created
 print ER "looking up generefs with $Generefplace/Genes_RefSeq_hg19_09.20.2013.bed\ncreating $infiletwo.out...\n";
-my$err2=system("bedtools window -a $infiletwo -b $Generefplace/Genes_RefSeq_hg19_09.20.2013.bed -w 1 >$infiletwo.out");
+my$err2=`bedtools window -a $infiletwo -b $Generefplace/Genes_RefSeq_hg19_09.20.2013.bed -w 1 >$infiletwo.out`;
 print ER "errors:\n$err2\n\n";
 # output of command2
 my$newnametwo="$infiletwo.out";
@@ -88,7 +88,7 @@ my@infile = <IN> ;
 
 
 # new filename for steptwo output ;
-# ist jetzt also $linfile.circ_candidates_auto_.bed.out_.processsed
+# is now  $linfile.circ_candidates_auto_.bed.out_.processsed
 
 
 my$linetwofile= "$linfile.circ_candidates_auto_.bed.out.processed";
@@ -117,7 +117,7 @@ foreach my $line (@infile){
 # now the fitting outfile is $currdir/$linetwofile and this is the input for next steps
 # command3, the sort
 print ER "sorting $linetwofile by coordinates...\ncreating $linetwofile.sorted ...\n";
-my$errso=system("sort -k 1,1 $linetwofile  > $linetwofile.sorted");
+my$errso=`sort -k 1,1 $linetwofile  > $linetwofile.sorted`;
 print ER "errors:\n$errso\n\n";
 ### now reorder the output file, delete unwanted information
 # file to dump information into

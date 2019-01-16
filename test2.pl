@@ -3,7 +3,7 @@ use strict;
 # takes in two fastq.gz files, aligns them and creates a subdirectory for the output files it creates
 # needs to be started in find_circ directory
 # output; $dirn/auto_$dirn.sites.reads and logfiles
-#system("clear");
+#`clear`;
 
 chdir "../";
 
@@ -48,43 +48,48 @@ chdir $bowtiepace ;
 
 # first alignment
 print ER "doing currently:\nbowtie2 -p 12 --very-sensitive --mm --score-min=C,-15,0 -x hg19 -1 $lineonefile -2 $linetwofile >temp.sam 2> firstpass.log\n";
-my$err = system ("bowtie2 -p 12 --very-sensitive --mm --score-min=C,-15,0 -x hg19 -1 $lineonefile -2 $linetwofile >temp.sam 2> firstpass.log");
+my$err = `bowtie2 -p 12 --very-sensitive --mm --score-min=C,-15,0 -x hg19 -1 $lineonefile -2 $linetwofile >temp.sam 2> firstpass.log`;
 
 
 print ER "creating temp.bam...\n";
-my$err2 = system ("samtools view -hbuS -o temp.bam temp.sam");
-print "errors:\n$err2\n\n";
-system ("cp temp.bam $bowtiepace/$dirn/temp.bam");
+my$err2 = `samtools view -hbuS -o temp.bam temp.sam`;
+print ER "errors:\n$err2\n";
+my$er_cpo=`cp temp.bam $bowtiepace/$dirn/temp.bam`;
 #
-
+print ER "errors copying :\n$err2\n";
 # new name convention MB01==auto , MB01.bam=auto.bam
 print ER "sorting temp.bam...\n";
-my$err3 = system ("samtools sort -O bam -o auto.bam temp.bam");
-print ER "errors:\n$err3\n\n";
-system ("cp auto.bam $bowtiepace/$dirn/auto.bam");
+my$err3 = `samtools sort -O bam -o auto.bam temp.bam`;
+print ER "errors:\n$err3\n";
+my$er_cpa=`cp auto.bam $bowtiepace/$dirn/auto.bam`;
+print ER "errors copying auto.bam:\n$er_cpa\n";
+
 #echo ">>> get the unmapped"
+
 print ER "getting the unmapped...\n";
-my$err4 = system ("samtools view -hf 4 auto.bam | samtools view -Sb - > unmapped_auto.bam");
+my$err4 = `samtools view -hf 4 auto.bam | samtools view -Sb - > unmapped_auto.bam`;
 
 
-system ("cp unmapped_auto.bam  $bowtiepace/$dirn/unmapped_auto.bam");
+my$rtrt=`cp unmapped_auto.bam  $bowtiepace/$dirn/unmapped_auto.bam`;
 #echo ">>> split into anchors"
+print ER "errors:$err4\nerrors copying the unmapped: $rtrt\n";
+
 print ER "splitting into anchors...\n";
-my$err5 = system ("python2.7 $bowtiepace/unmapped2anchors.py unmapped_auto.bam > $dirn/auto_anchors.qfa");
-print ER "errors:\n$err5\n\n";
+my$err5 = `python2.7 $bowtiepace/unmapped2anchors.py unmapped_auto.bam > $dirn/auto_anchors.qfa`;
+print ER "errors:\n$err5\n";
 #echo ">>> run find_circ.py"
 
 # maybe the dirn in the bowtie command is the problem?
 
 print ER "creating $bowtiepace/$dirn/auto_$dirn.sites.reads \tand  $bowtiepace/$dirn/auto_$dirn.sites.bed\n";
-my$err7 = system ("bowtie2 --reorder --mm --score-min=C,-15,0 -q -x hg19 -U $bowtiepace/$dirn/auto_anchors.qfa 2> $bowtiepace/$dirn/auto_bt2_secondpass.log | python2.7 $bowtiepace/find_circ.py -G $bowtiepace/genome/chroms/ -p $outfn -s $bowtiepace/$dirn/$dirn.sites.log > $bowtiepace/$dirn/auto_$dirn.sites.bed 2> $bowtiepace/$dirn/auto_$dirn.sites.reads");
+my$err7 = `bowtie2 --reorder --mm --score-min=C,-15,0 -q -x hg19 -U $bowtiepace/$dirn/auto_anchors.qfa 2> $bowtiepace/$dirn/auto_bt2_secondpass.log | python2.7 $bowtiepace/find_circ.py -G $bowtiepace/genome/chroms/ -p $outfn -s $bowtiepace/$dirn/$dirn.sites.log > $bowtiepace/$dirn/auto_$dirn.sites.bed 2> $bowtiepace/$dirn/auto_$dirn.sites.reads`;
 
-print ER "errors:\n$err7\n\n";
+print ER "errors:\n$err7\n";
 
 my $duration = ((time - $start)/60);
 print ER "Execution time first steps: $duration minutes\n";
 
-print ER "done with first steps with sample $outfn.\n";
+print ER "done with first find_circ steps with sample $outfn.\n";
 
 
 

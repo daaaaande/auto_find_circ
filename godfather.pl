@@ -1,7 +1,7 @@
 #/usr/bin/perl -w
 use strict;
 # clean command line before starting the whole analysis
-system("clear");
+`clear`;
 # change into the parent dir- find_circ- where all the action happens
 chdir "../";
 # global logfile- every pipeline and godfather.pl dumps its errors there
@@ -46,20 +46,20 @@ else{
   die  "did not find $infile in $cu\n";
 }
 
-my$inf_backup=system("cp $find_circ_dir/$infile $find_circ_dir/infile_$date.backup");
+my$inf_backup=`cp $find_circ_dir/$infile $find_circ_dir/infile_$date.backup`;
 
-my$rmcircexone= system("rm $circexplorer1_dir/auto_infile.txt");# keep the samplefile in the parent dir
-my$rm_dcc= system("rm $dcc_dir/auto_infile.txt");
-my$rmfind_circ= system("rm $find_circ_dir/auto_infile.txt");
+my$rmcircexone= `rm $circexplorer1_dir/auto_infile.txt`;# keep the samplefile in the parent dir
+my$rm_dcc= `rm $dcc_dir/auto_infile.txt`;
+my$rmfind_circ= `rm $find_circ_dir/auto_infile.txt`;
 
 print ER "deleted old input files:\ncircexplorer1: $rmcircexone\nDCC: $rm_dcc\nfind_circ: $rmfind_circ\n\n";
 
 
 # copying filesheet
 
-my$copycircexone= system("cp $find_circ_dir/$infile $circexplorer1_dir/auto_infile.txt");# keep the samplefile in the parent dir
-my$copy_dcc= system("cp $find_circ_dir/$infile $dcc_dir/auto_infile.txt");
-my$copyfind_circ= system("cp $find_circ_dir/$infile $find_circ_dir/auto_infile.txt");
+my$copycircexone= `cp $find_circ_dir/$infile $circexplorer1_dir/auto_infile.txt`;# keep the samplefile in the parent dir
+my$copy_dcc= `cp $find_circ_dir/$infile $dcc_dir/auto_infile.txt`;
+my$copyfind_circ= `cp $find_circ_dir/$infile $find_circ_dir/auto_infile.txt`;
 
 # starting the actual auto_automakers...
  my$startfin_ci= `perl $find_circ_dir/auto_find_circ/auto_automaker.pl auto_infile.txt $ndir`;
@@ -69,7 +69,7 @@ my$copyfind_circ= system("cp $find_circ_dir/$infile $find_circ_dir/auto_infile.t
 
  # making the voting in the output dir
  chdir "$find_circ_dir/$ndir/"; #change into dir where df should be placed
- my$er_vot=system("Rscript --vanilla $find_circ_dir/auto_find_circ/auto_voting.R allsamples_m_heatmap.find_circ.mat2 allsamples_m_heatmap.circex1.mat2 allsamples_m_heatmap.dcc.mat2");
+ my$er_vot=`Rscript --vanilla $find_circ_dir/auto_find_circ/auto_voting.R allsamples_m_heatmap.find_circ.mat2 allsamples_m_heatmap.circex1.mat2 allsamples_m_heatmap.dcc.mat2`;
  print"errors doing the vote : $er_vot\n";
  # reverse into default dir
  chdir "$find_circ_dir/";

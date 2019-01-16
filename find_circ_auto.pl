@@ -38,9 +38,9 @@ my$steptwodir=$steponedir;
 chdir($steponedir);
 ############################################################################# first step
 # test2.pl takes unmapped/trimmed/fastq.gz/line1 and line2 reads...
-my$errstepone = system ("perl auto_find_circ/test2.pl $infile1 $infile2 $samplename");
+my$errstepone = `perl auto_find_circ/test2.pl $infile1 $infile2 $samplename`;
 
-print ER "-------------------------------------------------\nsample $samplename processing:\n";
+print ER "\nsample $samplename processing:\n";
 print ER "step 1:\n$errstepone\n";
 #$outfn=$ARGV[2]
 #$dirn="run_$outfn"
@@ -56,21 +56,23 @@ my$steptwoinput="$steponedir/run_$samplename/auto_run_$samplename.sites.bed";# r
 
 # perl steptwo/steptwo.pl important_samples.bed important_samples_processed.csv
 print ER "trying now perl auto_find_circ/steptwo.pl $steptwoinput \n";
-my$errsteptwo = system ("perl $steptwodir/auto_find_circ/steptwo.pl $steptwoinput");
+my$errsteptwo = `perl $steptwodir/auto_find_circ/steptwo.pl $steptwoinput`;
 
 
 print ER "step 2:\n$errsteptwo\n";
 print ER "done making $steptwoinput.csv, moving it to run_$samplename/... \n";
 
 
-system("mv $steponedir/temp.bam run_$samplename/tmp_$samplename.bam");
-system("mv $steponedir/temp.sam run_$samplename/tmp_$samplename.sam");
+my$er_mva=`mv $steponedir/temp.bam run_$samplename/tmp_$samplename.bam`;
+my$er_mvb=`mv $steponedir/temp.sam run_$samplename/tmp_$samplename.sam`;
 #system()
-system("rm run_$samplename/*.bam");
-system("rm run_$samplename/*.sam");
+my$er_rma=`rm run_$samplename/*.bam`;
+my$er_rmb=`rm run_$samplename/*.sam`;
+
+print ER "find_circ_auto $samplename\t\nerrors moving bam:$er_mva\nerrors moving sam $er_mvb\nerrors deleting bam: $er_rma\nerrors deleting sam: $er_rmb\n";
 
 my $end = time;
 my$timeused=(($end-$start)/60);# into minutes
-print ER "############################################################\nsample $samplename done :\n";
+print ER "##\nsample $samplename done :\n";
 
 print ER "done.\n used $timeused minutes for $samplename\n ";
