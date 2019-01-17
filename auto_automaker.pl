@@ -47,7 +47,7 @@ foreach my $singleline (@lines){
 		$samplename=~s/\-/_/g;# avoid - in samplenames
 		my$groupname=$lineparts[3];
 		## if no group is defined, put one default group there
-		if($groupname eq ''){ # empty or only space-char
+		if($groupname eq ""){ # empty or only space-char
 			$groupname="default_group_$ndir";
 		}
 
