@@ -14,7 +14,7 @@ open(ER,'>>',"/home/daniel/logfile_auto.log")||die "$!";		# global logfile
 ######################################################
 # godfather.pl
 #   - as a wrapper for all three pipelines
-#   - the in .fastq files need to be in all thre directories before the analysis starts- otherwise only those pipelines will run that find the files in their parent dir
+#   - the in .fastq files need to be in the find_circ directory before the analysis starts- otherwise fails
 #   - will copy the infile into the three parent directories where the processing will be done (so one cd .. away from the corresponding .pl scripts) into the file auto_infile.txt
 #   - will then first start find_circ_auto pipeline, then circexplorer1_auto and in the end automate_DCC
 #   - drops errors into the global logfile as every other script does aswell- keep in mind to redirect the stdout from STAR and bowtie aligner into a file, otherwise it will get lost

@@ -136,7 +136,7 @@ foreach my $sampls  (@allenames) {
 }
 print OU "\n";
 ############################################# look for each circ in each sample and build a matrix
-					# not number of cores, but parallel processes you want, 200 seems good for 8 cores
+					# number of cores
 my $pf = Parallel::ForkManager->new(24);
 my$ni=0;
 our$count=0;

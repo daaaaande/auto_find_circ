@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# needed: four arguments: find_circ matrix infile, circex heatmap. dcc heatmap, output file ,median/men/min
+# needed: 3 arguments: find_circ matrix infile, circex heatmap. dcc heatmap, output files are named automatically
 # example; Rscript --vanilla auto_filtering.R find_circ/allsamples_m_heatmap.find_circ.tsv circex1/allsamples_m_heatmap.circex1.tsv dcc/matrixtwo_out_allsamples_dcc.tsv testout_test_mean.tsv mean
 
 args = commandArgs(trailingOnly=TRUE)
@@ -30,7 +30,7 @@ sapply(heat_circex1,as.numeric)# needs to be done with every of the three datafr
 sapply(heat_dcc,as.numeric)
 sapply(heat_find_circ,as.numeric)
 
-# cleanup for filtering: take only numeric columns, keep only those and then take only numeric columns from that all three df have 
+# cleanup for filtering: take only numeric columns, keep only those and then take only numeric columns from that all three df have
 tokeep_cx <- which(sapply(heat_circex1,is.numeric))
 only_num_heat_circex1=heat_circex1[ , tokeep_cx, ]
 
@@ -41,7 +41,7 @@ tokeep_fc <- which(sapply(heat_find_circ,is.numeric))
 only_num_heat_find_circ=heat_find_circ[ , tokeep_fc,]
 
 
-# get only the samples where all three dfs have data on 
+# get only the samples where all three dfs have data on
 samples_fc=colnames(only_num_heat_find_circ)
 samples_dc=colnames(only_num_heat_dcc)
 samples_cx=colnames(only_num_heat_circex1)

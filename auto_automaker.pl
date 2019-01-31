@@ -38,7 +38,7 @@ mkdir "$ndir";
 
 foreach my $singleline (@lines){
 
-	if($singleline =~ /[a-z]/gi){
+	if($singleline =~ /[A-z]/gi){
 		chomp $singleline;
 		my@lineparts=split(/\s+/,$singleline);
 		my$fileone=$lineparts[0];
