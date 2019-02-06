@@ -11,7 +11,7 @@ It also leaves the option open to add samples later, re-run the matrixmaker scri
 - bedtools installed                                      -> sudo apt install bedtools -y
 - bowtie2 installed                                       -> sudo apt install bowtie2 -y
 - hg19.fa                                                 -> download instructions from https://www.gungorbudak.com/blog/2014/04/13/download-human-reference-genome-hg19/ // should work with other organisms aswell
-- circbase.org known circular RNAs mapping file           ->(.txt) http://circbase.org/cgi-bin/downloads.cgi
+- circbase.org known circular RNAs mapping file           ->(.txt) http://circbase.org/cgi-bin/downloads.cgizz
 - all here listed .pl files in the same directory         -> git clone http://github.com/daaaaande/auto_find_circ/ .
 
 ### preparation steps:

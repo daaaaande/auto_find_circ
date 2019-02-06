@@ -52,14 +52,14 @@ my$err = `bowtie2 -p 12 --very-sensitive --mm --score-min=C,-15,0 -x hg19 -1 $li
 
 
 print ER "creating temp.bam...\n";
-my$err2 = `samtools view -hbuS -o temp.bam temp.sam`;
+my$err2 = `samtools view -@ 10 -hbuS -o temp.bam temp.sam`;
 print ER "errors:\n$err2\n";
 my$er_cpo=`cp temp.bam $bowtiepace/$dirn/temp.bam`;
 #
 print ER "errors copying :\n$err2\n";
 # new name convention MB01==auto , MB01.bam=auto.bam
 print ER "sorting temp.bam...\n";
-my$err3 = `samtools sort -O bam -o auto.bam temp.bam`;
+my$err3 = `samtools sort -@ 10 -O bam -o auto.bam temp.bam`;
 print ER "errors:\n$err3\n";
 my$er_cpa=`cp auto.bam $bowtiepace/$dirn/auto.bam`;
 print ER "errors copying auto.bam:\n$er_cpa\n";
@@ -67,7 +67,7 @@ print ER "errors copying auto.bam:\n$er_cpa\n";
 #echo ">>> get the unmapped"
 
 print ER "getting the unmapped...\n";
-my$err4 = `samtools view -hf 4 auto.bam | samtools view -Sb - > unmapped_auto.bam`;
+my$err4 = `samtools view -@ 10 -hf 4 auto.bam | samtools view -@ 10 -Sb - > unmapped_auto.bam`;
 
 
 my$rtrt=`cp unmapped_auto.bam  $bowtiepace/$dirn/unmapped_auto.bam`;
