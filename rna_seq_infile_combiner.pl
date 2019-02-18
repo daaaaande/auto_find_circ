@@ -1,6 +1,6 @@
 #/usr/bin/perl -w
 use strict;
-
+use List::MoreUtils qw(uniq);
 # takes a ls -1 *.fastq file and combines the files into two lanes, each called cb_ with all same lane same sample files catted into one
 
 
@@ -40,7 +40,7 @@ my@lines=<IN>;
 
 my@full_file_names=();
 my@sample_names=();
-
+my$all_used_ones;
 
 foreach my $singleline (@lines){
   # get the fukll file name into an array, the sample name isolate and the lane
@@ -66,15 +66,15 @@ foreach my $singleline (@lines){
    my$ident="$sample.$lane_n";
    push(@sample_names,$ident);
    push(@full_file_names,$singleline);
-   print "ident $ident fullfile $singleline\n";
+  # print "ident $ident fullfile $singleline\n";
 
 
 }
 # remove numbers, do the a and fs
 # there are cases where more than twi files are catted!
+#@sample_names= uniq (@sample_names);
 
-
-
+my@tried_ones=();#avoiding making the same command as many times as files are there
 my$o=0;
 foreach my $identity (@sample_names){
 
@@ -105,10 +105,13 @@ my$all_file=join(" ",@all_file_names_for_single_ident);
 my$sc_zi=scalar(@all_file_names_for_single_ident);
 #print "have $sc_zi files for $identity\n";
 if($sc_zi>1){
-  $all_file=~s/\n//g;
-  print "cat $all_file >$new_file_name\n";
+  if(!($all_used_ones=~/$identity/)){
 
 
+    $all_file=~s/\n//g;
+    print "cat $all_file >$new_file_name\n";
+    $all_used_ones="$all_used_ones.\n.$identity";
+  }
   # only combine if more than one file has the same $identity
 }
 $o++;
