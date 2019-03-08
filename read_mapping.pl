@@ -1,6 +1,6 @@
 #/usr/bin/perl -w
 use strict;
-# this file to be used as a function in several parts when a file needs to be mapped into a hash 
+# this file to be used as a function in several parts when a file needs to be mapped into a hash
 sub map_file  {
   # given params
   my$file=$_[0];
@@ -19,6 +19,7 @@ sub map_file  {
           if($key=~/[A-z]/){                # check both for empty values
             if($value=~/[A-z]/){
         #        print "filling now with key $key and value $value\n";
+                  $value=~s/\,/\_/g; # cleaning of any commas into _
                 $hash_to_fill{$key}="$value";
         }
       }
