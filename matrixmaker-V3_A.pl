@@ -225,7 +225,7 @@ sub findc{
   				}
 				$basicinfo=~s/\n//g;
 				$gene_name=~s/\n//g;
-				if(((($circcand=~/\:/)&&($presencething=~/[A-z]/)))){
+				if(($circcand=~/\:/)&&($presencething=~/[A-z]/)&&($circcand=~/^chr/)&&($str=~/[+-]/)&&(!($allquas=~/[A-z]/gi))){
   					my$linestring="$circcand\t$str\t$basicinfo\t$gene_name\t$circn\t$allsamplehit\t$ni\t$allquas\t$presencething\t$allsamplelines\n";
 	  				$linestring  =~s/\t\t/\t/g;
 	  				print OU $linestring;
