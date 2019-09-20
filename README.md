@@ -1,3 +1,9 @@
+
+# a more up-to date and easy to use version available on GitLab!
+# https://gitlab.com/daaaaande/circs
+
+
+
 # auto_find_circ
 a multiple sample multiple pipeline wrapper for RNA seq -> circ RNA detection;  automating the find_circ pipeline on a server
 
